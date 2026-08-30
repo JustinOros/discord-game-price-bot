@@ -3,6 +3,7 @@ node_modules/
 games.json
 owned.json
 steamlinks.json
+memory.yaml
 .link-steam-profiles-owner.json
 bot.log
 bot.error.log

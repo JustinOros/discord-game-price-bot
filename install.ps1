@@ -75,6 +75,10 @@ if (-not (Test-Path "steamlinks.json")) {
   Copy-Item "steamlinks.json.example" "steamlinks.json"
 }
 
+if (-not (Test-Path "memory.yaml")) {
+  Copy-Item "memory.yaml.example" "memory.yaml"
+}
+
 if ([string]::IsNullOrWhiteSpace((Get-EnvValue "DISCORD_BOT_TOKEN"))) {
   Write-Host ""
   Write-Host "Need a Discord bot token:"

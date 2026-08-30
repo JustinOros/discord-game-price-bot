@@ -26,6 +26,9 @@ const GREETINGS_PATH = path.join(__dirname, "greetings.yaml");
 const GOODBYES_PATH = path.join(__dirname, "goodbyes.yaml");
 const README_PATH = path.join(__dirname, "README.md");
 const PERSONALITY_PATH = path.join(__dirname, "personality.yaml");
+const MEMORY_PATH = path.join(__dirname, "memory.yaml");
+const MAX_MEMORIES_PER_USER = 20;
+const MAX_MEMORY_LENGTH = 300;
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
@@ -117,7 +120,22 @@ function trimIncompleteSentence(text) {
   return trimmed.slice(0, lastEnd + 1);
 }
 
-async function askAI(question, history, displayName) {
+async function askAI(question, history, displayName, memories) {
+  const messages = [
+    { role: "system", content: AI_SYSTEM_PROMPT },
+    { role: "system", content: "The Discord member you are talking to is called " + displayName + ". Do not address them by any other name." }
+  ];
+
+  if (memories && memories.length > 0) {
+    messages.push({
+      role: "system",
+      content: "Permanent facts this member has asked you to remember about them - always follow these, " +
+        "they override your default personality habits:\n" + memories.map((m) => "- " + m).join("\n")
+    });
+  }
+
+  messages.push(...history, { role: "user", content: question });
+
   const res = await fetch(OLLAMA_URL + "/api/chat", {
     method: "POST",
     headers: {
@@ -127,12 +145,7 @@ async function askAI(question, history, displayName) {
       model: OLLAMA_MODEL,
       stream: false,
       options: { num_predict: 120 },
-      messages: [
-        { role: "system", content: AI_SYSTEM_PROMPT },
-        { role: "system", content: "The Discord member you are talking to is called " + displayName + ". Do not address them by any other name." },
-        ...history,
-        { role: "user", content: question }
-      ]
+      messages: messages
     })
   });
   if (!res.ok) {
@@ -180,6 +193,19 @@ function loadSteamLinks() {
 
 function saveSteamLinks(links) {
   fs.writeFileSync(STEAMLINKS_PATH, JSON.stringify(links, null, 2) + "\n");
+}
+
+function loadMemory() {
+  try {
+    const data = yaml.load(fs.readFileSync(MEMORY_PATH, "utf8"));
+    return data || {};
+  } catch (err) {
+    return {};
+  }
+}
+
+function saveMemory(memory) {
+  fs.writeFileSync(MEMORY_PATH, yaml.dump(memory));
 }
 
 async function searchGame(title) {
@@ -846,6 +872,89 @@ async function handleUnown(message, query) {
   await message.reply("Removed \"" + match.title + "\" from your owned list.");
 }
 
+async function handleRemember(message, text) {
+  if (!text) {
+    await message.reply("Usage: !remember SOMETHING (e.g. !remember my name is Justin, or !remember don't call me buddy)");
+    return;
+  }
+
+  const memory = loadMemory();
+  const list = memory[message.author.id] || [];
+
+  if (list.length >= MAX_MEMORIES_PER_USER) {
+    await message.reply(
+      "I'm already remembering " + list.length + " things about you, that's my limit. " +
+      "Use !memories to see them and !forget one first."
+    );
+    return;
+  }
+
+  const fact = text.length > MAX_MEMORY_LENGTH ? text.slice(0, MAX_MEMORY_LENGTH) : text;
+
+  if (list.some((m) => m.toLowerCase() === fact.toLowerCase())) {
+    await message.reply("I already remember that.");
+    return;
+  }
+
+  list.push(fact);
+  memory[message.author.id] = list;
+  saveMemory(memory);
+
+  await message.reply("Got it, I'll remember: " + fact);
+}
+
+async function handleForget(message, text) {
+  if (!text) {
+    await message.reply("Usage: !forget SOMETHING (must match what you had me remember), or !forget all");
+    return;
+  }
+
+  const memory = loadMemory();
+  const list = memory[message.author.id] || [];
+
+  if (list.length === 0) {
+    await message.reply("I don't have anything remembered about you.");
+    return;
+  }
+
+  if (text.toLowerCase() === "all") {
+    delete memory[message.author.id];
+    saveMemory(memory);
+    await message.reply("Forgot everything I knew about you.");
+    return;
+  }
+
+  const index = list.findIndex((m) => m.toLowerCase() === text.toLowerCase());
+  if (index === -1) {
+    await message.reply("I don't have that saved. Use !memories to see what I remember about you.");
+    return;
+  }
+
+  list.splice(index, 1);
+  if (list.length === 0) {
+    delete memory[message.author.id];
+  } else {
+    memory[message.author.id] = list;
+  }
+  saveMemory(memory);
+
+  await message.reply("Forgot it.");
+}
+
+async function handleMemories(message) {
+  const memory = loadMemory();
+  const list = memory[message.author.id] || [];
+
+  if (list.length === 0) {
+    await message.reply("I don't have anything remembered about you yet. Use !remember SOMETHING to teach me.");
+    return;
+  }
+
+  await message.reply(
+    "Here's what I remember about you:\n" + list.map((m, i) => (i + 1) + ". " + m).join("\n")
+  );
+}
+
 async function handleLinkSteam(message, input) {
   if (!STEAM_API_KEY) {
     await message.reply("Steam linking is not set up on this bot yet - it needs a Steam Web API key added to .env.");
@@ -1068,6 +1177,9 @@ async function handleHelp(message) {
     "!my-steam-profile LINK - link your Steam profile so !info can count you automatically\n" +
     "!bulk-link - link multiple members' Steam profiles at once, one @member and link per line\n" +
     "!who GAME - list who has confirmed they own a game\n" +
+    "!remember SOMETHING - permanently teach me a fact about you (a name, a preference), I'll remember it across restarts\n" +
+    "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
+    "!memories - show everything I remember about you\n" +
     "!check - run the sale check right now instead of waiting for the daily run\n" +
     "!shops - list every store I check prices at"
   );
@@ -1224,6 +1336,12 @@ client.on("messageCreate", async (message) => {
     await handleLinkSteam(message, content.slice(18).trim());
   } else if (lower.startsWith("!who ")) {
     await handleWho(message, content.slice(5).trim());
+  } else if (lower.startsWith("!remember ")) {
+    await handleRemember(message, content.slice(10).trim());
+  } else if (lower.startsWith("!forget ")) {
+    await handleForget(message, content.slice(8).trim());
+  } else if (lower === "!memories") {
+    await handleMemories(message);
   } else if (lower.startsWith("!bulk-link")) {
     const lines = content.split("\n");
     await handleBulkLink(message, lines.slice(1).join("\n"));
@@ -1241,7 +1359,9 @@ client.on("messageCreate", async (message) => {
         const history = getAiHistory(message.author.id);
         const displayName = (message.member && message.member.displayName) ||
           message.author.globalName || message.author.username;
-        const aiReply = await askAI(content, history, displayName);
+        const memory = loadMemory();
+        const memories = memory[message.author.id] || [];
+        const aiReply = await askAI(content, history, displayName, memories);
         if (aiReply) {
           await message.reply(aiReply);
           rememberAiExchange(message.author.id, content, aiReply);

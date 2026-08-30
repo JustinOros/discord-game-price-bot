@@ -78,6 +78,10 @@ if [[ ! -f steamlinks.json ]]; then
   cp steamlinks.json.example steamlinks.json
 fi
 
+if [[ ! -f memory.yaml ]]; then
+  cp memory.yaml.example memory.yaml
+fi
+
 CURRENT_TOKEN=$(grep -E "^DISCORD_BOT_TOKEN=" .env | cut -d "=" -f2-)
 CURRENT_KEY=$(grep -E "^ITAD_API_KEY=" .env | cut -d "=" -f2-)
 
