@@ -1,0 +1,9 @@
+node_modules/
+.env
+games.json
+owned.json
+steamlinks.json
+.link-steam-profiles-owner.json
+bot.log
+bot.error.log
+.DS_Store

@@ -1,0 +1,11 @@
+goodbyes:
+  - "Aw man, {user} left the game. Save file corrupted."
+  - "{user} has disconnected. Connection lost, buddy."
+  - "Goodbye, {user}! BMO will miss pressing your buttons."
+  - "{user} logged off. BMO's battery feels a little lower now."
+  - "Achievement lost: {user} left the server."
+  - "{user} went on an adventure without us. Come back soon!"
+  - "Oh my glob, {user} is gone! BMO needs a hug."
+  - "Game over for {user}... for now. See you next load, buddy!"
+  - "{user} quit the party. BMO hopes it wasn't something BMO said."
+  - "Farewell, {user}! This does not compute, but BMO understands."

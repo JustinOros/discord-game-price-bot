@@ -1,0 +1,17 @@
+{
+  "name": "discord-game-price-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot that tracks PC game prices, ownership, and chats in character using a local AI model.",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "js-yaml": "^4.1.1",
+    "node-cron": "^3.0.3"
+  }
+}
