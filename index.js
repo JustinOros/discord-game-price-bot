@@ -19,6 +19,7 @@ const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.2";
 const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
 const EVENT_REMINDER_MINUTES = 15;
+const POPULAR_TOP_N = 10;
 const ITAD_BASE = "https://api.isthereanydeal.com";
 const GAMES_PATH = path.join(__dirname, "games.json");
 const OWNED_PATH = path.join(__dirname, "owned.json");
@@ -768,15 +769,21 @@ async function handlePopular(message) {
   const popular = Object.values(tally)
     .filter((g) => g.owners.size > 1)
     .map((g) => ({ title: g.title, count: g.owners.size }))
-    .sort((a, b) => b.count - a.count);
+    .sort((a, b) => b.count - a.count || a.title.localeCompare(b.title));
 
   if (popular.length === 0) {
     await message.reply("Nobody owns any games?! Type !own GAME to add a game you own to the list!");
     return;
   }
 
+  const top = popular.slice(0, POPULAR_TOP_N);
   const lines = ["Here's what members are playing!"];
-  popular.forEach((g) => lines.push(g.title + ": " + g.count + " member" + (g.count === 1 ? "" : "s")));
+  top.forEach((g) => lines.push(g.title + ": " + g.count + " member" + (g.count === 1 ? "" : "s")));
+
+  const remaining = popular.length - top.length;
+  if (remaining > 0) {
+    lines.push("...and " + remaining + " more game" + (remaining === 1 ? "" : "s") + " with multiple owners.");
+  }
 
   await message.reply(lines.join("\n"));
 }
