@@ -993,69 +993,6 @@ async function handleLinkSteam(message, input) {
   );
 }
 
-async function handleBulkLink(message, body) {
-  if (!STEAM_API_KEY) {
-    await message.reply("Steam linking is not set up on this bot yet - it needs a Steam Web API key added to .env.");
-    return;
-  }
-
-  const lines = body.split("\n").map((l) => l.trim()).filter((l) => l.length > 0);
-
-  if (lines.length === 0) {
-    await message.reply(
-      "Usage: type !bulk-link, then on new lines list one @member and Steam profile per line, like:\n" +
-      "!bulk-link\n" +
-      "@user1 https://steamcommunity.com/id/name1\n" +
-      "@user2 https://steamcommunity.com/id/name2"
-    );
-    return;
-  }
-
-  const links = loadSteamLinks();
-  const linked = [];
-  const failed = [];
-
-  for (const line of lines) {
-    const mentionMatch = line.match(/<@!?(\d+)>/);
-    if (!mentionMatch) {
-      failed.push(line + " (no @mention found)");
-      continue;
-    }
-
-    const userId = mentionMatch[1];
-    const rest = line.replace(/<@!?\d+>/, "").trim();
-    if (!rest) {
-      failed.push(line + " (no Steam profile given)");
-      continue;
-    }
-
-    let steamId;
-    try {
-      steamId = await resolveSteamId(rest);
-    } catch (err) {
-      failed.push(line + " (lookup failed)");
-      continue;
-    }
-
-    if (!steamId) {
-      failed.push(line + " (Steam profile not found)");
-      continue;
-    }
-
-    links[userId] = steamId;
-    linked.push("<@" + userId + ">");
-  }
-
-  saveSteamLinks(links);
-
-  let summary = "Linked " + linked.length + " member" + (linked.length === 1 ? "" : "s") + ".";
-  if (failed.length > 0) {
-    summary += "\nCould not link:\n" + failed.map((f) => "- " + f).join("\n");
-  }
-
-  await message.reply({ content: summary, allowedMentions: { users: [] } });
-}
-
 async function handleRemove(message, query, commandName) {
   if (!query) {
     await message.reply("Usage: " + (commandName || "!remove") + " GAME NAME");
@@ -1174,8 +1111,7 @@ async function handleHelp(message) {
     "!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n" +
     "!own GAME - mark a game as owned by you\n" +
     "!unown GAME - remove a game from your owned list\n" +
-    "!my-steam-profile LINK - link your Steam profile so !info can count you automatically\n" +
-    "!bulk-link - link multiple members' Steam profiles at once, one @member and link per line\n" +
+    "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n" +
     "!who GAME - list who has confirmed they own a game\n" +
     "!remember SOMETHING - permanently teach me a fact about you (a name, a preference), I'll remember it across restarts\n" +
     "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
@@ -1342,9 +1278,6 @@ client.on("messageCreate", async (message) => {
     await handleForget(message, content.slice(8).trim());
   } else if (lower === "!memories") {
     await handleMemories(message);
-  } else if (lower.startsWith("!bulk-link")) {
-    const lines = content.split("\n");
-    await handleBulkLink(message, lines.slice(1).join("\n"));
   } else if (lower === "!check") {
     await handleCheck(message, client);
   } else if (lower === "!list") {
