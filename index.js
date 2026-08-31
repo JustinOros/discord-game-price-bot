@@ -292,6 +292,41 @@ async function fetchSteamDetails(appid) {
   return { categories: categories, platforms: platforms, headerImage: entry.data.header_image || null };
 }
 
+async function fetchSteamLiveDeal(appid) {
+  const url = "https://store.steampowered.com/api/appdetails?appids=" + appid +
+    "&cc=us&filters=price_overview";
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("steam price failed: " + res.status);
+  const data = await res.json();
+  const entry = data && data[appid];
+  if (!entry || !entry.success || !entry.data) return null;
+
+  const overview = entry.data.price_overview;
+  if (!overview) return null;
+
+  return {
+    shop: { name: "Steam" },
+    price: { amountInt: overview.final },
+    regular: { amountInt: overview.initial },
+    cut: overview.discount_percent,
+    url: "https://store.steampowered.com/app/" + appid
+  };
+}
+
+async function mergeLiveSteamDeal(deals, appid) {
+  let merged = deals.filter((deal) => deal.shop.name !== "Steam");
+  if (!appid) return merged;
+
+  try {
+    const steamDeal = await fetchSteamLiveDeal(appid);
+    if (steamDeal) merged = merged.concat(steamDeal);
+  } catch (err) {
+    console.error("Steam live price fetch failed:", err.message);
+  }
+
+  return merged;
+}
+
 function parseSteamProfileInput(input) {
   const trimmed = input.trim();
   let m = trimmed.match(/steamcommunity\.com\/profiles\/(\d{17})/i);
@@ -409,11 +444,20 @@ async function handleWatch(message, query) {
   });
   saveGames(games);
 
+  let watchAppid = null;
+  try {
+    const info = await fetchGameInfo(match.id);
+    watchAppid = info.appid || null;
+  } catch (err) {
+    watchAppid = null;
+  }
+
   let priceNote = "";
   try {
     const priceData = await fetchPrices([match.id]);
     const entry = priceData && priceData[0];
-    const deal = entry && pickBestDeal(entry.deals);
+    const deals = await mergeLiveSteamDeal((entry && entry.deals) || [], watchAppid);
+    const deal = pickBestDeal(deals);
     if (deal) {
       const cutNote = deal.cut > 0 ? " (" + deal.cut + "% off right now)" : "";
       priceNote = " Current best price: " + formatMoney(deal.price.amountInt) + cutNote +
@@ -452,10 +496,19 @@ async function handlePrice(message, query) {
 
   const match = pickSearchMatch(query, results);
 
+  let priceAppid = null;
+  try {
+    const info = await fetchGameInfo(match.id);
+    priceAppid = info.appid || null;
+  } catch (err) {
+    priceAppid = null;
+  }
+
   try {
     const priceData = await fetchPrices([match.id]);
     const entry = priceData && priceData[0];
-    const deal = entry && pickBestDeal(entry.deals);
+    const deals = await mergeLiveSteamDeal((entry && entry.deals) || [], priceAppid);
+    const deal = pickBestDeal(deals);
     if (!deal) {
       await message.reply("\"" + match.title + "\" - could not find a current listing for it.");
       return;
@@ -492,13 +545,22 @@ async function handleAllPrices(message, query) {
 
   const match = pickSearchMatch(query, results);
 
+  let appid = null;
+  try {
+    const info = await fetchGameInfo(match.id);
+    appid = info.appid || null;
+  } catch (err) {
+    appid = null;
+  }
+
   try {
     const priceData = await fetchPrices([match.id]);
     const entry = priceData && priceData[0];
-    const deals = (entry && entry.deals) || [];
+    const merged = await mergeLiveSteamDeal((entry && entry.deals) || [], appid);
+    const deals = merged.filter((deal) => deal.cut > 0);
 
     if (deals.length === 0) {
-      await message.reply("\"" + match.title + "\" - could not find any current listings for it.");
+      await message.reply("\"" + match.title + "\" is not currently on sale anywhere I track.");
       return;
     }
 
@@ -898,7 +960,8 @@ async function handleInfo(message, query) {
   try {
     const priceData = await fetchPrices([match.id]);
     const entry = priceData && priceData[0];
-    const deal = entry && pickBestDeal(entry.deals);
+    const deals = await mergeLiveSteamDeal((entry && entry.deals) || [], info.appid || null);
+    const deal = pickBestDeal(deals);
     if (deal) {
       const cutNote = deal.cut > 0 ? " (" + deal.cut + "% off)" : "";
       priceLine = formatMoney(deal.price.amountInt) + cutNote;
