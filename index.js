@@ -254,6 +254,17 @@ async function fetchShops() {
   return res.json();
 }
 
+function formatReleaseDate(releaseDate) {
+  if (!releaseDate) return null;
+  const parts = releaseDate.split("-");
+  if (parts.length !== 3) return null;
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const day = parseInt(parts[2], 10);
+  if (!year || !month || !day) return null;
+  return day + " " + MONTH_NAMES[month - 1].slice(0, 3) + " " + year;
+}
+
 function toItadDateTime(date) {
   return date.toISOString().split(".")[0] + "+00:00";
 }
@@ -773,8 +784,11 @@ async function handleInfo(message, query) {
     priceLine = "unavailable";
   }
 
+  const releaseDate = formatReleaseDate(info.releaseDate);
+  const title = releaseDate ? match.title + " (" + releaseDate + ")" : match.title;
+
   const embed = new EmbedBuilder()
-    .setTitle(match.title)
+    .setTitle(title)
     .addFields(
       { name: "Price", value: priceLine, inline: true },
       { name: "Platform(s)", value: platforms, inline: true }
