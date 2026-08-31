@@ -3,7 +3,7 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const fs = require("fs");
 const cron = require("node-cron");
 const yaml = require("js-yaml");
-const { Client, GatewayIntentBits, MessageFlags, EmbedBuilder } = require("discord.js");
+const { Client, GatewayIntentBits, MessageFlags, EmbedBuilder, GuildScheduledEventStatus } = require("discord.js");
 
 const rawLog = console.log.bind(console);
 const rawError = console.error.bind(console);
@@ -18,6 +18,7 @@ const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.2";
 const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
+const EVENT_REMINDER_MINUTES = 15;
 const ITAD_BASE = "https://api.isthereanydeal.com";
 const GAMES_PATH = path.join(__dirname, "games.json");
 const OWNED_PATH = path.join(__dirname, "owned.json");
@@ -1197,6 +1198,52 @@ async function checkPrices(client) {
   return { checked: games.length, alerted: alerted };
 }
 
+const notifiedEvents = new Set();
+
+async function checkUpcomingEvents(client) {
+  const stillScheduled = new Set();
+
+  for (const guild of client.guilds.cache.values()) {
+    let events;
+    try {
+      events = await guild.scheduledEvents.fetch();
+    } catch (err) {
+      console.error("Could not fetch scheduled events for " + guild.name + ":", err.message);
+      continue;
+    }
+
+    for (const event of events.values()) {
+      if (event.status !== GuildScheduledEventStatus.Scheduled || !event.scheduledStartAt) continue;
+      stillScheduled.add(event.id);
+
+      if (notifiedEvents.has(event.id)) continue;
+
+      const minutesUntil = (event.scheduledStartAt.getTime() - Date.now()) / 60000;
+      if (minutesUntil <= 0 || minutesUntil > EVENT_REMINDER_MINUTES) continue;
+
+      const channel = guild.channels.cache.find(
+        (c) => c.name === GREETING_CHANNEL_NAME && c.isTextBased && c.isTextBased()
+      );
+      if (!channel) {
+        console.error("Could not find a #" + GREETING_CHANNEL_NAME + " channel in " + guild.name);
+        notifiedEvents.add(event.id);
+        continue;
+      }
+
+      try {
+        await channel.send(event.name + " starting in " + EVENT_REMINDER_MINUTES + " minutes!");
+      } catch (err) {
+        console.error("Could not send event reminder:", err.message);
+      }
+      notifiedEvents.add(event.id);
+    }
+  }
+
+  for (const id of Array.from(notifiedEvents)) {
+    if (!stillScheduled.has(id)) notifiedEvents.delete(id);
+  }
+}
+
 async function handleCheck(message, client) {
   await message.reply("Checking prices now...");
   const result = await checkPrices(client);
@@ -1215,13 +1262,15 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildScheduledEvents
   ]
 });
 
 client.once("clientReady", () => {
   console.log("Logged in as " + client.user.tag);
   cron.schedule("0 15 * * *", () => checkPrices(client));
+  cron.schedule("* * * * *", () => checkUpcomingEvents(client));
 });
 
 client.on("guildMemberAdd", async (member) => {
