@@ -3,7 +3,7 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const fs = require("fs");
 const cron = require("node-cron");
 const yaml = require("js-yaml");
-const { Client, GatewayIntentBits, MessageFlags, EmbedBuilder, GuildScheduledEventStatus } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, GuildScheduledEventStatus } = require("discord.js");
 
 const rawLog = console.log.bind(console);
 const rawError = console.error.bind(console);
@@ -1306,7 +1306,7 @@ async function handleShops(message) {
   }
 }
 
-async function handleHelp(message) {
+async function handleHelp(message, note) {
   await message.reply(
     "Commands:\n" +
     "!watch GAME - start watching a game for sales\n" +
@@ -1326,7 +1326,8 @@ async function handleHelp(message) {
     "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
     "!memories - show everything I remember about you\n" +
     "!check - run the sale check right now instead of waiting for the daily run\n" +
-    "!shops - list every store I check prices at"
+    "!shops - list every store I check prices at" +
+    (note ? "\n\n" + note : "")
   );
 }
 
@@ -1387,6 +1388,7 @@ async function checkPrices(client) {
 }
 
 const notifiedEvents = new Set();
+const dmGreetedUsers = new Set();
 
 async function checkUpcomingEvents(client) {
   const stillScheduled = new Set();
@@ -1449,10 +1451,12 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.DirectMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildScheduledEvents
-  ]
+  ],
+  partials: [Partials.Channel]
 });
 
 client.once("clientReady", () => {
@@ -1504,6 +1508,30 @@ client.on("guildMemberRemove", async (member) => {
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
+
+  if (!message.guild) {
+    const dmContent = message.content.trim().toLowerCase();
+
+    if (dmContent === "!help") {
+      await handleHelp(message, "Heads up: these commands only work in a text channel on your server, not here in DMs.");
+      dmGreetedUsers.add(message.author.id);
+      return;
+    }
+
+    const displayName = message.author.globalName || message.author.username;
+    if (dmGreetedUsers.has(message.author.id)) {
+      await message.reply("Type !help for a list of my commands to be used in Text Channels.");
+    } else {
+      dmGreetedUsers.add(message.author.id);
+      await message.reply({
+        content: "Hello " + displayName + ", I am a Discord Game Price Bot made by Justin Oros. " +
+          "https://github.com/JustinOros/discord-game-price-bot",
+        flags: MessageFlags.SuppressEmbeds
+      });
+    }
+    return;
+  }
+
   const content = message.content.trim();
   const lower = content.toLowerCase();
 
