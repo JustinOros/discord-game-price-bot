@@ -260,7 +260,7 @@ function toItadDateTime(date) {
 
 async function fetchSteamDetails(appid) {
   const url = "https://store.steampowered.com/api/appdetails?appids=" + appid +
-    "&cc=us&filters=categories,platforms,header_image";
+    "&cc=us&filters=categories,platforms,basic";
   const res = await fetch(url);
   if (!res.ok) throw new Error("steam appdetails failed: " + res.status);
   const data = await res.json();
