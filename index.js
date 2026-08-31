@@ -20,6 +20,7 @@ const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
 const EVENT_REMINDER_MINUTES = 15;
 const POPULAR_TOP_N = 10;
+const ALL_PRICES_TOP_N = 10;
 const ITAD_BASE = "https://api.isthereanydeal.com";
 const GAMES_PATH = path.join(__dirname, "games.json");
 const OWNED_PATH = path.join(__dirname, "owned.json");
@@ -467,6 +468,57 @@ async function handlePrice(message, query) {
     });
   } catch (err) {
     await message.reply("Could not load the price right now.");
+  }
+}
+
+async function handleAllPrices(message, query) {
+  if (!query) {
+    await message.reply("Usage: !prices GAME NAME");
+    return;
+  }
+
+  let results;
+  try {
+    results = await searchGame(query);
+  } catch (err) {
+    await message.reply("Search failed, try again in a moment.");
+    return;
+  }
+
+  if (!results || results.length === 0) {
+    await message.reply("Could not find a game called \"" + query + "\".");
+    return;
+  }
+
+  const match = pickSearchMatch(query, results);
+
+  try {
+    const priceData = await fetchPrices([match.id]);
+    const entry = priceData && priceData[0];
+    const deals = (entry && entry.deals) || [];
+
+    if (deals.length === 0) {
+      await message.reply("\"" + match.title + "\" - could not find any current listings for it.");
+      return;
+    }
+
+    const sorted = deals.slice().sort((a, b) => a.price.amountInt - b.price.amountInt);
+    const top = sorted.slice(0, ALL_PRICES_TOP_N);
+
+    const lines = ["\"" + match.title + "\" is on sale at:"];
+    top.forEach((deal) => {
+      const cutNote = deal.cut > 0 ? " (" + deal.cut + "% off)" : "";
+      lines.push(deal.shop.name + ": " + formatMoney(deal.price.amountInt) + cutNote);
+    });
+
+    const remaining = sorted.length - top.length;
+    if (remaining > 0) {
+      lines.push("...and " + remaining + " more store" + (remaining === 1 ? "" : "s") + ".");
+    }
+
+    await message.reply({ content: lines.join("\n"), flags: MessageFlags.SuppressEmbeds });
+  } catch (err) {
+    await message.reply("Could not load prices right now.");
   }
 }
 
@@ -1197,7 +1249,8 @@ async function handleHelp(message) {
     "!watch GAME - start watching a game for sales\n" +
     "!remove GAME - stop watching a game (!unwatch also works)\n" +
     "!list - show everything being watched\n" +
-    "!price GAME - check a game's current price without watching it\n" +
+    "!price GAME - check a game's current best price without watching it\n" +
+    "!prices GAME - list every store the game is on sale at, cheapest first\n" +
     "!history GAME - show every recorded sale over the past 12 months, with date and price\n" +
     "!predict GAME - guess when it might go on sale next, based on its full sale history\n" +
     "!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n" +
@@ -1397,6 +1450,8 @@ client.on("messageCreate", async (message) => {
     await handleRemove(message, content.slice(8).trim());
   } else if (lower.startsWith("!unwatch ")) {
     await handleRemove(message, content.slice(9).trim(), "!unwatch");
+  } else if (lower.startsWith("!prices ")) {
+    await handleAllPrices(message, content.slice(8).trim());
   } else if (lower.startsWith("!price ")) {
     await handlePrice(message, content.slice(7).trim());
   } else if (lower.startsWith("!history ")) {
