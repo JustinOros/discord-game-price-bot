@@ -260,7 +260,7 @@ function toItadDateTime(date) {
 
 async function fetchSteamDetails(appid) {
   const url = "https://store.steampowered.com/api/appdetails?appids=" + appid +
-    "&cc=us&filters=categories,platforms";
+    "&cc=us&filters=categories,platforms,header_image";
   const res = await fetch(url);
   if (!res.ok) throw new Error("steam appdetails failed: " + res.status);
   const data = await res.json();
@@ -275,7 +275,7 @@ async function fetchSteamDetails(appid) {
   if (flags.mac) platforms.push("Mac");
   if (flags.linux) platforms.push("Linux");
 
-  return { categories: categories, platforms: platforms };
+  return { categories: categories, platforms: platforms, headerImage: entry.data.header_image || null };
 }
 
 function parseSteamProfileInput(input) {
@@ -737,6 +737,7 @@ async function handleInfo(message, query) {
 
   let platforms = (info.platforms || []).map((p) => p.name).join(", ");
   let featureSource = info.tags || [];
+  let headerImage = null;
 
   if (info.appid) {
     try {
@@ -748,6 +749,7 @@ async function handleInfo(message, query) {
         if (!platforms && steamDetails.platforms.length > 0) {
           platforms = steamDetails.platforms.join(", ");
         }
+        headerImage = steamDetails.headerImage;
       }
     } catch (err) {
       console.error("Steam details fetch failed:", err.message);
@@ -777,6 +779,10 @@ async function handleInfo(message, query) {
       { name: "Price", value: priceLine, inline: true },
       { name: "Platform(s)", value: platforms, inline: true }
     );
+
+  if (headerImage) {
+    embed.setImage(headerImage);
+  }
 
   for (const label of Object.keys(FEATURE_TAG_PATTERNS)) {
     const pattern = FEATURE_TAG_PATTERNS[label];
