@@ -313,13 +313,18 @@ async function resolveSteamId(input) {
   return null;
 }
 
-async function fetchOwnedAppIds(steamId) {
+async function fetchOwnedGames(steamId) {
   const url = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
-    STEAM_API_KEY + "&steamid=" + steamId + "&format=json&include_played_free_games=true";
+    STEAM_API_KEY + "&steamid=" + steamId + "&format=json&include_played_free_games=true&include_appinfo=true";
   const res = await fetch(url);
   if (!res.ok) throw new Error("owned games failed: " + res.status);
   const data = await res.json();
   const games = (data.response && data.response.games) || [];
+  return games.map((g) => ({ appid: g.appid, name: g.name }));
+}
+
+async function fetchOwnedAppIds(steamId) {
+  const games = await fetchOwnedGames(steamId);
   return games.map((g) => g.appid);
 }
 
@@ -715,6 +720,65 @@ async function handleWho(message, query) {
   lines.push("Type \"!own GAME\" or \"!my-steam-profile LINK\" to update your owned games.");
 
   await message.reply({ content: lines.join("\n"), allowedMentions: { users: [] } });
+}
+
+async function handlePopular(message) {
+  const tally = {};
+
+  function addOwner(key, title, userId) {
+    if (!tally[key]) tally[key] = { title: title, owners: new Set() };
+    tally[key].owners.add(userId);
+  }
+
+  const owned = loadOwned();
+  const appidCache = {};
+
+  for (const userId of Object.keys(owned)) {
+    for (const game of owned[userId]) {
+      if (!(game.id in appidCache)) {
+        try {
+          const info = await fetchGameInfo(game.id);
+          appidCache[game.id] = info.appid || null;
+        } catch (err) {
+          appidCache[game.id] = null;
+        }
+      }
+      const appid = appidCache[game.id];
+      const key = appid ? "steam:" + appid : "itad:" + game.id;
+      addOwner(key, game.title, userId);
+    }
+  }
+
+  if (STEAM_API_KEY) {
+    const links = loadSteamLinks();
+    for (const userId of Object.keys(links)) {
+      let games;
+      try {
+        games = await fetchOwnedGames(links[userId]);
+      } catch (err) {
+        console.error("Owned games check failed for " + userId + ":", err.message);
+        continue;
+      }
+      for (const game of games) {
+        addOwner("steam:" + game.appid, game.name, userId);
+      }
+    }
+  }
+
+  const popular = Object.values(tally)
+    .filter((g) => g.owners.size > 1)
+    .map((g) => ({ title: g.title, count: g.owners.size }))
+    .sort((a, b) => b.count - a.count);
+
+  if (popular.length === 0) {
+    await message.reply("Nobody owns any games?! Type !own GAME to add a game you own to the list!");
+    return;
+  }
+
+  const lines = ["Here's what members are playing!"];
+  popular.forEach((g) => lines.push(g.title + ": " + g.count + " member" + (g.count === 1 ? "" : "s")));
+
+  await message.reply(lines.join("\n"));
 }
 
 async function handleInfo(message, query) {
@@ -1134,6 +1198,7 @@ async function handleHelp(message) {
     "!unown GAME - remove a game from your owned list\n" +
     "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n" +
     "!who GAME - list who has confirmed they own a game\n" +
+    "!popular - list games owned by more than one member, most owned first\n" +
     "!remember SOMETHING - permanently teach me a fact about you (a name, a preference), I'll remember it across restarts\n" +
     "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
     "!memories - show everything I remember about you\n" +
@@ -1341,6 +1406,8 @@ client.on("messageCreate", async (message) => {
     await handleLinkSteam(message, content.slice(18).trim());
   } else if (lower.startsWith("!who ")) {
     await handleWho(message, content.slice(5).trim());
+  } else if (lower === "!popular") {
+    await handlePopular(message);
   } else if (lower.startsWith("!remember ")) {
     await handleRemember(message, content.slice(10).trim());
   } else if (lower.startsWith("!forget ")) {
