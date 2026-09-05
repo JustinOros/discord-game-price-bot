@@ -123,17 +123,20 @@ function trimIncompleteSentence(text) {
   return trimmed.slice(0, lastEnd + 1);
 }
 
-async function askAI(question, history, displayName, memories) {
+async function askAI(question, history, displayName, allFacts) {
   const messages = [
     { role: "system", content: AI_SYSTEM_PROMPT },
     { role: "system", content: "The Discord member you are talking to is called " + displayName + ". Do not address them by any other name." }
   ];
 
-  if (memories && memories.length > 0) {
+  if (allFacts && allFacts.length > 0) {
     messages.push({
       role: "system",
-      content: "Permanent facts this member has asked you to remember about them - always follow these, " +
-        "they override your default personality habits:\n" + memories.map((m) => "- " + m).join("\n")
+      content: "Permanent facts Discord members have taught you with !remember - shared knowledge across " +
+        "everyone here, not private to whoever said them. Some are about the person who said them, some " +
+        "are about someone else they mentioned by name - use whichever ones are relevant, including when " +
+        "someone asks you what you know about a specific named person:\n" +
+        allFacts.map((f) => "- " + f).join("\n")
     });
   }
 
@@ -1322,7 +1325,7 @@ async function handleHelp(message, note) {
     "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n" +
     "!who GAME - list who has confirmed they own a game\n" +
     "!popular - list games owned by more than one member, most owned first\n" +
-    "!remember SOMETHING - permanently teach me a fact about you (a name, a preference), I'll remember it across restarts\n" +
+    "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n" +
     "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
     "!memories - show everything I remember about you\n" +
     "!check - run the sale check right now instead of waiting for the daily run\n" +
@@ -1582,8 +1585,8 @@ client.on("messageCreate", async (message) => {
         const displayName = (message.member && message.member.displayName) ||
           message.author.globalName || message.author.username;
         const memory = loadMemory();
-        const memories = memory[message.author.id] || [];
-        const aiReply = await askAI(content, history, displayName, memories);
+        const allFacts = Object.values(memory).reduce((acc, list) => acc.concat(list || []), []);
+        const aiReply = await askAI(content, history, displayName, allFacts);
         if (aiReply) {
           await message.reply(aiReply);
           rememberAiExchange(message.author.id, content, aiReply);
