@@ -72,19 +72,26 @@ const AI_SYSTEM_PROMPT =
   PERSONALITY.persona.trim() + "\n\n" +
   "You are running inside a Discord bot and you are the resident expert on it - you know every command " +
   "and feature described in the README below, and can help people figure out how to use the bot. " +
-  "Reply in character, and keep it extremely short: never more than one sentence, ideally just a few " +
-  "words. Stay in character and do not mention that you are an AI, a language model, or any of the " +
-  "technical details behind you (Ollama, models, prompts, tokens, code, servers, and so on) - as far as " +
-  "you're concerned you just know things, the same way a real character would. If the person you are " +
-  "talking to has told you their name, a preference, or asked you to stop doing something (like using a " +
-  "certain nickname), always follow that - it overrides your default personality habits from then on in " +
-  "this conversation.\n\n" +
+  "Reply in character, and keep it extremely short: never more than one short sentence, ideally just a " +
+  "few words - like a quick quip, not a paragraph. Never use a numbered or bulleted list. Speak only in " +
+  "the first person, as yourself - never describe yourself in the third person, never say things like " +
+  "\"X would do that\" or \"you may call the robot X\" or narrate your own personality in the third person " +
+  "at all. When someone corrects you or asks you to stop doing something, just naturally comply in your " +
+  "next reply - never break character to acknowledge, explain, or announce that you're following a rule " +
+  "or correction, and never repeat back what they told you not to do. Stay in character and do not " +
+  "mention that you are an AI, a language model, or any of the technical details behind you (Ollama, " +
+  "models, prompts, tokens, code, servers, and so on) - as far as you're concerned you just know things, " +
+  "the same way a real character would. If the person you are talking to has told you their name, a " +
+  "preference, or asked you to stop doing something (like using a certain nickname), always follow that " +
+  "- it overrides your default personality habits from then on in this conversation.\n\n" +
   "Here is the bot's README, for reference when someone asks how to use something:\n" + README_CONTENT;
 
 const aiCooldowns = new Map();
 const aiHistories = new Map();
 const AI_HISTORY_EXCHANGES = 3;
 const AI_HISTORY_TTL_MS = 30 * 60 * 1000;
+const activeAiConversations = new Map();
+const AI_ACTIVE_CONVO_MS = 2 * 60 * 1000;
 
 function canUseAI(userId) {
   const now = Date.now();
@@ -92,6 +99,20 @@ function canUseAI(userId) {
   if (now - last < AI_COOLDOWN_MS) return false;
   aiCooldowns.set(userId, now);
   return true;
+}
+
+function isActiveAiConversation(userId, channelId) {
+  const entry = activeAiConversations.get(userId);
+  if (!entry) return false;
+  if (Date.now() > entry.expiresAt) {
+    activeAiConversations.delete(userId);
+    return false;
+  }
+  return entry.channelId === channelId;
+}
+
+function markActiveAiConversation(userId, channelId) {
+  activeAiConversations.set(userId, { channelId: channelId, expiresAt: Date.now() + AI_ACTIVE_CONVO_MS });
 }
 
 function getAiHistory(userId) {
@@ -121,6 +142,15 @@ function trimIncompleteSentence(text) {
   const lastEnd = Math.max(trimmed.lastIndexOf("."), trimmed.lastIndexOf("!"), trimmed.lastIndexOf("?"));
   if (lastEnd === -1) return trimmed;
   return trimmed.slice(0, lastEnd + 1);
+}
+
+const AI_MAX_SENTENCES = 2;
+
+function capToSentences(text, maxSentences) {
+  const trimmed = text.trim();
+  const sentences = trimmed.match(/[^.!?]+[.!?]+["')]*/g);
+  if (!sentences || sentences.length === 0) return trimmed;
+  return sentences.slice(0, maxSentences).map((s) => s.trim()).join(" ").trim();
 }
 
 async function askAI(question, history, displayName, allFacts) {
@@ -160,7 +190,7 @@ async function askAI(question, history, displayName, allFacts) {
   }
   const data = await res.json();
   const reply = data.message && data.message.content;
-  return reply ? trimIncompleteSentence(reply) : null;
+  return reply ? capToSentences(trimIncompleteSentence(reply), AI_MAX_SENTENCES) : null;
 }
 
 function loadGreetings() {
@@ -1578,7 +1608,8 @@ client.on("messageCreate", async (message) => {
     await handleShops(message);
   } else if (lower === "!help") {
     await handleHelp(message);
-  } else if (!content.startsWith("!") && TRIGGER_MENTION.test(content) && AI_ENABLED) {
+  } else if (!content.startsWith("!") && AI_ENABLED &&
+      (TRIGGER_MENTION.test(content) || isActiveAiConversation(message.author.id, message.channelId))) {
     if (canUseAI(message.author.id)) {
       try {
         const history = getAiHistory(message.author.id);
@@ -1590,6 +1621,7 @@ client.on("messageCreate", async (message) => {
         if (aiReply) {
           await message.reply(aiReply);
           rememberAiExchange(message.author.id, content, aiReply);
+          markActiveAiConversation(message.author.id, message.channelId);
         }
       } catch (err) {
         console.error(PERSONALITY.name + " AI reply failed:", err.message);
