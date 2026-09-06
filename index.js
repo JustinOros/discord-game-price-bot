@@ -21,10 +21,13 @@ const GREETING_CHANNEL_NAME = "general";
 const EVENT_REMINDER_MINUTES = 15;
 const POPULAR_TOP_N = 10;
 const ALL_PRICES_TOP_N = 10;
+const TRIVIA_POINTS = 100;
+const SCORE_TOP_N = 10;
 const ITAD_BASE = "https://api.isthereanydeal.com";
 const GAMES_PATH = path.join(__dirname, "games.json");
 const OWNED_PATH = path.join(__dirname, "owned.json");
 const STEAMLINKS_PATH = path.join(__dirname, "steamlinks.json");
+const SCORES_PATH = path.join(__dirname, "scores.json");
 const GREETINGS_PATH = path.join(__dirname, "greetings.yaml");
 const GOODBYES_PATH = path.join(__dirname, "goodbyes.yaml");
 const README_PATH = path.join(__dirname, "README.md");
@@ -242,6 +245,21 @@ function loadSteamLinks() {
 
 function saveSteamLinks(links) {
   fs.writeFileSync(STEAMLINKS_PATH, JSON.stringify(links, null, 2) + "\n");
+}
+
+function loadScores() {
+  return JSON.parse(fs.readFileSync(SCORES_PATH, "utf8"));
+}
+
+function saveScores(scores) {
+  fs.writeFileSync(SCORES_PATH, JSON.stringify(scores, null, 2) + "\n");
+}
+
+function awardTriviaPoints(userId) {
+  const scores = loadScores();
+  scores[userId] = (scores[userId] || 0) + TRIVIA_POINTS;
+  saveScores(scores);
+  return scores[userId];
 }
 
 function loadMemory() {
@@ -1352,6 +1370,128 @@ async function handleShops(message) {
   }
 }
 
+const TRIVIA_TIME_LIMIT_MS = 30 * 1000;
+const TRIVIA_LETTERS = ["A", "B", "C", "D"];
+const activeTrivia = new Map();
+
+const TRIVIA_QUESTIONS = [
+  { question: "Which company developed the original Half-Life?", choices: ["Valve", "id Software", "Epic Games", "Bethesda"], answer: 0 },
+  { question: "What year did Steam first launch?", choices: ["2001", "2003", "2005", "2008"], answer: 1 },
+  { question: "Which studio made Minecraft?", choices: ["Mojang", "Notch Games", "Microsoft Studios", "Double Fine"], answer: 0 },
+  { question: "What engine powers Fortnite?", choices: ["Source", "Unity", "Unreal Engine", "CryEngine"], answer: 2 },
+  { question: "Which game popularized the battle royale genre on PC?", choices: ["Fortnite", "PUBG", "Apex Legends", "Warzone"], answer: 1 },
+  { question: "Who is the developer of the Elder Scrolls series?", choices: ["BioWare", "Bethesda Game Studios", "CD Projekt Red", "Obsidian"], answer: 1 },
+  { question: "What was the first game in the Half-Life series to introduce Alyx Vance?", choices: ["Half-Life", "Half-Life 2", "Half-Life: Opposing Force", "Half-Life: Blue Shift"], answer: 1 },
+  { question: "Which company created the Unreal Engine?", choices: ["Epic Games", "id Software", "Valve", "Crytek"], answer: 0 },
+  { question: "What is the best-selling PC game franchise made by Blizzard, known for orcs versus humans?", choices: ["StarCraft", "Diablo", "Warcraft", "Overwatch"], answer: 2 },
+  { question: "Which studio developed The Witcher 3: Wild Hunt?", choices: ["CD Projekt Red", "11 bit studios", "Techland", "People Can Fly"], answer: 0 },
+  { question: "What year was the original Doom released?", choices: ["1990", "1993", "1996", "1999"], answer: 1 },
+  { question: "Which company publishes the Steam storefront?", choices: ["Epic Games", "GOG", "Valve", "Microsoft"], answer: 2 },
+  { question: "What is the name of the AI companion in Portal?", choices: ["GLaDOS", "Cortana", "HAL", "SHODAN"], answer: 0 },
+  { question: "Which game is credited as one of the first major esports titles on PC?", choices: ["StarCraft: Brood War", "Minecraft", "The Sims", "Half-Life 2"], answer: 0 },
+  { question: "What company developed the Source engine?", choices: ["Valve", "id Software", "Epic Games", "Bethesda"], answer: 0 },
+  { question: "Which platform, launched by CD Projekt, is a DRM-free game store?", choices: ["Origin", "GOG", "itch.io", "Epic Games Store"], answer: 1 },
+  { question: "What is the name of the map editor built into many Bethesda games like Skyrim?", choices: ["Hammer", "Creation Kit", "UnrealEd", "Forge"], answer: 1 },
+  { question: "Which game series features the character Master Chief?", choices: ["Gears of War", "Halo", "Destiny", "Titanfall"], answer: 1 },
+  { question: "Who developed the game engine CryEngine?", choices: ["Crytek", "id Software", "Epic Games", "Valve"], answer: 0 },
+  { question: "What year did the Epic Games Store launch?", choices: ["2016", "2018", "2020", "2013"], answer: 1 },
+  { question: "Which game is known for popularizing the tower defense genre as a standalone PC hit?", choices: ["Plants vs. Zombies", "Bloons TD", "Dungeon Defenders", "Orcs Must Die!"], answer: 0 },
+  { question: "What studio created the Portal series?", choices: ["Valve", "id Software", "Arkane Studios", "Remedy Entertainment"], answer: 0 },
+  { question: "Which game was developed by Klei Entertainment and involves surviving on an alien planet?", choices: ["Don't Starve", "Oxygen Not Included", "Subnautica", "Raft"], answer: 1 },
+  { question: "Which company originally created and released Counter-Strike as a Half-Life mod?", choices: ["Valve", "a group of independent modders", "id Software", "Gearbox Software"], answer: 1 },
+  { question: "What year was the first Grand Theft Auto game released on PC?", choices: ["1994", "1997", "2001", "2004"], answer: 1 },
+  { question: "Which developer is known for the Souls series, including Dark Souls and Elden Ring?", choices: ["FromSoftware", "Team Ninja", "Capcom", "PlatinumGames"], answer: 0 },
+  { question: "What was the codename/engine used for id Software's Doom (2016) and Doom Eternal?", choices: ["id Tech", "Frostbite", "REDengine", "Anvil"], answer: 0 },
+  { question: "Which sandbox survival game was created by Facepunch Studios?", choices: ["Rust", "Ark: Survival Evolved", "7 Days to Die", "DayZ"], answer: 0 },
+  { question: "What game is widely credited as the first commercially successful real-time strategy game?", choices: ["Command & Conquer", "Dune II", "Warcraft: Orcs & Humans", "Age of Empires"], answer: 1 },
+  { question: "Which company developed and publishes World of Warcraft?", choices: ["Blizzard Entertainment", "Bethesda", "Square Enix", "NCSoft"], answer: 0 }
+];
+
+function pickTriviaQuestion() {
+  return TRIVIA_QUESTIONS[Math.floor(Math.random() * TRIVIA_QUESTIONS.length)];
+}
+
+async function handleTrivia(message) {
+  const channelId = message.channelId;
+  if (activeTrivia.has(channelId)) {
+    await message.reply("A trivia question is already up in this channel, answer that one first!");
+    return;
+  }
+
+  const picked = pickTriviaQuestion();
+  const entry = { question: picked, timeout: null };
+  activeTrivia.set(channelId, entry);
+
+  const lines = ["PC gaming trivia! " + picked.question];
+  picked.choices.forEach((choice, i) => lines.push(TRIVIA_LETTERS[i] + ") " + choice));
+  lines.push("You have 30 seconds, first correct answer wins!");
+
+  try {
+    await message.reply(lines.join("\n"));
+  } catch (err) {
+    console.error("Trivia post failed:", err.message);
+    activeTrivia.delete(channelId);
+    return;
+  }
+
+  entry.timeout = setTimeout(async () => {
+    if (activeTrivia.get(channelId) !== entry) return;
+    activeTrivia.delete(channelId);
+    try {
+      await message.channel.send(
+        "Time's up! The answer was " + TRIVIA_LETTERS[picked.answer] + ") " + picked.choices[picked.answer] + "."
+      );
+    } catch (err) {
+      console.error("Trivia timeout message failed:", err.message);
+    }
+  }, TRIVIA_TIME_LIMIT_MS);
+}
+
+async function handleTriviaAnswer(message, content) {
+  const channelId = message.channelId;
+  const entry = activeTrivia.get(channelId);
+  if (!entry) return false;
+
+  const cleaned = content.trim().toUpperCase().replace(/[).:]/g, "");
+  const guessIndex = TRIVIA_LETTERS.indexOf(cleaned);
+  if (guessIndex === -1) return false;
+  if (guessIndex !== entry.question.answer) return false;
+
+  clearTimeout(entry.timeout);
+  activeTrivia.delete(channelId);
+
+  const displayName = (message.member && message.member.displayName) ||
+    message.author.globalName || message.author.username;
+  const total = awardTriviaPoints(message.author.id);
+  await message.reply(
+    "Correct, " + displayName + "! The answer was " + TRIVIA_LETTERS[entry.question.answer] + ") " +
+    entry.question.choices[entry.question.answer] + ". +" + TRIVIA_POINTS + " points (" + total + " total)."
+  );
+  return true;
+}
+
+async function handleScore(message) {
+  const scores = loadScores();
+  const entries = Object.entries(scores)
+    .filter(([, points]) => points > 0)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, SCORE_TOP_N);
+
+  if (entries.length === 0) {
+    await message.reply("Nobody has scored any trivia points yet! Type !trivia to start a round.");
+    return;
+  }
+
+  const lines = ["Top trivia scores:"];
+  entries.forEach((entry, i) => {
+    const userId = entry[0];
+    const points = entry[1];
+    lines.push((i + 1) + ". <@" + userId + "> - " + points + " point" + (points === 1 ? "" : "s"));
+  });
+
+  await message.reply({ content: lines.join("\n"), allowedMentions: { users: [] } });
+}
+
 async function handleHelp(message, note) {
   await message.reply(
     "Commands:\n" +
@@ -1372,7 +1512,9 @@ async function handleHelp(message, note) {
     "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
     "!memories - show everything I remember about you\n" +
     "!check - run the sale check right now instead of waiting for the daily run\n" +
-    "!shops - list every store I check prices at" +
+    "!shops - list every store I check prices at\n" +
+    "!trivia - PC gaming trivia, multiple choice, first correct answer in chat wins 100 points\n" +
+    "!score - show the top 10 members by trivia points" +
     (note ? "\n\n" + note : "")
   );
 }
@@ -1581,6 +1723,10 @@ client.on("messageCreate", async (message) => {
   const content = message.content.trim();
   const lower = content.toLowerCase();
 
+  if (!content.startsWith("!") && (await handleTriviaAnswer(message, content))) {
+    return;
+  }
+
   if (lower.startsWith("!watch ")) {
     await handleWatch(message, content.slice(7).trim());
   } else if (lower.startsWith("!remove ")) {
@@ -1619,6 +1765,10 @@ client.on("messageCreate", async (message) => {
     await handleList(message);
   } else if (lower === "!shops") {
     await handleShops(message);
+  } else if (lower === "!trivia") {
+    await handleTrivia(message);
+  } else if (lower === "!score") {
+    await handleScore(message);
   } else if (lower === "!help") {
     await handleHelp(message);
   } else if (!content.startsWith("!") && AI_ENABLED &&

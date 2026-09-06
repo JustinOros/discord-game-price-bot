@@ -4,6 +4,7 @@ games.json
 owned.json
 steamlinks.json
 memory.yaml
+scores.json
 .link-steam-profiles-owner.json
 bot.log
 bot.error.log

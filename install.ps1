@@ -79,6 +79,10 @@ if (-not (Test-Path "memory.yaml")) {
   Copy-Item "memory.yaml.example" "memory.yaml"
 }
 
+if (-not (Test-Path "scores.json")) {
+  Copy-Item "scores.json.example" "scores.json"
+}
+
 if ([string]::IsNullOrWhiteSpace((Get-EnvValue "DISCORD_BOT_TOKEN"))) {
   Write-Host ""
   Write-Host "Need a Discord bot token:"
@@ -166,7 +170,7 @@ if (-not (Test-CommandExists pm2)) {
   npm install -g pm2
 }
 
-$AppName = "discord-game-price-bot"
+$AppName = "discord-bot"
 
 pm2 delete $AppName 2>$null | Out-Null
 pm2 start index.js --name $AppName --cwd $ScriptDir --output "$ScriptDir\bot.log" --error "$ScriptDir\bot.error.log"

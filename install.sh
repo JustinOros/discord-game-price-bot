@@ -82,6 +82,10 @@ if [[ ! -f memory.yaml ]]; then
   cp memory.yaml.example memory.yaml
 fi
 
+if [[ ! -f scores.json ]]; then
+  cp scores.json.example scores.json
+fi
+
 CURRENT_TOKEN=$(grep -E "^DISCORD_BOT_TOKEN=" .env | cut -d "=" -f2-)
 CURRENT_KEY=$(grep -E "^ITAD_API_KEY=" .env | cut -d "=" -f2-)
 
@@ -170,7 +174,7 @@ if ! command -v pm2 >/dev/null 2>&1; then
   npm install -g pm2
 fi
 
-APP_NAME="discord-game-price-bot"
+APP_NAME="discord-bot"
 
 pm2 delete "$APP_NAME" >/dev/null 2>&1 || true
 pm2 start index.js --name "$APP_NAME" --cwd "$SCRIPT_DIR" --output "$SCRIPT_DIR/bot.log" --error "$SCRIPT_DIR/bot.error.log"
