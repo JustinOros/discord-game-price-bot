@@ -115,6 +115,16 @@ function markActiveAiConversation(userId, channelId) {
   activeAiConversations.set(userId, { channelId: channelId, expiresAt: Date.now() + AI_ACTIVE_CONVO_MS });
 }
 
+async function isReplyToBot(message) {
+  if (!message.reference || !message.reference.messageId) return false;
+  try {
+    const refMessage = await message.channel.messages.fetch(message.reference.messageId);
+    return refMessage.author.id === client.user.id;
+  } catch (err) {
+    return false;
+  }
+}
+
 function getAiHistory(userId) {
   const entry = aiHistories.get(userId);
   if (!entry) return [];
@@ -1609,7 +1619,9 @@ client.on("messageCreate", async (message) => {
   } else if (lower === "!help") {
     await handleHelp(message);
   } else if (!content.startsWith("!") && AI_ENABLED &&
-      (TRIGGER_MENTION.test(content) || isActiveAiConversation(message.author.id, message.channelId))) {
+      (TRIGGER_MENTION.test(content) ||
+        isActiveAiConversation(message.author.id, message.channelId) ||
+        await isReplyToBot(message))) {
     if (canUseAI(message.author.id)) {
       try {
         const history = getAiHistory(message.author.id);
