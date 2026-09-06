@@ -96,8 +96,6 @@ const aiCooldowns = new Map();
 const aiHistories = new Map();
 const AI_HISTORY_EXCHANGES = 3;
 const AI_HISTORY_TTL_MS = 30 * 60 * 1000;
-const activeAiConversations = new Map();
-const AI_ACTIVE_CONVO_MS = 2 * 60 * 1000;
 
 function canUseAI(userId) {
   const now = Date.now();
@@ -105,20 +103,6 @@ function canUseAI(userId) {
   if (now - last < AI_COOLDOWN_MS) return false;
   aiCooldowns.set(userId, now);
   return true;
-}
-
-function isActiveAiConversation(userId, channelId) {
-  const entry = activeAiConversations.get(userId);
-  if (!entry) return false;
-  if (Date.now() > entry.expiresAt) {
-    activeAiConversations.delete(userId);
-    return false;
-  }
-  return entry.channelId === channelId;
-}
-
-function markActiveAiConversation(userId, channelId) {
-  activeAiConversations.set(userId, { channelId: channelId, expiresAt: Date.now() + AI_ACTIVE_CONVO_MS });
 }
 
 async function isReplyToBot(message) {
@@ -248,7 +232,11 @@ function saveSteamLinks(links) {
 }
 
 function loadScores() {
-  return JSON.parse(fs.readFileSync(SCORES_PATH, "utf8"));
+  try {
+    return JSON.parse(fs.readFileSync(SCORES_PATH, "utf8"));
+  } catch (err) {
+    return {};
+  }
 }
 
 function saveScores(scores) {
@@ -1370,7 +1358,7 @@ async function handleShops(message) {
   }
 }
 
-const TRIVIA_TIME_LIMIT_MS = 30 * 1000;
+const TRIVIA_TIME_LIMIT_MS = 60 * 1000;
 const TRIVIA_LETTERS = ["A", "B", "C", "D"];
 const activeTrivia = new Map();
 
@@ -1419,12 +1407,12 @@ async function handleTrivia(message) {
   }
 
   const picked = pickTriviaQuestion();
-  const entry = { question: picked, timeout: null };
+  const entry = { question: picked, timeout: null, answered: new Set() };
   activeTrivia.set(channelId, entry);
 
   const lines = ["PC gaming trivia! " + picked.question];
   picked.choices.forEach((choice, i) => lines.push(TRIVIA_LETTERS[i] + ") " + choice));
-  lines.push("You have 30 seconds, first correct answer wins!");
+  lines.push("You have 60 seconds, first correct answer wins!");
 
   try {
     await message.reply(lines.join("\n"));
@@ -1455,6 +1443,10 @@ async function handleTriviaAnswer(message, content) {
   const cleaned = content.trim().toUpperCase().replace(/[).:]/g, "");
   const guessIndex = TRIVIA_LETTERS.indexOf(cleaned);
   if (guessIndex === -1) return false;
+
+  if (entry.answered.has(message.author.id)) return false;
+  entry.answered.add(message.author.id);
+
   if (guessIndex !== entry.question.answer) return false;
 
   clearTimeout(entry.timeout);
@@ -1723,8 +1715,14 @@ client.on("messageCreate", async (message) => {
   const content = message.content.trim();
   const lower = content.toLowerCase();
 
-  if (!content.startsWith("!") && (await handleTriviaAnswer(message, content))) {
-    return;
+  if (!content.startsWith("!")) {
+    let triviaHandled = false;
+    try {
+      triviaHandled = await handleTriviaAnswer(message, content);
+    } catch (err) {
+      console.error("Trivia answer check failed:", err.message);
+    }
+    if (triviaHandled) return;
   }
 
   if (lower.startsWith("!watch ")) {
@@ -1772,9 +1770,7 @@ client.on("messageCreate", async (message) => {
   } else if (lower === "!help") {
     await handleHelp(message);
   } else if (!content.startsWith("!") && AI_ENABLED &&
-      (TRIGGER_MENTION.test(content) ||
-        isActiveAiConversation(message.author.id, message.channelId) ||
-        await isReplyToBot(message))) {
+      (TRIGGER_MENTION.test(content) || await isReplyToBot(message))) {
     if (canUseAI(message.author.id)) {
       try {
         const history = getAiHistory(message.author.id);
@@ -1786,7 +1782,6 @@ client.on("messageCreate", async (message) => {
         if (aiReply) {
           await message.reply(aiReply);
           rememberAiExchange(message.author.id, content, aiReply);
-          markActiveAiConversation(message.author.id, message.channelId);
         }
       } catch (err) {
         console.error(PERSONALITY.name + " AI reply failed:", err.message);
