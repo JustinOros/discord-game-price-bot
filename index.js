@@ -28,6 +28,7 @@ const GAMES_PATH = path.join(__dirname, "games.json");
 const OWNED_PATH = path.join(__dirname, "owned.json");
 const STEAMLINKS_PATH = path.join(__dirname, "steamlinks.json");
 const SCORES_PATH = path.join(__dirname, "scores.json");
+const TRIVIA_PATH = path.join(__dirname, "trivia.json");
 const GREETINGS_PATH = path.join(__dirname, "greetings.yaml");
 const GOODBYES_PATH = path.join(__dirname, "goodbyes.yaml");
 const README_PATH = path.join(__dirname, "README.md");
@@ -1362,38 +1363,27 @@ const TRIVIA_TIME_LIMIT_MS = 60 * 1000;
 const TRIVIA_LETTERS = ["A", "B", "C", "D"];
 const activeTrivia = new Map();
 
-const TRIVIA_QUESTIONS = [
+const FALLBACK_TRIVIA_QUESTIONS = [
   { question: "Which company developed the original Half-Life?", choices: ["Valve", "id Software", "Epic Games", "Bethesda"], answer: 0 },
   { question: "What year did Steam first launch?", choices: ["2001", "2003", "2005", "2008"], answer: 1 },
   { question: "Which studio made Minecraft?", choices: ["Mojang", "Notch Games", "Microsoft Studios", "Double Fine"], answer: 0 },
   { question: "What engine powers Fortnite?", choices: ["Source", "Unity", "Unreal Engine", "CryEngine"], answer: 2 },
-  { question: "Which game popularized the battle royale genre on PC?", choices: ["Fortnite", "PUBG", "Apex Legends", "Warzone"], answer: 1 },
-  { question: "Who is the developer of the Elder Scrolls series?", choices: ["BioWare", "Bethesda Game Studios", "CD Projekt Red", "Obsidian"], answer: 1 },
-  { question: "What was the first game in the Half-Life series to introduce Alyx Vance?", choices: ["Half-Life", "Half-Life 2", "Half-Life: Opposing Force", "Half-Life: Blue Shift"], answer: 1 },
-  { question: "Which company created the Unreal Engine?", choices: ["Epic Games", "id Software", "Valve", "Crytek"], answer: 0 },
-  { question: "What is the best-selling PC game franchise made by Blizzard, known for orcs versus humans?", choices: ["StarCraft", "Diablo", "Warcraft", "Overwatch"], answer: 2 },
-  { question: "Which studio developed The Witcher 3: Wild Hunt?", choices: ["CD Projekt Red", "11 bit studios", "Techland", "People Can Fly"], answer: 0 },
-  { question: "What year was the original Doom released?", choices: ["1990", "1993", "1996", "1999"], answer: 1 },
-  { question: "Which company publishes the Steam storefront?", choices: ["Epic Games", "GOG", "Valve", "Microsoft"], answer: 2 },
-  { question: "What is the name of the AI companion in Portal?", choices: ["GLaDOS", "Cortana", "HAL", "SHODAN"], answer: 0 },
-  { question: "Which game is credited as one of the first major esports titles on PC?", choices: ["StarCraft: Brood War", "Minecraft", "The Sims", "Half-Life 2"], answer: 0 },
-  { question: "What company developed the Source engine?", choices: ["Valve", "id Software", "Epic Games", "Bethesda"], answer: 0 },
-  { question: "Which platform, launched by CD Projekt, is a DRM-free game store?", choices: ["Origin", "GOG", "itch.io", "Epic Games Store"], answer: 1 },
-  { question: "What is the name of the map editor built into many Bethesda games like Skyrim?", choices: ["Hammer", "Creation Kit", "UnrealEd", "Forge"], answer: 1 },
-  { question: "Which game series features the character Master Chief?", choices: ["Gears of War", "Halo", "Destiny", "Titanfall"], answer: 1 },
-  { question: "Who developed the game engine CryEngine?", choices: ["Crytek", "id Software", "Epic Games", "Valve"], answer: 0 },
-  { question: "What year did the Epic Games Store launch?", choices: ["2016", "2018", "2020", "2013"], answer: 1 },
-  { question: "Which game is known for popularizing the tower defense genre as a standalone PC hit?", choices: ["Plants vs. Zombies", "Bloons TD", "Dungeon Defenders", "Orcs Must Die!"], answer: 0 },
-  { question: "What studio created the Portal series?", choices: ["Valve", "id Software", "Arkane Studios", "Remedy Entertainment"], answer: 0 },
-  { question: "Which game was developed by Klei Entertainment and involves surviving on an alien planet?", choices: ["Don't Starve", "Oxygen Not Included", "Subnautica", "Raft"], answer: 1 },
-  { question: "Which company originally created and released Counter-Strike as a Half-Life mod?", choices: ["Valve", "a group of independent modders", "id Software", "Gearbox Software"], answer: 1 },
-  { question: "What year was the first Grand Theft Auto game released on PC?", choices: ["1994", "1997", "2001", "2004"], answer: 1 },
-  { question: "Which developer is known for the Souls series, including Dark Souls and Elden Ring?", choices: ["FromSoftware", "Team Ninja", "Capcom", "PlatinumGames"], answer: 0 },
-  { question: "What was the codename/engine used for id Software's Doom (2016) and Doom Eternal?", choices: ["id Tech", "Frostbite", "REDengine", "Anvil"], answer: 0 },
-  { question: "Which sandbox survival game was created by Facepunch Studios?", choices: ["Rust", "Ark: Survival Evolved", "7 Days to Die", "DayZ"], answer: 0 },
-  { question: "What game is widely credited as the first commercially successful real-time strategy game?", choices: ["Command & Conquer", "Dune II", "Warcraft: Orcs & Humans", "Age of Empires"], answer: 1 },
-  { question: "Which company developed and publishes World of Warcraft?", choices: ["Blizzard Entertainment", "Bethesda", "Square Enix", "NCSoft"], answer: 0 }
+  { question: "Which game popularized the battle royale genre on PC?", choices: ["Fortnite", "PUBG", "Apex Legends", "Warzone"], answer: 1 }
 ];
+
+function loadTriviaQuestions() {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(TRIVIA_PATH, "utf8"));
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed;
+    }
+    return FALLBACK_TRIVIA_QUESTIONS;
+  } catch (err) {
+    return FALLBACK_TRIVIA_QUESTIONS;
+  }
+}
+
+const TRIVIA_QUESTIONS = loadTriviaQuestions();
 
 function pickTriviaQuestion() {
   return TRIVIA_QUESTIONS[Math.floor(Math.random() * TRIVIA_QUESTIONS.length)];
@@ -1410,7 +1400,7 @@ async function handleTrivia(message) {
   const entry = { question: picked, timeout: null, answered: new Set() };
   activeTrivia.set(channelId, entry);
 
-  const lines = ["PC gaming trivia! " + picked.question];
+  const lines = ["Video game trivia! " + picked.question];
   picked.choices.forEach((choice, i) => lines.push(TRIVIA_LETTERS[i] + ") " + choice));
   lines.push("You have 60 seconds, first correct answer wins!");
 
@@ -1505,7 +1495,7 @@ async function handleHelp(message, note) {
     "!memories - show everything I remember about you\n" +
     "!check - run the sale check right now instead of waiting for the daily run\n" +
     "!shops - list every store I check prices at\n" +
-    "!trivia - PC gaming trivia, multiple choice, first correct answer in chat wins 100 points\n" +
+    "!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n" +
     "!score - show the top 10 members by trivia points" +
     (note ? "\n\n" + note : "")
   );
