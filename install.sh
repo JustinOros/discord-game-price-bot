@@ -131,16 +131,16 @@ if [[ -z "$CURRENT_STEAM_KEY" ]]; then
   set_env_value STEAM_API_KEY "$STEAM_KEY_INPUT"
 fi
 
-CURRENT_BRAVE_KEY=$(grep -E "^BRAVE_API_KEY=" .env | cut -d "=" -f2-)
+CURRENT_TAVILY_KEY=$(grep -E "^TAVILY_API_KEY=" .env | cut -d "=" -f2-)
 
-if [[ -z "$CURRENT_BRAVE_KEY" ]]; then
+if [[ -z "$CURRENT_TAVILY_KEY" ]]; then
   echo ""
-  echo "Optional - lets the AI chat look things up on the web (like exact item locations or boss strategies) instead of only relying on what the AI model already knows:"
-  echo "1. Go to https://brave.com/search/api/ and sign up for the free plan"
-  echo "2. Create an API key and copy it"
+  echo "Optional - lets the AI chat look things up on the web (like exact item locations or boss strategies) instead of only relying on what the AI model already knows. Free, no credit card required:"
+  echo "1. Go to https://app.tavily.com/ and sign up"
+  echo "2. Copy the API key it shows you (starts with tvly-)"
   echo ""
-  read -p "Paste your Brave Search API key, or press Enter to skip: " BRAVE_KEY_INPUT
-  set_env_value BRAVE_API_KEY "$BRAVE_KEY_INPUT"
+  read -p "Paste your Tavily API key, or press Enter to skip: " TAVILY_KEY_INPUT
+  set_env_value TAVILY_API_KEY "$TAVILY_KEY_INPUT"
 fi
 
 if ! command -v ollama >/dev/null 2>&1; then

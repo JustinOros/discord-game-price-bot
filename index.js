@@ -16,9 +16,9 @@ const STEAM_API_KEY = process.env.STEAM_API_KEY;
 const AI_ENABLED = process.env.AI_ENABLED !== "false";
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.2";
-const BRAVE_API_KEY = process.env.BRAVE_API_KEY;
-const WEB_SEARCH_ENABLED = !!BRAVE_API_KEY;
-const WEB_SEARCH_RESULT_COUNT = 3;
+const TAVILY_API_KEY = process.env.TAVILY_API_KEY;
+const WEB_SEARCH_ENABLED = !!TAVILY_API_KEY;
+const WEB_SEARCH_RESULT_COUNT = 5;
 const WEB_SEARCH_TIMEOUT_MS = 5000;
 const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
@@ -90,22 +90,25 @@ async function searchWeb(query) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), WEB_SEARCH_TIMEOUT_MS);
   try {
-    const url = "https://api.search.brave.com/res/v1/web/search?q=" + encodeURIComponent(query) +
-      "&count=" + WEB_SEARCH_RESULT_COUNT;
-    const res = await fetch(url, {
+    const res = await fetch("https://api.tavily.com/search", {
+      method: "POST",
       headers: {
-        "Accept": "application/json",
-        "Accept-Encoding": "gzip",
-        "X-Subscription-Token": BRAVE_API_KEY
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + TAVILY_API_KEY
       },
+      body: JSON.stringify({
+        query: query,
+        max_results: WEB_SEARCH_RESULT_COUNT,
+        search_depth: "advanced"
+      }),
       signal: controller.signal
     });
     if (!res.ok) return [];
     const data = await res.json();
-    const results = (data.web && data.web.results) || [];
+    const results = data.results || [];
     return results.slice(0, WEB_SEARCH_RESULT_COUNT).map((r) => ({
       title: stripHtml(r.title),
-      description: stripHtml(r.description),
+      description: stripHtml(r.content),
       url: r.url || ""
     }));
   } catch (err) {
@@ -126,7 +129,9 @@ const AI_SYSTEM_PROMPT =
   "quip. But for a real question - how to use the bot, or a game question like where to find something or " +
   "how to beat something - you can use two or three short sentences to actually give the useful answer; " +
   "accuracy and usefulness matter more than brevity there, so don't cut a real answer short just to be " +
-  "punchy. Never use a numbered or bulleted list. Speak only in " +
+  "punchy. Never use a numbered or bulleted list. Never include stage directions or action narration of any " +
+  "kind, with or without asterisks - no \"*whirrs*\", no \"pauses for a moment\", no describing sounds, " +
+  "gestures, or pauses you're making. Just speak the words out loud, nothing else. Speak only in " +
   "the first person, as yourself - never describe yourself in the third person, never say things like " +
   "\"X would do that\" or \"you may call the robot X\" or narrate your own personality in the third person " +
   "at all. When someone corrects you or asks you to stop doing something, just naturally comply in your " +
@@ -223,9 +228,11 @@ async function askAI(question, history, displayName, allFacts, searchResults) {
   if (searchResults && searchResults.length > 0) {
     messages.push({
       role: "system",
-      content: "Live search results for this question, in case they help you give an accurate, specific " +
-        "answer (like an exact item location, boss strategy, or release date). Ignore them completely if " +
-        "they are not actually relevant, or if this is just casual chat rather than a real question:\n" +
+      content: "Live search results for this question. If they contain the specific answer (an exact location, " +
+        "name, or strategy), state it directly and confidently as fact - do not hedge with phrases like " +
+        "\"I'm not sure\" or \"I think\" when the results actually say it. Only fall back to a general answer " +
+        "if the results genuinely don't cover it. Ignore them completely if this is just casual chat rather " +
+        "than a real question:\n" +
         searchResults.map((r, i) => (i + 1) + ". " + r.title + " - " + r.description + " (" + r.url + ")").join("\n")
     });
   }

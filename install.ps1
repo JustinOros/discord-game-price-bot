@@ -123,14 +123,14 @@ if ([string]::IsNullOrWhiteSpace((Get-EnvValue "STEAM_API_KEY"))) {
   Set-EnvValue "STEAM_API_KEY" $steamKeyInput
 }
 
-if ([string]::IsNullOrWhiteSpace((Get-EnvValue "BRAVE_API_KEY"))) {
+if ([string]::IsNullOrWhiteSpace((Get-EnvValue "TAVILY_API_KEY"))) {
   Write-Host ""
-  Write-Host "Optional - lets the AI chat look things up on the web (like exact item locations or boss strategies) instead of only relying on what the AI model already knows:"
-  Write-Host "1. Go to https://brave.com/search/api/ and sign up for the free plan"
-  Write-Host "2. Create an API key and copy it"
+  Write-Host "Optional - lets the AI chat look things up on the web (like exact item locations or boss strategies) instead of only relying on what the AI model already knows. Free, no credit card required:"
+  Write-Host "1. Go to https://app.tavily.com/ and sign up"
+  Write-Host "2. Copy the API key it shows you (starts with tvly-)"
   Write-Host ""
-  $braveKeyInput = Read-Host "Paste your Brave Search API key, or press Enter to skip"
-  Set-EnvValue "BRAVE_API_KEY" $braveKeyInput
+  $tavilyKeyInput = Read-Host "Paste your Tavily API key, or press Enter to skip"
+  Set-EnvValue "TAVILY_API_KEY" $tavilyKeyInput
 }
 
 if (-not (Test-CommandExists ollama)) {
