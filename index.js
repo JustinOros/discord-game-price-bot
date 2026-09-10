@@ -19,7 +19,7 @@ const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.2";
 const TAVILY_API_KEY = process.env.TAVILY_API_KEY;
 const WEB_SEARCH_ENABLED = !!TAVILY_API_KEY;
 const WEB_SEARCH_RESULT_COUNT = 5;
-const WEB_SEARCH_TIMEOUT_MS = 5000;
+const WEB_SEARCH_TIMEOUT_MS = 12000;
 const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
 const EVENT_REMINDER_MINUTES = 15;
@@ -86,7 +86,7 @@ function stripHtml(text) {
 }
 
 async function searchWeb(query) {
-  if (!WEB_SEARCH_ENABLED || !query) return [];
+  if (!WEB_SEARCH_ENABLED || !query) return { answer: null, results: [] };
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), WEB_SEARCH_TIMEOUT_MS);
   try {
@@ -99,20 +99,30 @@ async function searchWeb(query) {
       body: JSON.stringify({
         query: query,
         max_results: WEB_SEARCH_RESULT_COUNT,
-        search_depth: "advanced"
+        search_depth: "advanced",
+        include_answer: true
       }),
       signal: controller.signal
     });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      console.error("Tavily search failed:", res.status, await res.text());
+      return { answer: null, results: [] };
+    }
     const data = await res.json();
     const results = data.results || [];
-    return results.slice(0, WEB_SEARCH_RESULT_COUNT).map((r) => ({
-      title: stripHtml(r.title),
-      description: stripHtml(r.content),
-      url: r.url || ""
-    }));
+    const answer = data.answer ? stripHtml(data.answer) : null;
+    console.log("Tavily search for \"" + query + "\" returned " + results.length + " results" + (answer ? " and a direct answer" : ""));
+    return {
+      answer: answer,
+      results: results.slice(0, WEB_SEARCH_RESULT_COUNT).map((r) => ({
+        title: stripHtml(r.title),
+        description: stripHtml(r.content),
+        url: r.url || ""
+      }))
+    };
   } catch (err) {
-    return [];
+    console.error("Tavily search error:", err.message);
+    return { answer: null, results: [] };
   } finally {
     clearTimeout(timeout);
   }
@@ -208,36 +218,60 @@ function capToSentences(text, maxSentences) {
   return sentences.slice(0, maxSentences).map((s) => s.trim()).join(" ").trim();
 }
 
+const STAGE_DIRECTION_PHRASES = /\b(whirrs?(\s+and\s+beeps?)?|beeps?(\s+and\s+whirrs?)?|pauses?\s+for\s+a\s+moment|clears?\s+(its|his|her)\s+throat|chuckles?(\s+softly)?|sighs?(\s+(heavily|deeply))?|nods?(\s+slowly)?|tilts?\s+(its|his|her)\s+head|shrugs?)\b[.,]?\s*/gi;
+
+function stripStageDirections(text) {
+  return text
+    .replace(/\*[^*]*\*/g, " ")
+    .replace(STAGE_DIRECTION_PHRASES, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 async function askAI(question, history, displayName, allFacts, searchResults) {
-  const messages = [
-    { role: "system", content: AI_SYSTEM_PROMPT },
-    { role: "system", content: "You are talking with " + displayName + " right now. Address them as " + displayName + " or naturally - never by any other name, and never describe them using a label like \"Discord member.\"" }
-  ];
+  let systemContent = AI_SYSTEM_PROMPT +
+    "\n\nYou are talking with " + displayName + " right now. Address them as " + displayName + " or naturally - " +
+    "never by any other name, and never describe them using a label like \"Discord member.\"";
 
   if (allFacts && allFacts.length > 0) {
-    messages.push({
-      role: "system",
-      content: "Permanent facts Discord members have taught you with !remember - shared knowledge across " +
-        "everyone here, not private to whoever said them. Some are about the person who said them, some " +
-        "are about someone else they mentioned by name - use whichever ones are relevant, including when " +
-        "someone asks you what you know about a specific named person:\n" +
-        allFacts.map((f) => "- " + f).join("\n")
-    });
+    systemContent += "\n\nPermanent facts Discord members have taught you with !remember - shared knowledge " +
+      "across everyone here, not private to whoever said them. Some are about the person who said them, some " +
+      "are about someone else they mentioned by name - use whichever ones are relevant, including when " +
+      "someone asks you what you know about a specific named person:\n" +
+      allFacts.map((f) => "- " + f).join("\n");
   }
 
-  if (searchResults && searchResults.length > 0) {
+  const messages = [{ role: "system", content: systemContent }, ...history];
+
+  const hasAnswer = searchResults && searchResults.answer;
+  const hasResults = searchResults && searchResults.results && searchResults.results.length > 0;
+
+  if (hasAnswer) {
     messages.push({
-      role: "system",
-      content: "Live search results for this question. If they contain the specific answer (an exact location, " +
-        "name, or strategy), state it directly and confidently as fact - do not hedge with phrases like " +
-        "\"I'm not sure\" or \"I think\" when the results actually say it. Only fall back to a general answer " +
-        "if the results genuinely don't cover it. Ignore them completely if this is just casual chat rather " +
-        "than a real question:\n" +
-        searchResults.map((r, i) => (i + 1) + ". " + r.title + " - " + r.description + " (" + r.url + ")").join("\n")
+      role: "user",
+      content: "Here is the answer to my next question, already looked up for you: \"" + searchResults.answer +
+        "\". Just repeat this fact back to me in your own words, in character, confidently and specifically - " +
+        "do not say \"I'm not sure\" or hedge in any way, this is a known fact. Ignore it completely only if " +
+        "my next message turns out to be casual chat rather than a real question."
     });
+    messages.push({ role: "assistant", content: "Got it, I'll answer with that." });
+  } else if (hasResults) {
+    messages.push({
+      role: "user",
+      content: "Here are live search results for my next question. If they contain the specific answer (an " +
+        "exact location, name, or strategy), state it directly and confidently as fact in your reply - do not " +
+        "hedge with phrases like \"I'm not sure\" or \"I think\" when the results actually say it, and never " +
+        "say something vague like \"it's in a specific spot but I'm not sure what it is\" - that is worse than " +
+        "useless. For example, if a result says \"the red key is in the sewer level, behind the waterfall,\" " +
+        "answer like \"It's in the sewer level, behind the waterfall\" - not \"it's somewhere in the sewer " +
+        "level.\" Only fall back to a general answer if the results genuinely don't mention it at all. Ignore " +
+        "them completely if my next message turns out to be just casual chat rather than a real question:\n" +
+        searchResults.results.map((r, i) => (i + 1) + ". " + r.title + " - " + r.description + " (" + r.url + ")").join("\n")
+    });
+    messages.push({ role: "assistant", content: "Got it, I'll use those if they're relevant." });
   }
 
-  messages.push(...history, { role: "user", content: question });
+  messages.push({ role: "user", content: question });
 
   const res = await fetch(OLLAMA_URL + "/api/chat", {
     method: "POST",
@@ -257,7 +291,7 @@ async function askAI(question, history, displayName, allFacts, searchResults) {
   }
   const data = await res.json();
   const reply = data.message && data.message.content;
-  return reply ? capToSentences(trimIncompleteSentence(reply), AI_MAX_SENTENCES) : null;
+  return reply ? capToSentences(trimIncompleteSentence(stripStageDirections(reply)), AI_MAX_SENTENCES) : null;
 }
 
 function loadGreetings() {
@@ -1697,6 +1731,7 @@ const client = new Client({
 
 client.once("clientReady", () => {
   console.log("Logged in as " + client.user.tag);
+  console.log("Web search: " + (WEB_SEARCH_ENABLED ? "enabled (TAVILY_API_KEY is set)" : "disabled - set TAVILY_API_KEY in .env to enable"));
   cron.schedule("0 15 * * *", () => checkPrices(client));
   cron.schedule("* * * * *", () => checkUpcomingEvents(client));
 });
@@ -1835,7 +1870,9 @@ client.on("messageCreate", async (message) => {
         const memory = loadMemory();
         const allFacts = Object.values(memory).reduce((acc, list) => acc.concat(list || []), []);
         const searchResults = await searchWeb(buildSearchQuery(content));
-        const aiReply = await askAI(content, history, displayName, allFacts, searchResults);
+        const aiReply = searchResults && searchResults.answer
+          ? capToSentences(searchResults.answer.trim(), AI_MAX_SENTENCES)
+          : await askAI(content, history, displayName, allFacts, searchResults);
         if (aiReply) {
           await message.reply(aiReply);
           rememberAiExchange(message.author.id, content, aiReply);
