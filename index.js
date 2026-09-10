@@ -75,11 +75,6 @@ function loadPersonality() {
 
 const PERSONALITY = loadPersonality();
 const TRIGGER_MENTION = new RegExp("\\b" + escapeRegex(PERSONALITY.trigger) + "\\b", "i");
-const TRIGGER_STRIP = new RegExp("\\b" + escapeRegex(PERSONALITY.trigger) + "\\b", "gi");
-
-function buildSearchQuery(content) {
-  return content.replace(TRIGGER_STRIP, "").replace(/\s+/g, " ").trim();
-}
 
 function stripHtml(text) {
   return (text || "").replace(/<\/?[^>]+(>|$)/g, "");
@@ -144,7 +139,11 @@ const AI_SYSTEM_PROMPT =
   "gestures, or pauses you're making. Just speak the words out loud, nothing else. Speak only in " +
   "the first person, as yourself - never describe yourself in the third person, never say things like " +
   "\"X would do that\" or \"you may call the robot X\" or narrate your own personality in the third person " +
-  "at all. When someone corrects you or asks you to stop doing something, just naturally comply in your " +
+  "at all. Never open a reply with \"You're talking with...\" or \"You're talking to...\" or restate who you " +
+  "are and what you do like an introduction - the person already knows who they're talking to, just answer " +
+  "them like a friend would, mid-conversation. For example, if someone asks how you're doing, a bad reply is " +
+  "\"You're talking with me, [name]! I'm doing great...\" - just say how you're doing, straight away, like " +
+  "\"I'm doing great, thanks for asking!\" When someone corrects you or asks you to stop doing something, just naturally comply in your " +
   "next reply - never break character to acknowledge, explain, or announce that you're following a rule " +
   "or correction, and never repeat back what they told you not to do. Stay in character and do not " +
   "mention that you are an AI, a language model, or any of the technical details behind you (Ollama, " +
@@ -1574,6 +1573,35 @@ async function handleScore(message) {
   await message.reply({ content: lines.join("\n"), allowedMentions: { users: [] } });
 }
 
+async function handleWiki(message, query) {
+  if (!AI_ENABLED) {
+    await message.reply("AI isn't enabled for this bot right now.");
+    return;
+  }
+  if (!query) {
+    await message.reply("Ask a game question after !wiki, like !wiki where is the key card on The Forest");
+    return;
+  }
+  if (!canUseAI(message.author.id)) return;
+  try {
+    const history = getAiHistory(message.author.id);
+    const displayName = (message.member && message.member.displayName) ||
+      message.author.globalName || message.author.username;
+    const memory = loadMemory();
+    const allFacts = Object.values(memory).reduce((acc, list) => acc.concat(list || []), []);
+    const searchResults = await searchWeb(query);
+    const aiReply = searchResults && searchResults.answer
+      ? capToSentences(searchResults.answer.trim(), AI_MAX_SENTENCES)
+      : await askAI(query, history, displayName, allFacts, searchResults);
+    if (aiReply) {
+      await message.reply(aiReply);
+      rememberAiExchange(message.author.id, query, aiReply);
+    }
+  } catch (err) {
+    console.error(PERSONALITY.name + " wiki reply failed:", err.message);
+  }
+}
+
 async function handleHelp(message, note) {
   await message.reply(
     "Commands:\n" +
@@ -1596,7 +1624,8 @@ async function handleHelp(message, note) {
     "!check - run the sale check right now instead of waiting for the daily run\n" +
     "!shops - list every store I check prices at\n" +
     "!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n" +
-    "!score - show the top 10 members by trivia points" +
+    "!score - show the top 10 members by trivia points\n" +
+    "!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer" +
     (note ? "\n\n" + note : "")
   );
 }
@@ -1860,6 +1889,8 @@ client.on("messageCreate", async (message) => {
     await handleScore(message);
   } else if (lower === "!help") {
     await handleHelp(message);
+  } else if (lower.startsWith("!wiki ")) {
+    await handleWiki(message, content.slice(6).trim());
   } else if (!content.startsWith("!") && AI_ENABLED &&
       (TRIGGER_MENTION.test(content) || await isReplyToBot(message))) {
     if (canUseAI(message.author.id)) {
@@ -1869,10 +1900,7 @@ client.on("messageCreate", async (message) => {
           message.author.globalName || message.author.username;
         const memory = loadMemory();
         const allFacts = Object.values(memory).reduce((acc, list) => acc.concat(list || []), []);
-        const searchResults = await searchWeb(buildSearchQuery(content));
-        const aiReply = searchResults && searchResults.answer
-          ? capToSentences(searchResults.answer.trim(), AI_MAX_SENTENCES)
-          : await askAI(content, history, displayName, allFacts, searchResults);
+        const aiReply = await askAI(content, history, displayName, allFacts, null);
         if (aiReply) {
           await message.reply(aiReply);
           rememberAiExchange(message.author.id, content, aiReply);
