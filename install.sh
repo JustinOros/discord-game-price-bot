@@ -131,6 +131,18 @@ if [[ -z "$CURRENT_STEAM_KEY" ]]; then
   set_env_value STEAM_API_KEY "$STEAM_KEY_INPUT"
 fi
 
+CURRENT_BRAVE_KEY=$(grep -E "^BRAVE_API_KEY=" .env | cut -d "=" -f2-)
+
+if [[ -z "$CURRENT_BRAVE_KEY" ]]; then
+  echo ""
+  echo "Optional - lets the AI chat look things up on the web (like exact item locations or boss strategies) instead of only relying on what the AI model already knows:"
+  echo "1. Go to https://brave.com/search/api/ and sign up for the free plan"
+  echo "2. Create an API key and copy it"
+  echo ""
+  read -p "Paste your Brave Search API key, or press Enter to skip: " BRAVE_KEY_INPUT
+  set_env_value BRAVE_API_KEY "$BRAVE_KEY_INPUT"
+fi
+
 if ! command -v ollama >/dev/null 2>&1; then
   echo ""
   read -p "Want the bot to use AI to give smarter, in-character answers when people chat with it? This is free - it installs Ollama and runs a small AI model locally on this machine, no API key or cost involved. [y/N] " AI_ANSWER

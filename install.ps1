@@ -123,6 +123,16 @@ if ([string]::IsNullOrWhiteSpace((Get-EnvValue "STEAM_API_KEY"))) {
   Set-EnvValue "STEAM_API_KEY" $steamKeyInput
 }
 
+if ([string]::IsNullOrWhiteSpace((Get-EnvValue "BRAVE_API_KEY"))) {
+  Write-Host ""
+  Write-Host "Optional - lets the AI chat look things up on the web (like exact item locations or boss strategies) instead of only relying on what the AI model already knows:"
+  Write-Host "1. Go to https://brave.com/search/api/ and sign up for the free plan"
+  Write-Host "2. Create an API key and copy it"
+  Write-Host ""
+  $braveKeyInput = Read-Host "Paste your Brave Search API key, or press Enter to skip"
+  Set-EnvValue "BRAVE_API_KEY" $braveKeyInput
+}
+
 if (-not (Test-CommandExists ollama)) {
   Write-Host ""
   $aiAnswer = Read-Host "Want the bot to use AI to give smarter, in-character answers when people chat with it? This is free - it installs Ollama and runs a small AI model locally on this machine, no API key or cost involved. [y/N]"
