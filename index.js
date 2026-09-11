@@ -1676,7 +1676,7 @@ async function handleWiki(message, query) {
       const knownMap = findKnownGameMap(query);
       const mapLink = findMapLink(searchResults && searchResults.results) ||
         (knownMap ? appendMapSearch(knownMap.url, extractMapSearchTerm(query, knownMap.name)) : null);
-      const content = aiReply + (mapLink ? "\n\n🗺️ Map: <" + mapLink + ">" : "");
+      const content = aiReply + "\n\n🗺️ Map: " + (mapLink ? "[mapgenie.io](<" + mapLink + ">)" : "Not found.");
       await message.reply(content);
       rememberAiExchange(message.author.id, query, aiReply);
     }
