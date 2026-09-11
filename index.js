@@ -82,6 +82,14 @@ function stripHtml(text) {
   return (text || "").replace(/<\/?[^>]+(>|$)/g, "");
 }
 
+const MAP_SITE_PATTERN = /mapgenie\.io/i;
+
+function findMapLink(results) {
+  if (!results) return null;
+  const hit = results.find((r) => r.url && MAP_SITE_PATTERN.test(r.url));
+  return hit ? hit.url : null;
+}
+
 async function searchWeb(query) {
   if (!WEB_SEARCH_ENABLED || !query) return { answer: null, results: [] };
   const controller = new AbortController();
@@ -97,7 +105,9 @@ async function searchWeb(query) {
         query: query,
         max_results: WEB_SEARCH_RESULT_COUNT,
         search_depth: "advanced",
-        include_answer: true
+        include_answer: true,
+        include_domains: ["mapgenie.io"],
+        include_domains_mode: "boost"
       }),
       signal: controller.signal
     });
@@ -1620,7 +1630,9 @@ async function handleWiki(message, query) {
       ? capToSentences(searchResults.answer.trim(), AI_MAX_SENTENCES)
       : await askAI(query, history, displayName, allFacts, searchResults);
     if (aiReply) {
-      await message.reply(aiReply);
+      const mapLink = findMapLink(searchResults && searchResults.results);
+      const content = aiReply + (mapLink ? "\nInteractive map: " + mapLink : "");
+      await message.reply(content);
       rememberAiExchange(message.author.id, query, aiReply);
     }
   } catch (err) {
