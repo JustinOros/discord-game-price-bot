@@ -25,6 +25,7 @@ const GREETING_CHANNEL_NAME = "general";
 const EVENT_REMINDER_MINUTES = 15;
 const POPULAR_TOP_N = 10;
 const ALL_PRICES_TOP_N = 10;
+const SALE_ENDING_SOON_HOURS = 48;
 const TRIVIA_POINTS = 100;
 const SCORE_TOP_N = 10;
 const ITAD_BASE = "https://api.isthereanydeal.com";
@@ -560,6 +561,25 @@ function formatMoney(cents) {
   return "$" + (cents / 100).toFixed(2);
 }
 
+function formatExpiry(expiryIso) {
+  if (!expiryIso) return null;
+  const expiryDate = new Date(expiryIso);
+  if (isNaN(expiryDate.getTime())) return null;
+  const hoursLeft = (expiryDate.getTime() - Date.now()) / (1000 * 60 * 60);
+  if (hoursLeft <= 0) return null;
+  if (hoursLeft < 24) return "ends within a day";
+  const daysLeft = Math.round(hoursLeft / 24);
+  if (daysLeft === 1) return "ends tomorrow";
+  if (daysLeft <= 21) return "ends in " + daysLeft + " days";
+  return "ends " + formatReleaseDate(expiryDate.toISOString().slice(0, 10));
+}
+
+function dealNote(deal, label) {
+  if (!deal || deal.cut <= 0) return "";
+  const expiryText = formatExpiry(deal.expiry);
+  return " (" + deal.cut + "% off" + (label ? " " + label : "") + (expiryText ? ", " + expiryText : "") + ")";
+}
+
 async function handleWatch(message, query) {
   if (!query) {
     await message.reply("Usage: !watch GAME NAME");
@@ -611,7 +631,7 @@ async function handleWatch(message, query) {
     const deals = await mergeLiveSteamDeal((entry && entry.deals) || [], watchAppid);
     const deal = pickBestDeal(deals);
     if (deal) {
-      const cutNote = deal.cut > 0 ? " (" + deal.cut + "% off right now)" : "";
+      const cutNote = dealNote(deal, "right now");
       priceNote = " Current best price: " + formatMoney(deal.price.amountInt) + cutNote +
         " at " + deal.shop.name + ".\n" + deal.url;
     } else {
@@ -665,7 +685,7 @@ async function handlePrice(message, query) {
       await message.reply("\"" + match.title + "\" - could not find a current listing for it.");
       return;
     }
-    const cutNote = deal.cut > 0 ? " (" + deal.cut + "% off)" : "";
+    const cutNote = dealNote(deal);
     await message.reply({
       content: "\"" + match.title + "\": " + formatMoney(deal.price.amountInt) + cutNote +
         " at " + deal.shop.name + "\n" + deal.url,
@@ -721,7 +741,7 @@ async function handleAllPrices(message, query) {
 
     const lines = ["\"" + match.title + "\" is on sale at:"];
     top.forEach((deal) => {
-      const cutNote = deal.cut > 0 ? " (" + deal.cut + "% off)" : "";
+      const cutNote = dealNote(deal);
       lines.push(deal.shop.name + ": " + formatMoney(deal.price.amountInt) + cutNote);
     });
 
@@ -1115,7 +1135,7 @@ async function handleInfo(message, query) {
     const deals = await mergeLiveSteamDeal((entry && entry.deals) || [], info.appid || null);
     const deal = pickBestDeal(deals);
     if (deal) {
-      const cutNote = deal.cut > 0 ? " (" + deal.cut + "% off)" : "";
+      const cutNote = dealNote(deal);
       priceLine = formatMoney(deal.price.amountInt) + cutNote;
       dealUrl = deal.url;
     }
@@ -1658,23 +1678,43 @@ async function checkPrices(client) {
     if (deal.cut > 0) {
       const isNewAlert = game.lastAlertedPrice === null || game.lastAlertedPrice === undefined ||
         deal.price.amountInt < game.lastAlertedPrice;
+      const expiryText = formatExpiry(deal.expiry);
       if (isNewAlert) {
         try {
           const channel = await client.channels.fetch(game.channelId);
           await channel.send({
             content: game.title + " is on sale at " + deal.shop.name + ": " + formatMoney(deal.price.amountInt) +
-              " (" + deal.cut + "% off, was " + formatMoney(deal.regular.amountInt) + ")\n" + deal.url,
+              " (" + deal.cut + "% off, was " + formatMoney(deal.regular.amountInt) +
+              (expiryText ? ", " + expiryText : "") + ")\n" + deal.url,
             flags: MessageFlags.SuppressEmbeds
           });
         } catch (err) {
           console.error("Could not send alert for " + game.title + ":", err.message);
         }
         game.lastAlertedPrice = deal.price.amountInt;
+        game.lastEndingSoonExpiry = deal.expiry || null;
         changed = true;
         alerted++;
+      } else if (deal.expiry && expiryText &&
+          new Date(deal.expiry).getTime() - Date.now() <= SALE_ENDING_SOON_HOURS * 60 * 60 * 1000 &&
+          game.lastEndingSoonExpiry !== deal.expiry) {
+        try {
+          const channel = await client.channels.fetch(game.channelId);
+          await channel.send({
+            content: game.title + "'s sale at " + deal.shop.name + " is " + expiryText + " - " +
+              formatMoney(deal.price.amountInt) + " (" + deal.cut + "% off)\n" + deal.url,
+            flags: MessageFlags.SuppressEmbeds
+          });
+        } catch (err) {
+          console.error("Could not send ending-soon alert for " + game.title + ":", err.message);
+        }
+        game.lastEndingSoonExpiry = deal.expiry;
+        changed = true;
       }
-    } else if (game.lastAlertedPrice !== null && game.lastAlertedPrice !== undefined) {
+    } else if ((game.lastAlertedPrice !== null && game.lastAlertedPrice !== undefined) ||
+        (game.lastEndingSoonExpiry !== null && game.lastEndingSoonExpiry !== undefined)) {
       game.lastAlertedPrice = null;
+      game.lastEndingSoonExpiry = null;
       changed = true;
     }
   }
