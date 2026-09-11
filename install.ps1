@@ -133,6 +133,15 @@ if ([string]::IsNullOrWhiteSpace((Get-EnvValue "TAVILY_API_KEY"))) {
   Set-EnvValue "TAVILY_API_KEY" $tavilyKeyInput
 }
 
+if ([string]::IsNullOrWhiteSpace((Get-EnvValue "ITAD_COUNTRY"))) {
+  Write-Host ""
+  Write-Host "Optional - sets which country's prices and currency to use (2-letter code, e.g. US, GB, DE, CA, AU). Defaults to US if you skip this."
+  Write-Host ""
+  $itadCountryInput = Read-Host "Country code, or press Enter for US"
+  if ([string]::IsNullOrWhiteSpace($itadCountryInput)) { $itadCountryInput = "US" }
+  Set-EnvValue "ITAD_COUNTRY" $itadCountryInput
+}
+
 if (-not (Test-CommandExists ollama)) {
   Write-Host ""
   $aiAnswer = Read-Host "Want the bot to use AI to give smarter, in-character answers when people chat with it? This is free - it installs Ollama and runs a small AI model locally on this machine, no API key or cost involved. [y/N]"

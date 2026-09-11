@@ -13,6 +13,7 @@ console.error = (...args) => rawError(new Date().toISOString(), ...args);
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const ITAD_API_KEY = process.env.ITAD_API_KEY;
 const STEAM_API_KEY = process.env.STEAM_API_KEY;
+const ITAD_COUNTRY = (process.env.ITAD_COUNTRY || "US").toUpperCase();
 const AI_ENABLED = process.env.AI_ENABLED !== "false";
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.2";
@@ -393,7 +394,7 @@ function pickSearchMatch(query, results) {
 }
 
 async function fetchPrices(ids) {
-  const url = ITAD_BASE + "/games/prices/v3?key=" + ITAD_API_KEY + "&country=US";
+  const url = ITAD_BASE + "/games/prices/v3?key=" + ITAD_API_KEY + "&country=" + ITAD_COUNTRY;
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -427,7 +428,7 @@ function toItadDateTime(date) {
 
 async function fetchSteamDetails(appid) {
   const url = "https://store.steampowered.com/api/appdetails?appids=" + appid +
-    "&cc=us&filters=categories,platforms,basic";
+    "&cc=" + ITAD_COUNTRY.toLowerCase() + "&filters=categories,platforms,basic";
   const res = await fetch(url);
   if (!res.ok) throw new Error("steam appdetails failed: " + res.status);
   const data = await res.json();
@@ -447,7 +448,7 @@ async function fetchSteamDetails(appid) {
 
 async function fetchSteamLiveDeal(appid) {
   const url = "https://store.steampowered.com/api/appdetails?appids=" + appid +
-    "&cc=us&filters=price_overview";
+    "&cc=" + ITAD_COUNTRY.toLowerCase() + "&filters=price_overview";
   const res = await fetch(url);
   if (!res.ok) throw new Error("steam price failed: " + res.status);
   const data = await res.json();
@@ -459,8 +460,8 @@ async function fetchSteamLiveDeal(appid) {
 
   return {
     shop: { name: "Steam" },
-    price: { amountInt: overview.final },
-    regular: { amountInt: overview.initial },
+    price: { amountInt: overview.final, currency: overview.currency },
+    regular: { amountInt: overview.initial, currency: overview.currency },
     cut: overview.discount_percent,
     url: "https://store.steampowered.com/app/" + appid
   };
@@ -530,7 +531,7 @@ async function fetchGameInfo(id) {
 
 async function fetchHistorySince(id, since) {
   const url = ITAD_BASE + "/games/history/v2?key=" + ITAD_API_KEY +
-    "&id=" + encodeURIComponent(id) + "&country=US&since=" + encodeURIComponent(since);
+    "&id=" + encodeURIComponent(id) + "&country=" + ITAD_COUNTRY + "&since=" + encodeURIComponent(since);
   const res = await fetch(url);
   if (!res.ok) {
     const body = await res.text();
@@ -557,8 +558,13 @@ function pickBestDeal(deals) {
   }, null);
 }
 
-function formatMoney(cents) {
-  return "$" + (cents / 100).toFixed(2);
+function formatMoney(cents, currency) {
+  const amount = cents / 100;
+  try {
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: currency || "USD" }).format(amount);
+  } catch (err) {
+    return "$" + amount.toFixed(2);
+  }
 }
 
 function formatExpiry(expiryIso) {
@@ -632,7 +638,7 @@ async function handleWatch(message, query) {
     const deal = pickBestDeal(deals);
     if (deal) {
       const cutNote = dealNote(deal, "right now");
-      priceNote = " Current best price: " + formatMoney(deal.price.amountInt) + cutNote +
+      priceNote = " Current best price: " + formatMoney(deal.price.amountInt, deal.price.currency) + cutNote +
         " at " + deal.shop.name + ".\n" + deal.url;
     } else {
       priceNote = " Could not find a current listing for it yet.";
@@ -687,7 +693,7 @@ async function handlePrice(message, query) {
     }
     const cutNote = dealNote(deal);
     await message.reply({
-      content: "\"" + match.title + "\": " + formatMoney(deal.price.amountInt) + cutNote +
+      content: "\"" + match.title + "\": " + formatMoney(deal.price.amountInt, deal.price.currency) + cutNote +
         " at " + deal.shop.name + "\n" + deal.url,
       flags: MessageFlags.SuppressEmbeds
     });
@@ -742,7 +748,7 @@ async function handleAllPrices(message, query) {
     const lines = ["\"" + match.title + "\" is on sale at:"];
     top.forEach((deal) => {
       const cutNote = dealNote(deal);
-      lines.push(deal.shop.name + ": " + formatMoney(deal.price.amountInt) + cutNote);
+      lines.push(deal.shop.name + ": " + formatMoney(deal.price.amountInt, deal.price.currency) + cutNote);
     });
 
     const remaining = sorted.length - top.length;
@@ -796,8 +802,8 @@ async function handleHistory(message, query) {
 
   const lines = sales.map((h) => {
     const date = h.timestamp.slice(0, 10);
-    const price = formatMoney(h.deal.price.amountInt);
-    const regular = formatMoney(h.deal.regular.amountInt);
+    const price = formatMoney(h.deal.price.amountInt, h.deal.price.currency);
+    const regular = formatMoney(h.deal.regular.amountInt, h.deal.regular.currency);
     return "- " + date + ": " + price + " (" + h.deal.cut + "% off, was " + regular + ") at " + h.shop.name;
   });
 
@@ -1136,7 +1142,7 @@ async function handleInfo(message, query) {
     const deal = pickBestDeal(deals);
     if (deal) {
       const cutNote = dealNote(deal);
-      priceLine = formatMoney(deal.price.amountInt) + cutNote;
+      priceLine = formatMoney(deal.price.amountInt, deal.price.currency) + cutNote;
       dealUrl = deal.url;
     }
   } catch (err) {
@@ -1417,7 +1423,7 @@ async function handleList(message) {
     if (!deal) {
       return "- **" + g.title + "** (price unavailable)";
     }
-    const price = formatMoney(deal.price.amountInt);
+    const price = formatMoney(deal.price.amountInt, deal.price.currency);
     return "- **" + g.title + "** - " + price + " at " + deal.shop.name + " - [🔗 link](" + deal.url + ")";
   });
 
@@ -1683,8 +1689,8 @@ async function checkPrices(client) {
         try {
           const channel = await client.channels.fetch(game.channelId);
           await channel.send({
-            content: game.title + " is on sale at " + deal.shop.name + ": " + formatMoney(deal.price.amountInt) +
-              " (" + deal.cut + "% off, was " + formatMoney(deal.regular.amountInt) +
+            content: game.title + " is on sale at " + deal.shop.name + ": " + formatMoney(deal.price.amountInt, deal.price.currency) +
+              " (" + deal.cut + "% off, was " + formatMoney(deal.regular.amountInt, deal.regular.currency) +
               (expiryText ? ", " + expiryText : "") + ")\n" + deal.url,
             flags: MessageFlags.SuppressEmbeds
           });
@@ -1702,7 +1708,7 @@ async function checkPrices(client) {
           const channel = await client.channels.fetch(game.channelId);
           await channel.send({
             content: game.title + "'s sale at " + deal.shop.name + " is " + expiryText + " - " +
-              formatMoney(deal.price.amountInt) + " (" + deal.cut + "% off)\n" + deal.url,
+              formatMoney(deal.price.amountInt, deal.price.currency) + " (" + deal.cut + "% off)\n" + deal.url,
             flags: MessageFlags.SuppressEmbeds
           });
         } catch (err) {

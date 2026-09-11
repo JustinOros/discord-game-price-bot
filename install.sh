@@ -143,6 +143,16 @@ if [[ -z "$CURRENT_TAVILY_KEY" ]]; then
   set_env_value TAVILY_API_KEY "$TAVILY_KEY_INPUT"
 fi
 
+CURRENT_ITAD_COUNTRY=$(grep -E "^ITAD_COUNTRY=" .env | cut -d "=" -f2-)
+
+if [[ -z "$CURRENT_ITAD_COUNTRY" ]]; then
+  echo ""
+  echo "Optional - sets which country's prices and currency to use (2-letter code, e.g. US, GB, DE, CA, AU). Defaults to US if you skip this."
+  echo ""
+  read -p "Country code, or press Enter for US: " ITAD_COUNTRY_INPUT
+  set_env_value ITAD_COUNTRY "${ITAD_COUNTRY_INPUT:-US}"
+fi
+
 if ! command -v ollama >/dev/null 2>&1; then
   echo ""
   read -p "Want the bot to use AI to give smarter, in-character answers when people chat with it? This is free - it installs Ollama and runs a small AI model locally on this machine, no API key or cost involved. [y/N] " AI_ANSWER
