@@ -83,14 +83,6 @@ function stripHtml(text) {
   return (text || "").replace(/<\/?[^>]+(>|$)/g, "");
 }
 
-const MAP_SITE_PATTERN = /mapgenie\.io/i;
-
-function findMapLink(results) {
-  if (!results) return null;
-  const hit = results.find((r) => r.url && MAP_SITE_PATTERN.test(r.url));
-  return hit ? hit.url : null;
-}
-
 function loadGameMaps() {
   try {
     const parsed = JSON.parse(fs.readFileSync(MAPS_PATH, "utf8"));
@@ -1674,8 +1666,7 @@ async function handleWiki(message, query) {
       : await askAI(query, history, displayName, allFacts, searchResults);
     if (aiReply) {
       const knownMap = findKnownGameMap(query);
-      const mapLink = findMapLink(searchResults && searchResults.results) ||
-        (knownMap ? appendMapSearch(knownMap.url, extractMapSearchTerm(query, knownMap.name)) : null);
+      const mapLink = knownMap ? appendMapSearch(knownMap.url, extractMapSearchTerm(query, knownMap.name)) : null;
       const content = aiReply + "\n\n🗺️ Map: " + (mapLink ? "[mapgenie.io](<" + mapLink + ">)" : "Not found.");
       await message.reply(content);
       rememberAiExchange(message.author.id, query, aiReply);
