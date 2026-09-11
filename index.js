@@ -1760,7 +1760,7 @@ async function checkUpcomingEvents(client) {
       }
 
       try {
-        await channel.send(event.name + " starting in " + EVENT_REMINDER_MINUTES + " minutes!");
+        await channel.send("EVENT: " + event.name + " starting in " + EVENT_REMINDER_MINUTES + " minutes!");
       } catch (err) {
         console.error("Could not send event reminder:", err.message);
       }
