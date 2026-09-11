@@ -1676,6 +1676,14 @@ async function checkPrices(client) {
   let changed = false;
   let alerted = 0;
 
+  const newSalesByChannel = new Map();
+  const endingSoonByChannel = new Map();
+
+  function pushLine(map, channelId, line) {
+    if (!map.has(channelId)) map.set(channelId, []);
+    map.get(channelId).push(line);
+  }
+
   for (const game of games) {
     const entry = priceById[game.id];
     const deal = entry && pickBestDeal(entry.deals);
@@ -1686,17 +1694,10 @@ async function checkPrices(client) {
         deal.price.amountInt < game.lastAlertedPrice;
       const expiryText = formatExpiry(deal.expiry);
       if (isNewAlert) {
-        try {
-          const channel = await client.channels.fetch(game.channelId);
-          await channel.send({
-            content: game.title + " is on sale at " + deal.shop.name + ": " + formatMoney(deal.price.amountInt, deal.price.currency) +
-              " (" + deal.cut + "% off, was " + formatMoney(deal.regular.amountInt, deal.regular.currency) +
-              (expiryText ? ", " + expiryText : "") + ")\n" + deal.url,
-            flags: MessageFlags.SuppressEmbeds
-          });
-        } catch (err) {
-          console.error("Could not send alert for " + game.title + ":", err.message);
-        }
+        pushLine(newSalesByChannel, game.channelId,
+          "**" + game.title + "** is on sale at " + deal.shop.name + ": " + formatMoney(deal.price.amountInt, deal.price.currency) +
+          " (" + deal.cut + "% off, was " + formatMoney(deal.regular.amountInt, deal.regular.currency) +
+          (expiryText ? ", " + expiryText : "") + ")\n" + deal.url);
         game.lastAlertedPrice = deal.price.amountInt;
         game.lastEndingSoonExpiry = deal.expiry || null;
         changed = true;
@@ -1704,16 +1705,9 @@ async function checkPrices(client) {
       } else if (deal.expiry && expiryText &&
           new Date(deal.expiry).getTime() - Date.now() <= SALE_ENDING_SOON_HOURS * 60 * 60 * 1000 &&
           game.lastEndingSoonExpiry !== deal.expiry) {
-        try {
-          const channel = await client.channels.fetch(game.channelId);
-          await channel.send({
-            content: game.title + "'s sale at " + deal.shop.name + " is " + expiryText + " - " +
-              formatMoney(deal.price.amountInt, deal.price.currency) + " (" + deal.cut + "% off)\n" + deal.url,
-            flags: MessageFlags.SuppressEmbeds
-          });
-        } catch (err) {
-          console.error("Could not send ending-soon alert for " + game.title + ":", err.message);
-        }
+        pushLine(endingSoonByChannel, game.channelId,
+          "**" + game.title + "**'s sale at " + deal.shop.name + " is " + expiryText + " - " +
+          formatMoney(deal.price.amountInt, deal.price.currency) + " (" + deal.cut + "% off)\n" + deal.url);
         game.lastEndingSoonExpiry = deal.expiry;
         changed = true;
       }
@@ -1729,7 +1723,52 @@ async function checkPrices(client) {
     saveGames(games);
   }
 
+  const channelIds = new Set([...newSalesByChannel.keys(), ...endingSoonByChannel.keys()]);
+  for (const channelId of channelIds) {
+    const sections = [];
+    const newSales = newSalesByChannel.get(channelId);
+    if (newSales && newSales.length > 0) {
+      sections.push("**On sale:**\n" + newSales.join("\n\n"));
+    }
+    const endingSoon = endingSoonByChannel.get(channelId);
+    if (endingSoon && endingSoon.length > 0) {
+      sections.push("**Ending soon:**\n" + endingSoon.join("\n\n"));
+    }
+    await sendDigest(channelId, sections);
+  }
+
   return { checked: games.length, alerted: alerted };
+}
+
+async function sendDigest(channelId, sections) {
+  let channel;
+  try {
+    channel = await client.channels.fetch(channelId);
+  } catch (err) {
+    console.error("Could not fetch channel " + channelId + " for digest:", err.message);
+    return;
+  }
+
+  const chunks = [];
+  let chunk = "";
+  for (const section of sections) {
+    const candidate = chunk ? chunk + "\n\n" + section : section;
+    if (candidate.length > 1900 && chunk) {
+      chunks.push(chunk);
+      chunk = section;
+    } else {
+      chunk = candidate;
+    }
+  }
+  if (chunk) chunks.push(chunk);
+
+  for (const c of chunks) {
+    try {
+      await channel.send({ content: c, flags: MessageFlags.SuppressEmbeds });
+    } catch (err) {
+      console.error("Could not send digest to channel " + channelId + ":", err.message);
+    }
+  }
 }
 
 const notifiedEvents = new Set();
