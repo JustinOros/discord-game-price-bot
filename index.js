@@ -118,12 +118,12 @@ const MAP_SEARCH_FILLER_PHRASES = [
 const MAP_SEARCH_STOPWORDS = /\b(the|a|an|on|in|for|of|to|at|near|can|i|do|does|find|get)\b/g;
 
 function extractMapSearchTerm(query, gameName) {
-  let text = normalizeTitle(query);
-  if (gameName) text = text.split(gameName).join(" ");
+  let text = normalizeTitle(query).replace(/'/g, "");
+  if (gameName) text = text.split(gameName.replace(/'/g, "")).join(" ");
   MAP_SEARCH_FILLER_PHRASES.forEach((pattern) => {
     text = text.replace(pattern, " ");
   });
-  text = text.replace(MAP_SEARCH_STOPWORDS, " ").replace(/\s+/g, " ").trim();
+  text = text.replace(MAP_SEARCH_STOPWORDS, " ").replace(/[^a-z0-9\s-]/g, " ").replace(/\s+/g, " ").trim();
   return text;
 }
 
