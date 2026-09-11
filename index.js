@@ -35,6 +35,7 @@ const OWNED_PATH = path.join(__dirname, "owned.json");
 const STEAMLINKS_PATH = path.join(__dirname, "steamlinks.json");
 const SCORES_PATH = path.join(__dirname, "scores.json");
 const TRIVIA_PATH = path.join(__dirname, "trivia.json");
+const MAPS_PATH = path.join(__dirname, "maps.json");
 const GREETINGS_PATH = path.join(__dirname, "greetings.yaml");
 const GOODBYES_PATH = path.join(__dirname, "goodbyes.yaml");
 const README_PATH = path.join(__dirname, "README.md");
@@ -88,6 +89,48 @@ function findMapLink(results) {
   if (!results) return null;
   const hit = results.find((r) => r.url && MAP_SITE_PATTERN.test(r.url));
   return hit ? hit.url : null;
+}
+
+function loadGameMaps() {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(MAPS_PATH, "utf8"));
+    return (parsed && typeof parsed === "object") ? parsed : {};
+  } catch (err) {
+    return {};
+  }
+}
+
+const GAME_MAPS = loadGameMaps();
+
+function findKnownGameMap(query) {
+  const normalized = normalizeTitle(query);
+  for (const name of Object.keys(GAME_MAPS)) {
+    if (normalized.includes(name)) return { name: name, url: GAME_MAPS[name] };
+  }
+  return null;
+}
+
+const MAP_SEARCH_FILLER_PHRASES = [
+  /\bwhere\s+(can\s+i\s+find|do\s+i\s+find|is|are|to\s+find)\b/g,
+  /\bhow\s+(do\s+i|to)\s+(get|find)\b/g,
+  /\blocation\s+of\b/g
+];
+const MAP_SEARCH_STOPWORDS = /\b(the|a|an|on|in|for|of|to|at|near|can|i|do|does|find|get)\b/g;
+
+function extractMapSearchTerm(query, gameName) {
+  let text = normalizeTitle(query);
+  if (gameName) text = text.split(gameName).join(" ");
+  MAP_SEARCH_FILLER_PHRASES.forEach((pattern) => {
+    text = text.replace(pattern, " ");
+  });
+  text = text.replace(MAP_SEARCH_STOPWORDS, " ").replace(/\s+/g, " ").trim();
+  return text;
+}
+
+function appendMapSearch(url, term) {
+  if (!term) return url;
+  const separator = url.includes("?") ? "&" : "?";
+  return url + separator + "search=" + encodeURIComponent(term);
 }
 
 async function searchWeb(query) {
@@ -1630,7 +1673,9 @@ async function handleWiki(message, query) {
       ? capToSentences(searchResults.answer.trim(), AI_MAX_SENTENCES)
       : await askAI(query, history, displayName, allFacts, searchResults);
     if (aiReply) {
-      const mapLink = findMapLink(searchResults && searchResults.results);
+      const knownMap = findKnownGameMap(query);
+      const mapLink = findMapLink(searchResults && searchResults.results) ||
+        (knownMap ? appendMapSearch(knownMap.url, extractMapSearchTerm(query, knownMap.name)) : null);
       const content = aiReply + (mapLink ? "\nInteractive map: " + mapLink : "");
       await message.reply(content);
       rememberAiExchange(message.author.id, query, aiReply);
