@@ -1676,7 +1676,7 @@ async function handleWiki(message, query) {
       const knownMap = findKnownGameMap(query);
       const mapLink = findMapLink(searchResults && searchResults.results) ||
         (knownMap ? appendMapSearch(knownMap.url, extractMapSearchTerm(query, knownMap.name)) : null);
-      const content = aiReply + (mapLink ? "\n\nInteractive map: 🔗 <" + mapLink + ">" : "");
+      const content = aiReply + (mapLink ? "\n\n🗺️ Interactive map: <" + mapLink + ">" : "");
       await message.reply(content);
       rememberAiExchange(message.author.id, query, aiReply);
     }
