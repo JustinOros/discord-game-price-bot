@@ -1532,14 +1532,14 @@ async function handleRoles(message) {
     const embed = new EmbedBuilder()
       .setTitle(i === 0 ? "Game roles" : "Game roles (continued)")
       .setDescription(chunks[i]);
-    const payload = { embeds: [embed] };
-    if (i === chunks.length - 1 && picker.components.length > 0) {
-      payload.components = picker.components;
-      payload.content = picker.overflow
-        ? "Use the dropdown below to add yourself to a role (showing the first " + ROLE_PICKER_MAX + " alphabetically - use !role GAME for any others):"
-        : "Click on a button below to add yourself to a role:";
-    }
-    await message.reply(payload);
+    await message.reply({ embeds: [embed] });
+  }
+
+  if (picker.components.length > 0) {
+    const content = picker.overflow
+      ? "Use the dropdown below to add yourself to a role (showing the first " + ROLE_PICKER_MAX + " alphabetically - use !role GAME for any others):"
+      : "Click on a button below to add yourself to a role:";
+    await message.reply({ content: content, components: picker.components });
   }
 }
 
