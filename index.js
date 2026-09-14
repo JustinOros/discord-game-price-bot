@@ -2201,7 +2201,11 @@ async function checkUpcomingEvents(client) {
       }
 
       try {
-        await channel.send("EVENT: " + event.name + " starting soon!");
+        const roles = loadRoles();
+        const match = findGameRole(roles, event.name);
+        const role = match && guild.roles.cache.get(match.entry.roleId);
+        const mention = role ? role.toString() + " " : "";
+        await channel.send(mention + "EVENT: " + event.name + " starting soon!");
       } catch (err) {
         console.error("Could not send event reminder:", err.message);
       }
@@ -2337,8 +2341,11 @@ async function handleRoleInteraction(interaction, roleId) {
 
   const entries = sortedRoleEntries();
   const counts = roleMemberCounts(interaction.guild, entries);
-  if (counts[roleId] !== undefined) {
-    counts[roleId] = Math.max(0, counts[roleId] + (hadRole ? -1 : 1));
+  const role = interaction.guild.roles.cache.get(roleId);
+  const cacheHasMember = role ? role.members.has(interaction.member.id) : false;
+  const shouldHaveMember = !hadRole;
+  if (counts[roleId] !== undefined && cacheHasMember !== shouldHaveMember) {
+    counts[roleId] = Math.max(0, counts[roleId] + (shouldHaveMember ? 1 : -1));
   }
   const picker = buildRolePickerComponents(entries, counts);
   try {
