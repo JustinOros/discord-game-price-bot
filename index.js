@@ -23,7 +23,7 @@ const WEB_SEARCH_RESULT_COUNT = 5;
 const WEB_SEARCH_TIMEOUT_MS = 12000;
 const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
-const EVENT_REMINDER_MINUTES = 15;
+const EVENT_REMINDER_MINUTES = 5;
 const POPULAR_TOP_N = 10;
 const ALL_PRICES_TOP_N = 10;
 const SALE_ENDING_SOON_HOURS = 48;
@@ -466,8 +466,22 @@ function sortedRoleEntries() {
 
 const ROLE_PICKER_MAX = 25;
 
-function buildRolePickerComponents(entries) {
+function roleMemberCounts(guild, entries) {
+  const counts = {};
+  entries.forEach((entry) => {
+    const role = guild && guild.roles.cache.get(entry.roleId);
+    counts[entry.roleId] = role ? role.members.size : 0;
+  });
+  return counts;
+}
+
+function buildRolePickerComponents(entries, counts) {
   if (entries.length === 0) return { components: [], overflow: false };
+
+  const labelFor = (entry) => {
+    const count = counts ? counts[entry.roleId] : undefined;
+    return count === undefined ? entry.title : entry.title + " (" + count + ")";
+  };
 
   if (entries.length <= ROLE_PICKER_MAX) {
     const rows = [];
@@ -477,7 +491,7 @@ function buildRolePickerComponents(entries) {
         row.addComponents(
           new ButtonBuilder()
             .setCustomId("role:" + entry.roleId)
-            .setLabel(entry.title.slice(0, 80))
+            .setLabel(labelFor(entry).slice(0, 80))
             .setEmoji(entry.emoji)
             .setStyle(ButtonStyle.Secondary)
         );
@@ -492,7 +506,7 @@ function buildRolePickerComponents(entries) {
     .setCustomId("role-select")
     .setPlaceholder("Choose a game role")
     .addOptions(shown.map((entry) => ({
-      label: entry.title.slice(0, 100),
+      label: labelFor(entry).slice(0, 100),
       value: entry.roleId,
       emoji: entry.emoji
     })));
@@ -1507,40 +1521,12 @@ async function handleRoles(message) {
     }
   }
 
-  const lines = entries.map((entry) => {
-    const role = guild && guild.roles.cache.get(entry.roleId);
-    const count = role ? role.members.size : 0;
-    return entry.emoji + " **" + entry.title + "** - " + count + (count === 1 ? " member" : " members");
-  });
-
-  const chunks = [];
-  let chunk = "";
-  for (const line of lines) {
-    const candidate = chunk ? chunk + "\n" + line : line;
-    if (candidate.length > 4000) {
-      chunks.push(chunk);
-      chunk = line;
-    } else {
-      chunk = candidate;
-    }
-  }
-  if (chunk) chunks.push(chunk);
-
-  const picker = buildRolePickerComponents(entries);
-
-  for (let i = 0; i < chunks.length; i++) {
-    const embed = new EmbedBuilder()
-      .setTitle(i === 0 ? "Game roles" : "Game roles (continued)")
-      .setDescription(chunks[i]);
-    await message.reply({ embeds: [embed] });
-  }
-
-  if (picker.components.length > 0) {
-    const content = picker.overflow
-      ? "Use the dropdown below to add yourself to a role (showing the first " + ROLE_PICKER_MAX + " alphabetically - use !role GAME for any others):"
-      : "Click on a button below to add yourself to a role:";
-    await message.reply({ content: content, components: picker.components });
-  }
+  const counts = roleMemberCounts(guild, entries);
+  const picker = buildRolePickerComponents(entries, counts);
+  const content = picker.overflow
+    ? "Use the dropdown below to add yourself to a role (showing the first " + ROLE_PICKER_MAX + " alphabetically - use !role GAME for any others):"
+    : "Click a button below to add or remove yourself from a role:";
+  await message.reply({ content: content, components: picker.components });
 }
 
 async function handleRole(message, input) {
@@ -2215,7 +2201,7 @@ async function checkUpcomingEvents(client) {
       }
 
       try {
-        await channel.send("EVENT: " + event.name + " starting in " + EVENT_REMINDER_MINUTES + " minutes!");
+        await channel.send("EVENT: " + event.name + " starting soon!");
       } catch (err) {
         console.error("Could not send event reminder:", err.message);
       }
@@ -2290,7 +2276,8 @@ client.on("guildMemberAdd", async (member) => {
 
   const entries = sortedRoleEntries();
   if (entries.length > 0) {
-    const picker = buildRolePickerComponents(entries);
+    const counts = roleMemberCounts(member.guild, entries);
+    const picker = buildRolePickerComponents(entries, counts);
     const content = "Add yourself to a role for games you own or play, " + member.toString() + ":" +
       (picker.overflow ? " (showing the first " + ROLE_PICKER_MAX + " alphabetically in the dropdown, !role GAME works for the rest)" : "");
     try {
@@ -2330,18 +2317,36 @@ async function handleRoleInteraction(interaction, roleId) {
     return;
   }
 
+  await interaction.deferUpdate();
+
+  const hadRole = interaction.member.roles.cache.has(roleId);
+  let confirmation;
   try {
-    if (interaction.member.roles.cache.has(roleId)) {
+    if (hadRole) {
       await interaction.member.roles.remove(roleId);
-      await interaction.reply({ content: "Removed you from the " + entry.emoji + " " + entry.title + " role.", flags: MessageFlags.Ephemeral });
+      confirmation = "Removed you from the " + entry.emoji + " " + entry.title + " role.";
     } else {
       await interaction.member.roles.add(roleId);
-      await interaction.reply({ content: "Added you to the " + entry.emoji + " " + entry.title + " role.", flags: MessageFlags.Ephemeral });
+      confirmation = "Added you to the " + entry.emoji + " " + entry.title + " role.";
     }
   } catch (err) {
     console.error("Role button interaction failed:", err.message);
-    await interaction.reply({ content: "Could not update that role - make sure I have Manage Roles permission and my role is above the roles I manage.", flags: MessageFlags.Ephemeral });
+    await interaction.followUp({ content: "Could not update that role - make sure I have Manage Roles permission and my role is above the roles I manage.", flags: MessageFlags.Ephemeral });
+    return;
   }
+
+  const entries = sortedRoleEntries();
+  const counts = roleMemberCounts(interaction.guild, entries);
+  if (counts[roleId] !== undefined) {
+    counts[roleId] = Math.max(0, counts[roleId] + (hadRole ? -1 : 1));
+  }
+  const picker = buildRolePickerComponents(entries, counts);
+  try {
+    await interaction.editReply({ components: picker.components });
+  } catch (err) {
+    console.error("Could not refresh role picker message:", err.message);
+  }
+  await interaction.followUp({ content: confirmation, flags: MessageFlags.Ephemeral });
 }
 
 client.on("interactionCreate", async (interaction) => {
