@@ -15,6 +15,40 @@ if [[ "$1" == "--link-steam-profiles" ]]; then
   exit 0
 fi
 
+if [[ "$1" == "--backfill-roles" ]]; then
+  if [[ ! -f .env ]]; then
+    echo "No .env found yet. Run bash install.sh (with no flag) first to set up your keys."
+    exit 1
+  fi
+  echo "Installing dependencies..."
+  npm install --silent
+  node backfill-roles.js
+  exit 0
+fi
+
+if [[ "$1" == "--bulk-own" ]]; then
+  if [[ ! -f .env ]]; then
+    echo "No .env found yet. Run bash install.sh (with no flag) first to set up your keys."
+    exit 1
+  fi
+  shift
+  echo "Installing dependencies..."
+  npm install --silent
+  node bulk-own.js "$@"
+  exit 0
+fi
+
+if [[ "$1" == "--sync-roles" ]]; then
+  if [[ ! -f .env ]]; then
+    echo "No .env found yet. Run bash install.sh (with no flag) first to set up your keys."
+    exit 1
+  fi
+  echo "Installing dependencies..."
+  npm install --silent
+  node sync-roles.js
+  exit 0
+fi
+
 OS_NAME="$(uname -s)"
 
 if [[ "$OS_NAME" != "Darwin" && "$OS_NAME" != "Linux" ]]; then
@@ -86,6 +120,10 @@ if [[ ! -f scores.json ]]; then
   cp scores.json.example scores.json
 fi
 
+if [[ ! -f roles.yaml ]]; then
+  cp roles.yaml.example roles.yaml
+fi
+
 CURRENT_TOKEN=$(grep -E "^DISCORD_BOT_TOKEN=" .env | cut -d "=" -f2-)
 CURRENT_KEY=$(grep -E "^ITAD_API_KEY=" .env | cut -d "=" -f2-)
 
@@ -98,7 +136,7 @@ if [[ -z "$CURRENT_TOKEN" ]]; then
   echo "4. IMPORTANT - scroll to Privileged Gateway Intents, turn ON both Message Content Intent and Server Members Intent, then click the Save Changes button at the bottom."
   echo "   The toggles by themselves do not save. If you skip Save Changes, the bot will fail to log in with a disallowed intents error."
   echo "5. Click Reset Token (or Copy) and copy the token"
-  echo "6. Click OAuth2 > URL Generator, check bot under Scopes, then check Send Messages and Read Message History under Bot Permissions"
+  echo "6. Click OAuth2 > URL Generator, check bot under Scopes, then check Send Messages, Read Message History, and Manage Roles under Bot Permissions"
   echo "7. IMPORTANT - a URL appears at the bottom of that page. Copy it, paste it into your web browser, press Enter, pick your server, and click Authorize."
   echo "   Creating the bot does NOT add it to your server. It will not show up in your server until you open that URL and authorize it there."
   echo ""

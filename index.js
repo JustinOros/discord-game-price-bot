@@ -3,7 +3,7 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const fs = require("fs");
 const cron = require("node-cron");
 const yaml = require("js-yaml");
-const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, GuildScheduledEventStatus } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, GuildScheduledEventStatus, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require("discord.js");
 
 const rawLog = console.log.bind(console);
 const rawError = console.error.bind(console);
@@ -36,6 +36,7 @@ const STEAMLINKS_PATH = path.join(__dirname, "steamlinks.json");
 const SCORES_PATH = path.join(__dirname, "scores.json");
 const TRIVIA_PATH = path.join(__dirname, "trivia.json");
 const MAPS_PATH = path.join(__dirname, "maps.json");
+const ROLES_PATH = path.join(__dirname, "roles.yaml");
 const GREETINGS_PATH = path.join(__dirname, "greetings.yaml");
 const GOODBYES_PATH = path.join(__dirname, "goodbyes.yaml");
 const README_PATH = path.join(__dirname, "README.md");
@@ -368,6 +369,217 @@ function loadOwned() {
 
 function saveOwned(owned) {
   fs.writeFileSync(OWNED_PATH, JSON.stringify(owned, null, 2) + "\n");
+}
+
+const ROLE_EMOJI_POOL = [
+  "🎮", "🕹️", "🎲", "🎯", "🏆", "🥇", "🥈", "🥉", "🎖️", "🏅",
+  "⚔️", "🛡️", "🏹", "🗡️", "🔪", "🪓", "💣", "🧨", "🔫", "🔱",
+  "🧙", "🧝", "🧛", "🧟", "🐉", "🐲", "👑", "💎", "🔮", "🗝️",
+  "🔑", "🚀", "🛸", "🤖", "👾", "💀", "☠️", "🔥", "❄️", "⚡",
+  "🌊", "🌪️", "🌋", "🌟", "⭐", "✨", "🌙", "☀️", "🍀", "🌵",
+  "🌲", "🍄", "🦅", "🐺", "🦊", "🦁", "🐯", "🐻", "🐸", "🐍",
+  "🕷️", "🦂", "🦇", "🦄", "🐴", "🐙", "🦑", "🦖", "🦕", "🐊",
+  "🦈", "🐳", "🎃", "🥷", "🧭", "🏰", "🛶", "⛵", "🚁", "🚂",
+  "🎸", "🎺", "🥁", "🎻", "🍕", "🍔", "🌮", "🍩", "☕", "🍺"
+];
+
+function loadRoles() {
+  try {
+    const data = yaml.load(fs.readFileSync(ROLES_PATH, "utf8"));
+    return (data && typeof data === "object") ? data : {};
+  } catch (err) {
+    return {};
+  }
+}
+
+function saveRoles(roles) {
+  fs.writeFileSync(ROLES_PATH, yaml.dump(roles));
+}
+
+function pickRoleEmoji(roles) {
+  const used = new Set(Object.values(roles).map((r) => r.emoji));
+  const available = ROLE_EMOJI_POOL.filter((e) => !used.has(e));
+  const pool = available.length > 0 ? available : ROLE_EMOJI_POOL;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+const EMOJI_PATTERN = /^\p{Extended_Pictographic}(️|‍\p{Extended_Pictographic})*$/u;
+const EMOJI_SUGGEST_TIMEOUT_MS = 8000;
+
+function isEmoji(str) {
+  return EMOJI_PATTERN.test(str);
+}
+
+async function suggestGameEmoji(title) {
+  if (!AI_ENABLED) return null;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), EMOJI_SUGGEST_TIMEOUT_MS);
+  try {
+    const res = await fetch(OLLAMA_URL + "/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        stream: false,
+        options: { num_predict: 10 },
+        messages: [
+          { role: "system", content: "You only ever reply with a single emoji character, nothing else - no words, no explanation, no punctuation." },
+          { role: "user", content: "Pick one emoji that best fits the video game \"" + title + "\"." }
+        ]
+      }),
+      signal: controller.signal
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const text = ((data.message && data.message.content) || "").trim();
+    const match = text.match(/\p{Extended_Pictographic}(️|‍\p{Extended_Pictographic})*/u);
+    return match ? match[0] : null;
+  } catch (err) {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function pickFittingEmoji(roles, title) {
+  const suggested = await suggestGameEmoji(title);
+  if (suggested) {
+    const used = new Set(Object.values(roles).map((r) => r.emoji));
+    if (!used.has(suggested)) return suggested;
+  }
+  return pickRoleEmoji(roles);
+}
+
+function findGameRole(roles, query) {
+  const normalized = normalizeTitle(query);
+  if (roles[normalized]) return { key: normalized, entry: roles[normalized] };
+  for (const key of Object.keys(roles)) {
+    if (normalized.includes(key) || key.includes(normalized)) return { key: key, entry: roles[key] };
+  }
+  return null;
+}
+
+function sortedRoleEntries() {
+  const roles = loadRoles();
+  return Object.values(roles).sort((a, b) => a.title.localeCompare(b.title));
+}
+
+const ROLE_PICKER_MAX = 25;
+
+function buildRolePickerComponents(entries) {
+  if (entries.length === 0) return { components: [], overflow: false };
+
+  if (entries.length <= ROLE_PICKER_MAX) {
+    const rows = [];
+    for (let i = 0; i < entries.length; i += 5) {
+      const row = new ActionRowBuilder();
+      entries.slice(i, i + 5).forEach((entry) => {
+        row.addComponents(
+          new ButtonBuilder()
+            .setCustomId("role:" + entry.roleId)
+            .setLabel(entry.title.slice(0, 80))
+            .setEmoji(entry.emoji)
+            .setStyle(ButtonStyle.Secondary)
+        );
+      });
+      rows.push(row);
+    }
+    return { components: rows, overflow: false };
+  }
+
+  const shown = entries.slice(0, ROLE_PICKER_MAX);
+  const menu = new StringSelectMenuBuilder()
+    .setCustomId("role-select")
+    .setPlaceholder("Choose a game role")
+    .addOptions(shown.map((entry) => ({
+      label: entry.title.slice(0, 100),
+      value: entry.roleId,
+      emoji: entry.emoji
+    })));
+  return { components: [new ActionRowBuilder().addComponents(menu)], overflow: true };
+}
+
+function cleanTitle(title) {
+  return title.replace(/[®™©]/g, "").replace(/\s+/g, " ").trim();
+}
+
+async function ensureGameRole(guild, title, preferredEmoji) {
+  const cleanedTitle = cleanTitle(title);
+  const roles = loadRoles();
+  const key = normalizeTitle(title);
+  const entry = roles[key];
+
+  if (entry) {
+    const existing = guild.roles.cache.get(entry.roleId) || await guild.roles.fetch(entry.roleId).catch(() => null);
+    if (existing) {
+      let changed = false;
+      if (entry.title !== cleanedTitle) {
+        entry.title = cleanedTitle;
+        changed = true;
+      }
+      if (preferredEmoji && preferredEmoji !== entry.emoji) {
+        entry.emoji = preferredEmoji;
+        changed = true;
+      }
+
+      const tryNative = entry.iconMode !== "name";
+      const desiredName = tryNative ? cleanedTitle : (entry.emoji + " " + cleanedTitle);
+      const nameOk = existing.name === desiredName;
+      const iconOk = !tryNative || existing.unicodeEmoji === entry.emoji;
+
+      if (!nameOk || !iconOk) {
+        if (tryNative) {
+          try {
+            await existing.edit({ name: cleanedTitle, unicodeEmoji: entry.emoji });
+            entry.iconMode = "native";
+          } catch (err) {
+            try {
+              await existing.setName(entry.emoji + " " + cleanedTitle);
+              entry.iconMode = "name";
+            } catch (err2) {
+              console.error("Could not update role:", err2.message);
+            }
+          }
+        } else {
+          try {
+            await existing.setName(entry.emoji + " " + cleanedTitle);
+          } catch (err) {
+            console.error("Could not update role:", err.message);
+          }
+        }
+        changed = true;
+      }
+
+      if (changed) {
+        roles[key] = entry;
+        saveRoles(roles);
+      }
+      return { role: existing, emoji: entry.emoji, created: false, title: cleanedTitle };
+    }
+  }
+
+  const emoji = preferredEmoji || await pickFittingEmoji(roles, cleanedTitle);
+  let role;
+  let iconMode;
+  try {
+    role = await guild.roles.create({
+      name: cleanedTitle,
+      unicodeEmoji: emoji,
+      mentionable: true,
+      reason: "Game role for " + cleanedTitle
+    });
+    iconMode = "native";
+  } catch (err) {
+    role = await guild.roles.create({
+      name: emoji + " " + cleanedTitle,
+      mentionable: true,
+      reason: "Game role for " + cleanedTitle
+    });
+    iconMode = "name";
+  }
+  roles[key] = { title: cleanedTitle, roleId: role.id, emoji: emoji, iconMode: iconMode };
+  saveRoles(roles);
+  return { role: role, emoji: emoji, created: true, title: cleanedTitle };
 }
 
 function loadSteamLinks() {
@@ -1265,7 +1477,154 @@ async function handleOwn(message, query) {
   owned[message.author.id] = list;
   saveOwned(owned);
 
-  await message.reply("Marked \"" + match.title + "\" as owned.");
+  let roleNote = "";
+  if (message.guild && message.member) {
+    try {
+      const roleResult = await ensureGameRole(message.guild, match.title);
+      await message.member.roles.add(roleResult.role.id);
+      roleNote = " and gave you the " + roleResult.emoji + " " + roleResult.title + " role.";
+    } catch (err) {
+      console.error("Role assignment failed:", err.message);
+    }
+  }
+
+  await message.reply("Marked \"" + match.title + "\" as owned" + (roleNote || "."));
+}
+
+async function handleRoles(message) {
+  const entries = sortedRoleEntries();
+  if (entries.length === 0) {
+    await message.reply("No game roles yet. Use !own GAME or !role GAME to create one.");
+    return;
+  }
+
+  const guild = message.guild;
+  if (guild) {
+    try {
+      await guild.members.fetch();
+    } catch (err) {
+      console.error("Could not refresh member cache:", err.message);
+    }
+  }
+
+  const lines = entries.map((entry) => {
+    const role = guild && guild.roles.cache.get(entry.roleId);
+    const count = role ? role.members.size : 0;
+    return entry.emoji + " **" + entry.title + "** - " + count + (count === 1 ? " member" : " members");
+  });
+
+  const chunks = [];
+  let chunk = "";
+  for (const line of lines) {
+    const candidate = chunk ? chunk + "\n" + line : line;
+    if (candidate.length > 4000) {
+      chunks.push(chunk);
+      chunk = line;
+    } else {
+      chunk = candidate;
+    }
+  }
+  if (chunk) chunks.push(chunk);
+
+  const picker = buildRolePickerComponents(entries);
+
+  for (let i = 0; i < chunks.length; i++) {
+    const embed = new EmbedBuilder()
+      .setTitle(i === 0 ? "Game roles" : "Game roles (continued)")
+      .setDescription(chunks[i]);
+    const payload = { embeds: [embed] };
+    if (i === chunks.length - 1 && picker.components.length > 0) {
+      payload.components = picker.components;
+      payload.content = picker.overflow
+        ? "Use the dropdown below to add yourself to a role (showing the first " + ROLE_PICKER_MAX + " alphabetically - use !role GAME for any others):"
+        : "Click on a button below to add yourself to a role:";
+    }
+    await message.reply(payload);
+  }
+}
+
+async function handleRole(message, input) {
+  if (!input) {
+    await message.reply("Usage: !role GAME NAME or !role EMOJI GAME NAME");
+    return;
+  }
+  if (!message.guild) {
+    await message.reply("Roles only work inside a server, not in DMs.");
+    return;
+  }
+
+  let customEmoji = null;
+  let query = input;
+  const firstSpace = input.indexOf(" ");
+  const firstToken = firstSpace === -1 ? input : input.slice(0, firstSpace);
+  if (isEmoji(firstToken)) {
+    customEmoji = firstToken;
+    query = firstSpace === -1 ? "" : input.slice(firstSpace + 1).trim();
+  }
+
+  if (!query) {
+    await message.reply("Usage: !role GAME NAME or !role EMOJI GAME NAME");
+    return;
+  }
+
+  let results;
+  try {
+    results = await searchGame(query);
+  } catch (err) {
+    await message.reply("Search failed, try again in a moment.");
+    return;
+  }
+
+  if (!results || results.length === 0) {
+    await message.reply("Could not find a game called \"" + query + "\".");
+    return;
+  }
+
+  const match = pickSearchMatch(query, results);
+
+  try {
+    const roleResult = await ensureGameRole(message.guild, match.title, customEmoji);
+    if (message.member.roles.cache.has(roleResult.role.id)) {
+      await message.reply("You already have the " + roleResult.emoji + " " + roleResult.title + " role.");
+      return;
+    }
+    await message.member.roles.add(roleResult.role.id);
+    await message.reply((roleResult.created ? "Created the " : "Added you to the ") + roleResult.emoji + " " + roleResult.title + " role.");
+  } catch (err) {
+    console.error("Role assignment failed:", err.message);
+    await message.reply("Could not assign that role - make sure I have Manage Roles permission and my role is above the roles I manage.");
+  }
+}
+
+async function handleUnroll(message, query) {
+  if (!query) {
+    await message.reply("Usage: !unroll GAME NAME");
+    return;
+  }
+  if (!message.guild) {
+    await message.reply("Roles only work inside a server, not in DMs.");
+    return;
+  }
+
+  const roles = loadRoles();
+  const found = findGameRole(roles, query);
+  if (!found) {
+    await message.reply("No role exists for \"" + query + "\".");
+    return;
+  }
+
+  if (!message.member.roles.cache.has(found.entry.roleId)) {
+    await message.reply("You don't have the " + found.entry.emoji + " " + found.entry.title + " role.");
+    return;
+  }
+
+  try {
+    await message.member.roles.remove(found.entry.roleId);
+    await message.reply("Removed you from the " + found.entry.emoji + " " + found.entry.title + " role.");
+  } catch (err) {
+    console.error("Role removal failed:", err.message);
+    await message.reply("Could not remove that role - make sure I have Manage Roles permission.");
+  }
 }
 
 async function handleUnown(message, query) {
@@ -1692,6 +2051,9 @@ async function handleHelp(message, note) {
     "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n" +
     "!who GAME - list who has confirmed they own a game\n" +
     "!popular - list games owned by more than one member, most owned first\n" +
+    "!roles - list every game role and how many members have each\n" +
+    "!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n" +
+    "!unroll GAME - leave a game's role\n" +
     "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n" +
     "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
     "!memories - show everything I remember about you\n" +
@@ -1891,11 +2253,20 @@ const client = new Client({
   partials: [Partials.Channel]
 });
 
-client.once("clientReady", () => {
+client.once("clientReady", async () => {
   console.log("Logged in as " + client.user.tag);
   console.log("Web search: " + (WEB_SEARCH_ENABLED ? "enabled (TAVILY_API_KEY is set)" : "disabled - set TAVILY_API_KEY in .env to enable"));
   cron.schedule("0 15 * * *", () => checkPrices(client));
   cron.schedule("* * * * *", () => checkUpcomingEvents(client));
+
+  for (const guild of client.guilds.cache.values()) {
+    try {
+      await guild.members.fetch();
+      console.log("Cached " + guild.memberCount + " members for " + guild.name + ".");
+    } catch (err) {
+      console.error("Could not cache members for " + guild.name + ":", err.message);
+    }
+  }
 });
 
 client.on("guildMemberAdd", async (member) => {
@@ -1915,6 +2286,18 @@ client.on("guildMemberAdd", async (member) => {
     await channel.send(text);
   } catch (err) {
     console.error("Could not send greeting:", err.message);
+  }
+
+  const entries = sortedRoleEntries();
+  if (entries.length > 0) {
+    const picker = buildRolePickerComponents(entries);
+    const content = "Add yourself to a role for games you own or play, " + member.toString() + ":" +
+      (picker.overflow ? " (showing the first " + ROLE_PICKER_MAX + " alphabetically in the dropdown, !role GAME works for the rest)" : "");
+    try {
+      await channel.send({ content: content, components: picker.components });
+    } catch (err) {
+      console.error("Could not send role picker:", err.message);
+    }
   }
 });
 
@@ -1936,6 +2319,39 @@ client.on("guildMemberRemove", async (member) => {
     await channel.send(text);
   } catch (err) {
     console.error("Could not send goodbye:", err.message);
+  }
+});
+
+async function handleRoleInteraction(interaction, roleId) {
+  const roles = loadRoles();
+  const entry = Object.values(roles).find((r) => r.roleId === roleId);
+  if (!entry) {
+    await interaction.reply({ content: "That role no longer exists.", flags: MessageFlags.Ephemeral });
+    return;
+  }
+
+  try {
+    if (interaction.member.roles.cache.has(roleId)) {
+      await interaction.member.roles.remove(roleId);
+      await interaction.reply({ content: "Removed you from the " + entry.emoji + " " + entry.title + " role.", flags: MessageFlags.Ephemeral });
+    } else {
+      await interaction.member.roles.add(roleId);
+      await interaction.reply({ content: "Added you to the " + entry.emoji + " " + entry.title + " role.", flags: MessageFlags.Ephemeral });
+    }
+  } catch (err) {
+    console.error("Role button interaction failed:", err.message);
+    await interaction.reply({ content: "Could not update that role - make sure I have Manage Roles permission and my role is above the roles I manage.", flags: MessageFlags.Ephemeral });
+  }
+}
+
+client.on("interactionCreate", async (interaction) => {
+  if (interaction.isButton() && interaction.customId.startsWith("role:")) {
+    await handleRoleInteraction(interaction, interaction.customId.slice(5));
+    return;
+  }
+  if (interaction.isStringSelectMenu() && interaction.customId === "role-select") {
+    await handleRoleInteraction(interaction, interaction.values[0]);
+    return;
   }
 });
 
@@ -2004,6 +2420,12 @@ client.on("messageCreate", async (message) => {
     await handleWho(message, content.slice(5).trim());
   } else if (lower === "!popular") {
     await handlePopular(message);
+  } else if (lower === "!roles") {
+    await handleRoles(message);
+  } else if (lower.startsWith("!role ")) {
+    await handleRole(message, content.slice(6).trim());
+  } else if (lower.startsWith("!unroll ")) {
+    await handleUnroll(message, content.slice(8).trim());
   } else if (lower.startsWith("!remember ")) {
     await handleRemember(message, content.slice(10).trim());
   } else if (lower.startsWith("!forget ")) {

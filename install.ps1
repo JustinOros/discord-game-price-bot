@@ -1,5 +1,8 @@
 param(
-  [switch]$LinkSteamProfiles
+  [switch]$LinkSteamProfiles,
+  [switch]$BackfillRoles,
+  [string]$BulkOwn,
+  [switch]$SyncRoles
 )
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -13,6 +16,39 @@ if ($LinkSteamProfiles) {
   Write-Host "Installing dependencies..."
   npm install --silent
   node link-steam-profiles.js
+  exit 0
+}
+
+if ($BackfillRoles) {
+  if (-not (Test-Path ".env")) {
+    Write-Host "No .env found yet. Run install.ps1 (with no flag) first to set up your keys."
+    exit 1
+  }
+  Write-Host "Installing dependencies..."
+  npm install --silent
+  node backfill-roles.js
+  exit 0
+}
+
+if ($BulkOwn) {
+  if (-not (Test-Path ".env")) {
+    Write-Host "No .env found yet. Run install.ps1 (with no flag) first to set up your keys."
+    exit 1
+  }
+  Write-Host "Installing dependencies..."
+  npm install --silent
+  node bulk-own.js $BulkOwn
+  exit 0
+}
+
+if ($SyncRoles) {
+  if (-not (Test-Path ".env")) {
+    Write-Host "No .env found yet. Run install.ps1 (with no flag) first to set up your keys."
+    exit 1
+  }
+  Write-Host "Installing dependencies..."
+  npm install --silent
+  node sync-roles.js
   exit 0
 }
 
@@ -83,6 +119,10 @@ if (-not (Test-Path "scores.json")) {
   Copy-Item "scores.json.example" "scores.json"
 }
 
+if (-not (Test-Path "roles.yaml")) {
+  Copy-Item "roles.yaml.example" "roles.yaml"
+}
+
 if ([string]::IsNullOrWhiteSpace((Get-EnvValue "DISCORD_BOT_TOKEN"))) {
   Write-Host ""
   Write-Host "Need a Discord bot token:"
@@ -92,7 +132,7 @@ if ([string]::IsNullOrWhiteSpace((Get-EnvValue "DISCORD_BOT_TOKEN"))) {
   Write-Host "4. IMPORTANT - scroll to Privileged Gateway Intents, turn ON both Message Content Intent and Server Members Intent, then click the Save Changes button at the bottom."
   Write-Host "   The toggles by themselves do not save. If you skip Save Changes, the bot will fail to log in with a disallowed intents error."
   Write-Host "5. Click Reset Token (or Copy) and copy the token"
-  Write-Host "6. Click OAuth2 > URL Generator, check bot under Scopes, then check Send Messages and Read Message History under Bot Permissions"
+  Write-Host "6. Click OAuth2 > URL Generator, check bot under Scopes, then check Send Messages, Read Message History, and Manage Roles under Bot Permissions"
   Write-Host "7. IMPORTANT - a URL appears at the bottom of that page. Copy it, paste it into your web browser, press Enter, pick your server, and click Authorize."
   Write-Host "   Creating the bot does NOT add it to your server. It will not show up in your server until you open that URL and authorize it there."
   Write-Host ""
