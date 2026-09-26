@@ -15,17 +15,6 @@ if [[ "$1" == "--link-steam-profiles" ]]; then
   exit 0
 fi
 
-if [[ "$1" == "--backfill-roles" ]]; then
-  if [[ ! -f .env ]]; then
-    echo "No .env found yet. Run bash install.sh (with no flag) first to set up your keys."
-    exit 1
-  fi
-  echo "Installing dependencies..."
-  npm install --silent
-  node backfill-roles.js
-  exit 0
-fi
-
 if [[ "$1" == "--bulk-own" ]]; then
   if [[ ! -f .env ]]; then
     echo "No .env found yet. Run bash install.sh (with no flag) first to set up your keys."
@@ -189,6 +178,28 @@ if [[ -z "$CURRENT_ITAD_COUNTRY" ]]; then
   echo ""
   read -p "Country code, or press Enter for US: " ITAD_COUNTRY_INPUT
   set_env_value ITAD_COUNTRY "${ITAD_COUNTRY_INPUT:-US}"
+fi
+
+CURRENT_DOCKER_HOST=$(grep -E "^DOCKER_SSH_HOST=" .env | cut -d "=" -f2-)
+
+if [[ -z "$CURRENT_DOCKER_HOST" ]]; then
+  echo ""
+  echo "Optional - lets people with a specific Discord role run !docker ps and !docker restart CONTAINER to manage Docker containers on a remote server over SSH (e.g. an Unraid box running your game servers). Requires SSH key access to that server already set up:"
+  echo ""
+  read -p "SSH host for the Docker server (e.g. chappie.local), or press Enter to skip: " DOCKER_HOST_INPUT
+  if [[ -n "$DOCKER_HOST_INPUT" ]]; then
+    set_env_value DOCKER_SSH_HOST "$DOCKER_HOST_INPUT"
+    read -p "SSH username (e.g. root): " DOCKER_USER_INPUT
+    set_env_value DOCKER_SSH_USER "$DOCKER_USER_INPUT"
+    read -p "Path to the SSH private key to use: " DOCKER_KEY_INPUT
+    set_env_value DOCKER_SSH_KEY_PATH "$DOCKER_KEY_INPUT"
+    read -p "Discord role ID allowed to use !docker (right-click the role in Discord, Copy Role ID): " DOCKER_ROLE_INPUT
+    set_env_value DOCKER_ROLE_ID "$DOCKER_ROLE_INPUT"
+    read -p "Container names to protect from !docker restart, comma-separated (e.g. Plex-Media-Server), or press Enter for none: " DOCKER_PROTECTED_INPUT
+    set_env_value DOCKER_PROTECTED_CONTAINERS "$DOCKER_PROTECTED_INPUT"
+  else
+    echo "Skipping - !docker won't be available. Run this script again any time to set it up."
+  fi
 fi
 
 if ! command -v ollama >/dev/null 2>&1; then

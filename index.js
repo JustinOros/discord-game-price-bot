@@ -3,6 +3,8 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const fs = require("fs");
 const cron = require("node-cron");
 const yaml = require("js-yaml");
+const util = require("util");
+const execFileAsync = util.promisify(require("child_process").execFile);
 const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, GuildScheduledEventStatus, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require("discord.js");
 
 const rawLog = console.log.bind(console);
@@ -24,6 +26,16 @@ const WEB_SEARCH_TIMEOUT_MS = 12000;
 const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
 const EVENT_REMINDER_MINUTES = 5;
+const DOCKER_SSH_HOST = process.env.DOCKER_SSH_HOST;
+const DOCKER_SSH_USER = process.env.DOCKER_SSH_USER;
+const DOCKER_SSH_KEY_PATH = process.env.DOCKER_SSH_KEY_PATH;
+const DOCKER_ROLE_ID = process.env.DOCKER_ROLE_ID;
+const DOCKER_PROTECTED_CONTAINERS = (process.env.DOCKER_PROTECTED_CONTAINERS || "")
+  .split(",")
+  .map((name) => name.trim().toLowerCase())
+  .filter((name) => name.length > 0);
+const DOCKER_ENABLED = !!(DOCKER_SSH_HOST && DOCKER_SSH_USER && DOCKER_SSH_KEY_PATH && DOCKER_ROLE_ID);
+const DOCKER_SSH_TIMEOUT_MS = 15000;
 const POPULAR_TOP_N = 10;
 const ALL_PRICES_TOP_N = 10;
 const SALE_ENDING_SOON_HOURS = 48;
@@ -2021,6 +2033,122 @@ async function handleWiki(message, query) {
   }
 }
 
+async function runDockerCommand(args) {
+  const { stdout } = await execFileAsync(
+    "ssh",
+    [
+      "-i", DOCKER_SSH_KEY_PATH,
+      "-o", "StrictHostKeyChecking=no",
+      "-o", "ConnectTimeout=10",
+      DOCKER_SSH_USER + "@" + DOCKER_SSH_HOST,
+      "docker", ...args
+    ],
+    { timeout: DOCKER_SSH_TIMEOUT_MS }
+  );
+  return stdout;
+}
+
+async function fetchDockerContainers() {
+  const stdout = await runDockerCommand(["ps", "-a", "--format", "{{.ID}}|{{.Names}}|{{.Status}}"]);
+  return stdout
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .map((line) => {
+      const parts = line.split("|");
+      return { id: parts[0], name: parts[1], status: parts[2] };
+    });
+}
+
+function isProtectedContainer(name) {
+  return DOCKER_PROTECTED_CONTAINERS.includes(name.toLowerCase());
+}
+
+async function handleDockerPs(message) {
+  try {
+    const containers = await fetchDockerContainers();
+    if (containers.length === 0) {
+      await message.reply("No containers found.");
+      return;
+    }
+    const lines = containers.map((c) => c.name + " - " + c.status);
+    await message.reply("```\n" + lines.join("\n") + "\n```");
+  } catch (err) {
+    console.error("docker ps failed:", err.message);
+    await message.reply("Could not reach the Docker host.");
+  }
+}
+
+async function handleDockerRestart(message, name) {
+  if (!name) {
+    await message.reply("Usage: !docker restart CONTAINER NAME");
+    return;
+  }
+
+  if (isProtectedContainer(name)) {
+    await message.reply("The \"" + name + "\" container is protected and can't be restarted through the bot.");
+    return;
+  }
+
+  let containers;
+  try {
+    containers = await fetchDockerContainers();
+  } catch (err) {
+    console.error("docker ps failed:", err.message);
+    await message.reply("Could not reach the Docker host.");
+    return;
+  }
+
+  const match = containers.find((c) =>
+    c.name.toLowerCase() === name.toLowerCase() || c.id === name || c.id.startsWith(name.toLowerCase())
+  );
+  if (!match) {
+    await message.reply("No container named \"" + name + "\" found. Use !docker ps to see the list.");
+    return;
+  }
+
+  if (isProtectedContainer(match.name)) {
+    await message.reply("The \"" + match.name + "\" container is protected and can't be restarted through the bot.");
+    return;
+  }
+
+  try {
+    await runDockerCommand(["restart", match.name]);
+    await message.reply("Restarted \"" + match.name + "\".");
+  } catch (err) {
+    console.error("docker restart failed:", err.message);
+    await message.reply("Could not restart \"" + match.name + "\".");
+  }
+}
+
+async function handleDocker(message, input) {
+  if (!DOCKER_ENABLED) {
+    await message.reply("Docker control isn't set up. Set DOCKER_SSH_HOST, DOCKER_SSH_USER, DOCKER_SSH_KEY_PATH, and DOCKER_ROLE_ID in .env to enable it.");
+    return;
+  }
+  if (!message.guild) {
+    await message.reply("!docker only works inside a server, not in DMs.");
+    return;
+  }
+  if (!message.member.roles.cache.has(DOCKER_ROLE_ID)) {
+    await message.reply("You don't have permission to use !docker.");
+    return;
+  }
+
+  const parts = input.trim().split(/\s+/).filter((p) => p.length > 0);
+  const subcommand = (parts[0] || "").toLowerCase();
+
+  if (subcommand === "ps") {
+    await handleDockerPs(message);
+    return;
+  }
+  if (subcommand === "restart") {
+    await handleDockerRestart(message, parts.slice(1).join(" "));
+    return;
+  }
+  await message.reply("Usage: !docker ps or !docker restart CONTAINER NAME");
+}
+
 async function handleHelp(message, note) {
   await message.reply(
     "Commands:\n" +
@@ -2040,6 +2168,8 @@ async function handleHelp(message, note) {
     "!roles - list every game role and how many members have each\n" +
     "!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n" +
     "!unroll GAME - leave a game's role\n" +
+    "!docker ps - list containers on the game server (requires the Docker role)\n" +
+    "!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n" +
     "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n" +
     "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
     "!memories - show everything I remember about you\n" +
@@ -2438,6 +2568,8 @@ client.on("messageCreate", async (message) => {
     await handleRole(message, content.slice(6).trim());
   } else if (lower.startsWith("!unroll ")) {
     await handleUnroll(message, content.slice(8).trim());
+  } else if (lower === "!docker" || lower.startsWith("!docker ")) {
+    await handleDocker(message, content.slice(7).trim());
   } else if (lower.startsWith("!remember ")) {
     await handleRemember(message, content.slice(10).trim());
   } else if (lower.startsWith("!forget ")) {

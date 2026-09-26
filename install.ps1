@@ -1,6 +1,5 @@
 param(
   [switch]$LinkSteamProfiles,
-  [switch]$BackfillRoles,
   [string]$BulkOwn,
   [switch]$SyncRoles
 )
@@ -16,17 +15,6 @@ if ($LinkSteamProfiles) {
   Write-Host "Installing dependencies..."
   npm install --silent
   node link-steam-profiles.js
-  exit 0
-}
-
-if ($BackfillRoles) {
-  if (-not (Test-Path ".env")) {
-    Write-Host "No .env found yet. Run install.ps1 (with no flag) first to set up your keys."
-    exit 1
-  }
-  Write-Host "Installing dependencies..."
-  npm install --silent
-  node backfill-roles.js
   exit 0
 }
 
@@ -180,6 +168,26 @@ if ([string]::IsNullOrWhiteSpace((Get-EnvValue "ITAD_COUNTRY"))) {
   $itadCountryInput = Read-Host "Country code, or press Enter for US"
   if ([string]::IsNullOrWhiteSpace($itadCountryInput)) { $itadCountryInput = "US" }
   Set-EnvValue "ITAD_COUNTRY" $itadCountryInput
+}
+
+if ([string]::IsNullOrWhiteSpace((Get-EnvValue "DOCKER_SSH_HOST"))) {
+  Write-Host ""
+  Write-Host "Optional - lets people with a specific Discord role run !docker ps and !docker restart CONTAINER to manage Docker containers on a remote server over SSH (e.g. an Unraid box running your game servers). Requires SSH key access to that server already set up:"
+  Write-Host ""
+  $dockerHostInput = Read-Host "SSH host for the Docker server (e.g. chappie.local), or press Enter to skip"
+  if (-not [string]::IsNullOrWhiteSpace($dockerHostInput)) {
+    Set-EnvValue "DOCKER_SSH_HOST" $dockerHostInput
+    $dockerUserInput = Read-Host "SSH username (e.g. root)"
+    Set-EnvValue "DOCKER_SSH_USER" $dockerUserInput
+    $dockerKeyInput = Read-Host "Path to the SSH private key to use"
+    Set-EnvValue "DOCKER_SSH_KEY_PATH" $dockerKeyInput
+    $dockerRoleInput = Read-Host "Discord role ID allowed to use !docker (right-click the role in Discord, Copy Role ID)"
+    Set-EnvValue "DOCKER_ROLE_ID" $dockerRoleInput
+    $dockerProtectedInput = Read-Host "Container names to protect from !docker restart, comma-separated (e.g. Plex-Media-Server), or press Enter for none"
+    Set-EnvValue "DOCKER_PROTECTED_CONTAINERS" $dockerProtectedInput
+  } else {
+    Write-Host "Skipping - !docker won't be available. Run this script again any time to set it up."
+  }
 }
 
 if (-not (Test-CommandExists ollama)) {
