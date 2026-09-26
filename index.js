@@ -2033,7 +2033,12 @@ async function handleWiki(message, query) {
   }
 }
 
+function shQuote(str) {
+  return "'" + String(str).replace(/'/g, "'\\''") + "'";
+}
+
 async function runDockerCommand(args) {
+  const remoteCommand = "docker " + args.map(shQuote).join(" ");
   const { stdout } = await execFileAsync(
     "ssh",
     [
@@ -2041,7 +2046,7 @@ async function runDockerCommand(args) {
       "-o", "StrictHostKeyChecking=no",
       "-o", "ConnectTimeout=10",
       DOCKER_SSH_USER + "@" + DOCKER_SSH_HOST,
-      "docker", ...args
+      remoteCommand
     ],
     { timeout: DOCKER_SSH_TIMEOUT_MS }
   );
@@ -2066,7 +2071,9 @@ function isProtectedContainer(name) {
 
 async function handleDockerPs(message) {
   try {
-    const containers = await fetchDockerContainers();
+    const containers = await fetchDockerContainers().then((list) =>
+      list.filter((c) => !isProtectedContainer(c.name))
+    );
     if (containers.length === 0) {
       await message.reply("No containers found.");
       return;
