@@ -2167,7 +2167,7 @@ async function handleDocker(message, input) {
 }
 
 async function handleHelp(message, note) {
-  await message.reply(
+  const description =
     "Commands:\n" +
     "!watch GAME - start watching a game for sales\n" +
     "!remove GAME - stop watching a game (!unwatch also works)\n" +
@@ -2195,8 +2195,9 @@ async function handleHelp(message, note) {
     "!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n" +
     "!score - show the top 10 members by trivia points\n" +
     "!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer" +
-    (note ? "\n\n" + note : "")
-  );
+    (note ? "\n\n" + note : "");
+  const embed = new EmbedBuilder().setDescription(description);
+  await message.reply({ embeds: [embed] });
 }
 
 async function checkPrices(client) {
