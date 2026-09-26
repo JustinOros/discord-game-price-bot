@@ -2128,16 +2128,26 @@ async function handleDockerRestart(message, name) {
   }
 }
 
+async function hasDockerRole(message) {
+  if (message.guild) {
+    return message.member.roles.cache.has(DOCKER_ROLE_ID);
+  }
+  for (const guild of message.client.guilds.cache.values()) {
+    let member = guild.members.cache.get(message.author.id);
+    if (!member) {
+      member = await guild.members.fetch(message.author.id).catch(() => null);
+    }
+    if (member && member.roles.cache.has(DOCKER_ROLE_ID)) return true;
+  }
+  return false;
+}
+
 async function handleDocker(message, input) {
   if (!DOCKER_ENABLED) {
     await message.reply("Docker control isn't set up. Set DOCKER_SSH_HOST, DOCKER_SSH_USER, DOCKER_SSH_KEY_PATH, and DOCKER_ROLE_ID in .env to enable it.");
     return;
   }
-  if (!message.guild) {
-    await message.reply("!docker only works inside a server, not in DMs.");
-    return;
-  }
-  if (!message.member.roles.cache.has(DOCKER_ROLE_ID)) {
+  if (!(await hasDockerRole(message))) {
     await message.reply("You don't have permission to use !docker.");
     return;
   }
@@ -2513,6 +2523,11 @@ client.on("messageCreate", async (message) => {
     if (dmContent === "!help") {
       await handleHelp(message, "Heads up: these commands only work in a text channel on your server, not here in DMs.");
       dmGreetedUsers.add(message.author.id);
+      return;
+    }
+
+    if (dmContent === "!docker" || dmContent.startsWith("!docker ")) {
+      await handleDocker(message, message.content.trim().slice(7).trim());
       return;
     }
 
