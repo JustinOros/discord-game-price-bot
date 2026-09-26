@@ -2167,6 +2167,10 @@ async function handleDocker(message, input) {
 }
 
 async function handleHelp(message, note) {
+  const dockerLines = (DOCKER_ENABLED && (await hasDockerRole(message)))
+    ? "!docker ps - list containers on the game server (requires the Docker role)\n" +
+      "!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n"
+    : "";
   const description =
     "Commands:\n" +
     "!watch GAME - start watching a game for sales\n" +
@@ -2185,8 +2189,7 @@ async function handleHelp(message, note) {
     "!roles - list every game role and how many members have each\n" +
     "!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n" +
     "!unroll GAME - leave a game's role\n" +
-    "!docker ps - list containers on the game server (requires the Docker role)\n" +
-    "!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n" +
+    dockerLines +
     "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n" +
     "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
     "!memories - show everything I remember about you\n" +
