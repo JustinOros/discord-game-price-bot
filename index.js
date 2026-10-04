@@ -1565,23 +1565,18 @@ async function handleRole(message, input) {
     return;
   }
 
-  let results;
+  let roleTitle = query.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   try {
-    results = await searchGame(query);
+    const results = await searchGame(query);
+    const needle = normalizeTitle(query);
+    const exact = (results || []).find((r) => normalizeTitle(r.title) === needle);
+    if (exact) roleTitle = exact.title;
   } catch (err) {
-    await message.reply("Search failed, try again in a moment.");
-    return;
+    console.error("Role title search failed:", err.message);
   }
-
-  if (!results || results.length === 0) {
-    await message.reply("Could not find a game called \"" + query + "\".");
-    return;
-  }
-
-  const match = pickSearchMatch(query, results);
 
   try {
-    const roleResult = await ensureGameRole(message.guild, match.title, customEmoji);
+    const roleResult = await ensureGameRole(message.guild, roleTitle, customEmoji);
     if (message.member.roles.cache.has(roleResult.role.id)) {
       await message.reply("You already have the " + roleResult.emoji + " " + roleResult.title + " role.");
       return;
