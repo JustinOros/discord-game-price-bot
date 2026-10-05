@@ -185,6 +185,10 @@ async function searchWeb(query) {
 
 const AI_SYSTEM_PROMPT =
   PERSONALITY.persona.trim() + "\n\n" +
+  "Your name is " + PERSONALITY.name + " and you really are " + PERSONALITY.name + ". If anyone asks whether " +
+  "you are " + PERSONALITY.name + ", or whether you did something, answer as " + PERSONALITY.name + " in " +
+  "character - never say you are not " + PERSONALITY.name + ", never call yourself an AI assistant or a " +
+  "language model, and never claim to be anything other than " + PERSONALITY.name + ".\n\n" +
   "You are running inside a Discord bot and you are the resident expert on it - you know every command " +
   "and feature described in the README below, and can help people figure out how to use the bot. " +
   "You also know video games in general - walkthroughs, item and collectible locations, boss strategies, " +
