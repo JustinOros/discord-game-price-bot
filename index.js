@@ -3,8 +3,8 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const fs = require("fs");
 const cron = require("node-cron");
 const yaml = require("js-yaml");
-const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, GuildScheduledEventStatus, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require("discord.js");
-const { loadPlugins, findCommand, collectHelpEntries } = require("./core/plugins");
+const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require("discord.js");
+const { loadPlugins, findCommand, collectHelpEntries, startPlugins } = require("./core/plugins");
 
 const rawLog = console.log.bind(console);
 const rawError = console.error.bind(console);
@@ -24,7 +24,6 @@ const WEB_SEARCH_RESULT_COUNT = 5;
 const WEB_SEARCH_TIMEOUT_MS = 12000;
 const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
-const EVENT_REMINDER_MINUTES = 5;
 const POPULAR_TOP_N = 10;
 const ALL_PRICES_TOP_N = 10;
 const SALE_ENDING_SOON_HOURS = 48;
@@ -2177,56 +2176,7 @@ async function sendDigest(channelId, sections) {
   }
 }
 
-const notifiedEvents = new Set();
 const dmGreetedUsers = new Set();
-
-async function checkUpcomingEvents(client) {
-  const stillScheduled = new Set();
-
-  for (const guild of client.guilds.cache.values()) {
-    let events;
-    try {
-      events = await guild.scheduledEvents.fetch();
-    } catch (err) {
-      console.error("Could not fetch scheduled events for " + guild.name + ":", err.message);
-      continue;
-    }
-
-    for (const event of events.values()) {
-      if (event.status !== GuildScheduledEventStatus.Scheduled || !event.scheduledStartAt) continue;
-      stillScheduled.add(event.id);
-
-      if (notifiedEvents.has(event.id)) continue;
-
-      const minutesUntil = (event.scheduledStartAt.getTime() - Date.now()) / 60000;
-      if (minutesUntil <= 0 || minutesUntil > EVENT_REMINDER_MINUTES) continue;
-
-      const channel = guild.channels.cache.find(
-        (c) => c.name === GREETING_CHANNEL_NAME && c.isTextBased && c.isTextBased()
-      );
-      if (!channel) {
-        console.error("Could not find a #" + GREETING_CHANNEL_NAME + " channel in " + guild.name);
-        notifiedEvents.add(event.id);
-        continue;
-      }
-
-      try {
-        const roles = loadRoles();
-        const match = findGameRole(roles, event.name);
-        const role = match && guild.roles.cache.get(match.entry.roleId);
-        const mention = role ? role.toString() + " " : "";
-        await channel.send(mention + "EVENT: " + event.name + " starting soon!");
-      } catch (err) {
-        console.error("Could not send event reminder:", err.message);
-      }
-      notifiedEvents.add(event.id);
-    }
-  }
-
-  for (const id of Array.from(notifiedEvents)) {
-    if (!stillScheduled.has(id)) notifiedEvents.delete(id);
-  }
-}
 
 async function handleCheck(message, client) {
   await message.reply("Checking prices now...");
@@ -2253,11 +2203,13 @@ const client = new Client({
   partials: [Partials.Channel]
 });
 
+const pluginContext = { client, cron, loadRoles, findGameRole, GREETING_CHANNEL_NAME };
+
 client.once("clientReady", async () => {
   console.log("Logged in as " + client.user.tag);
   console.log("Web search: " + (WEB_SEARCH_ENABLED ? "enabled (TAVILY_API_KEY is set)" : "disabled - set TAVILY_API_KEY in .env to enable"));
   cron.schedule("0 15 * * *", () => checkPrices(client));
-  cron.schedule("* * * * *", () => checkUpcomingEvents(client));
+  startPlugins(plugins, pluginContext);
 
   for (const guild of client.guilds.cache.values()) {
     try {

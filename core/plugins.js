@@ -50,4 +50,15 @@ async function collectHelpEntries(plugins, message) {
   return entries;
 }
 
-module.exports = { loadPlugins, findCommand, collectHelpEntries };
+function startPlugins(plugins, context) {
+  for (const plugin of plugins) {
+    if (typeof plugin.onReady !== "function") continue;
+    try {
+      plugin.onReady(context);
+    } catch (err) {
+      console.error("Could not start plugin " + plugin.name + ":", err.message);
+    }
+  }
+}
+
+module.exports = { loadPlugins, findCommand, collectHelpEntries, startPlugins };
