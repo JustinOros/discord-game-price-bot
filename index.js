@@ -4,7 +4,7 @@ const fs = require("fs");
 const cron = require("node-cron");
 const yaml = require("js-yaml");
 const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require("discord.js");
-const { loadPlugins, findCommand, collectHelpEntries, startPlugins } = require("./core/plugins");
+const { loadPlugins, findCommand, collectHelpEntries, startPlugins, registerPlugins } = require("./core/plugins");
 
 const rawLog = console.log.bind(console);
 const rawError = console.error.bind(console);
@@ -37,8 +37,6 @@ const SCORES_PATH = path.join(__dirname, "scores.json");
 const TRIVIA_PATH = path.join(__dirname, "trivia.json");
 const MAPS_PATH = path.join(__dirname, "maps.json");
 const ROLES_PATH = path.join(__dirname, "roles.yaml");
-const GREETINGS_PATH = path.join(__dirname, "greetings.yaml");
-const GOODBYES_PATH = path.join(__dirname, "goodbyes.yaml");
 const README_PATH = path.join(__dirname, "README.md");
 const PERSONALITY_PATH = path.join(__dirname, "personality.yaml");
 const MEMORY_PATH = path.join(__dirname, "memory.yaml");
@@ -350,20 +348,6 @@ async function askAI(question, history, displayName, allFacts, searchResults) {
   const reply = data.message && data.message.content;
   return reply ? capToSentences(trimIncompleteSentence(stripStageDirections(reply)), AI_MAX_SENTENCES) : null;
 }
-
-function loadGreetings() {
-  const data = yaml.load(fs.readFileSync(GREETINGS_PATH, "utf8"));
-  return (data && data.greetings) || [];
-}
-
-const GREETINGS = loadGreetings();
-
-function loadGoodbyes() {
-  const data = yaml.load(fs.readFileSync(GOODBYES_PATH, "utf8"));
-  return (data && data.goodbyes) || [];
-}
-
-const GOODBYES = loadGoodbyes();
 
 function loadGames() {
   return JSON.parse(fs.readFileSync(GAMES_PATH, "utf8"));
@@ -2203,7 +2187,7 @@ const client = new Client({
   partials: [Partials.Channel]
 });
 
-const pluginContext = { client, cron, loadRoles, findGameRole, GREETING_CHANNEL_NAME };
+const pluginContext = { client, cron, loadRoles, findGameRole, GREETING_CHANNEL_NAME, sortedRoleEntries, roleMemberCounts, buildRolePickerComponents, ROLE_PICKER_MAX };
 
 client.once("clientReady", async () => {
   console.log("Logged in as " + client.user.tag);
@@ -2221,59 +2205,7 @@ client.once("clientReady", async () => {
   }
 });
 
-client.on("guildMemberAdd", async (member) => {
-  if (GREETINGS.length === 0) return;
-
-  const channel = member.guild.channels.cache.find(
-    (c) => c.name === GREETING_CHANNEL_NAME && c.isTextBased && c.isTextBased()
-  );
-  if (!channel) {
-    console.error("Could not find a #" + GREETING_CHANNEL_NAME + " channel in " + member.guild.name);
-    return;
-  }
-
-  const template = GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
-  const text = template.replace(/\{user\}/g, member.toString());
-  try {
-    await channel.send(text);
-  } catch (err) {
-    console.error("Could not send greeting:", err.message);
-  }
-
-  const entries = sortedRoleEntries();
-  if (entries.length > 0) {
-    const counts = roleMemberCounts(member.guild, entries);
-    const picker = buildRolePickerComponents(entries, counts);
-    const content = "Add yourself to a role for games you own or play, " + member.toString() + ":" +
-      (picker.overflow ? " (showing the first " + ROLE_PICKER_MAX + " alphabetically in the dropdown, !role GAME works for the rest)" : "");
-    try {
-      await channel.send({ content: content, components: picker.components });
-    } catch (err) {
-      console.error("Could not send role picker:", err.message);
-    }
-  }
-});
-
-client.on("guildMemberRemove", async (member) => {
-  if (GOODBYES.length === 0) return;
-
-  const channel = member.guild.channels.cache.find(
-    (c) => c.name === GREETING_CHANNEL_NAME && c.isTextBased && c.isTextBased()
-  );
-  if (!channel) {
-    console.error("Could not find a #" + GREETING_CHANNEL_NAME + " channel in " + member.guild.name);
-    return;
-  }
-
-  const template = GOODBYES[Math.floor(Math.random() * GOODBYES.length)];
-  const name = member.user ? member.user.username : "someone";
-  const text = template.replace(/\{user\}/g, name);
-  try {
-    await channel.send(text);
-  } catch (err) {
-    console.error("Could not send goodbye:", err.message);
-  }
-});
+registerPlugins(plugins, pluginContext);
 
 async function handleRoleInteraction(interaction, roleId) {
   const roles = loadRoles();

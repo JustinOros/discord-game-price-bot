@@ -61,4 +61,15 @@ function startPlugins(plugins, context) {
   }
 }
 
-module.exports = { loadPlugins, findCommand, collectHelpEntries, startPlugins };
+function registerPlugins(plugins, context) {
+  for (const plugin of plugins) {
+    if (typeof plugin.register !== "function") continue;
+    try {
+      plugin.register(context);
+    } catch (err) {
+      console.error("Could not register plugin " + plugin.name + ":", err.message);
+    }
+  }
+}
+
+module.exports = { loadPlugins, findCommand, collectHelpEntries, startPlugins, registerPlugins };
