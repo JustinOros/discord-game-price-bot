@@ -790,178 +790,9 @@ async function handleAllPrices(message, query) {
   }
 }
 
-async function handleHistory(message, query) {
-  if (!query) {
-    await message.reply("Usage: !history GAME");
-    return;
-  }
 
-  let results;
-  try {
-    results = await searchGame(query);
-  } catch (err) {
-    await message.reply("Search failed, try again in a moment.");
-    return;
-  }
 
-  if (!results || results.length === 0) {
-    await message.reply("Could not find a game called \"" + query + "\".");
-    return;
-  }
 
-  const match = pickSearchMatch(query, results);
-
-  let history;
-  try {
-    history = await fetchHistory(match.id);
-  } catch (err) {
-    console.error("History fetch failed:", err.message);
-    await message.reply("Could not load sale history right now.");
-    return;
-  }
-
-  const sales = (history || []).filter((h) => h.deal && h.deal.cut > 0);
-  if (sales.length === 0) {
-    await message.reply("\"" + match.title + "\" has no recorded sales.");
-    return;
-  }
-
-  sales.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-  const lines = sales.map((h) => {
-    const date = h.timestamp.slice(0, 10);
-    const price = formatMoney(h.deal.price.amountInt, h.deal.price.currency);
-    const regular = formatMoney(h.deal.regular.amountInt, h.deal.regular.currency);
-    return "- " + date + ": " + price + " (" + h.deal.cut + "% off, was " + regular + ") at " + h.shop.name;
-  });
-
-  const header = "Sale history for \"" + match.title + "\", past 12 months (" + sales.length + " events):\n";
-  const full = header + lines.join("\n");
-
-  if (full.length <= 1900) {
-    await message.reply(full);
-    return;
-  }
-
-  let chunk = header;
-  for (const line of lines) {
-    const candidate = chunk + line + "\n";
-    if (candidate.length > 1900) {
-      await message.reply(chunk);
-      chunk = line + "\n";
-    } else {
-      chunk = candidate;
-    }
-  }
-  if (chunk) {
-    await message.reply(chunk);
-  }
-}
-
-function describeSaleTiming(sales) {
-  const monthYears = {};
-  const monthDays = {};
-  const years = new Set();
-
-  const seenYearMonth = new Set();
-  for (const s of sales) {
-    const d = new Date(s.timestamp);
-    const year = d.getUTCFullYear();
-    const month = d.getUTCMonth() + 1;
-    const day = d.getUTCDate();
-    years.add(year);
-
-    const key = year + "-" + month;
-    if (!seenYearMonth.has(key)) {
-      seenYearMonth.add(key);
-      monthYears[month] = (monthYears[month] || 0) + 1;
-    }
-    if (!monthDays[month]) monthDays[month] = [];
-    monthDays[month].push(day);
-  }
-
-  const totalYears = years.size;
-  const threshold = Math.max(1, Math.ceil(totalYears * 0.4));
-
-  const qualifying = Object.keys(monthYears)
-    .map(Number)
-    .filter((m) => monthYears[m] >= threshold);
-
-  if (qualifying.length === 0) return null;
-
-  const currentMonth = new Date().getUTCMonth() + 1;
-  let targetMonth = null;
-  for (let offset = 1; offset <= 12; offset++) {
-    const candidate = ((currentMonth - 1 + offset) % 12) + 1;
-    if (qualifying.includes(candidate)) {
-      targetMonth = candidate;
-      break;
-    }
-  }
-  if (!targetMonth) return null;
-
-  const days = monthDays[targetMonth];
-  const avgDay = days.reduce((a, b) => a + b, 0) / days.length;
-  let qualifier;
-  if (avgDay <= 10) qualifier = "early";
-  else if (avgDay <= 20) qualifier = "mid";
-  else qualifier = "late";
-
-  return qualifier + " " + MONTH_NAMES[targetMonth - 1];
-}
-
-async function handlePredict(message, query) {
-  if (!query) {
-    await message.reply("Usage: !predict GAME");
-    return;
-  }
-
-  let results;
-  try {
-    results = await searchGame(query);
-  } catch (err) {
-    await message.reply("Search failed, try again in a moment.");
-    return;
-  }
-
-  if (!results || results.length === 0) {
-    await message.reply("Could not find a game called \"" + query + "\".");
-    return;
-  }
-
-  const match = pickSearchMatch(query, results);
-
-  let history;
-  try {
-    history = await fetchFullHistory(match.id);
-  } catch (err) {
-    console.error("Predict history fetch failed:", err.message);
-    await message.reply("Could not load sale history right now.");
-    return;
-  }
-
-  const sales = (history || []).filter((h) => h.deal && h.deal.cut > 0);
-  if (sales.length < 3) {
-    await message.reply("\"" + match.title + "\" does not have enough sale history yet to make a good guess.");
-    return;
-  }
-
-  const timing = describeSaleTiming(sales);
-  if (!timing) {
-    await message.reply("\"" + match.title + "\" does not show a clear enough sale pattern to predict.");
-    return;
-  }
-
-  await message.reply(
-    "Based on \"" + match.title + "\"'s full sale history, it might go on sale " + timing + "!"
-  );
-}
-
-const FEATURE_TAG_PATTERNS = {
-  Multiplayer: /\bmulti-?player\b|\bmmo\b/i,
-  "Co-Op": /\bco-?op\b/i,
-  "Cross-Play": /\bcross-?(play|platform)\b/i
-};
 
 async function findOwnerIds(gameId, appid) {
   const owned = loadOwned();
@@ -991,120 +822,9 @@ async function findOwnerIds(gameId, appid) {
   return Array.from(ownerIds);
 }
 
-async function countOwners(gameId, appid) {
-  const ownerIds = await findOwnerIds(gameId, appid);
-  return ownerIds.length;
-}
 
 
 
-async function handleInfo(message, query) {
-  if (!query) {
-    await message.reply("Usage: !info GAME NAME");
-    return;
-  }
-
-  let results;
-  try {
-    results = await searchGame(query);
-  } catch (err) {
-    await message.reply("Search failed, try again in a moment.");
-    return;
-  }
-
-  if (!results || results.length === 0) {
-    await message.reply("Could not find a game called \"" + query + "\".");
-    return;
-  }
-
-  const match = pickSearchMatch(query, results);
-
-  let info;
-  try {
-    info = await fetchGameInfo(match.id);
-  } catch (err) {
-    console.error("Info fetch failed:", err.message);
-    await message.reply("Could not load game info right now.");
-    return;
-  }
-
-  let platforms = (info.platforms || []).map((p) => p.name).join(", ");
-  let featureSource = info.tags || [];
-  let headerImage = null;
-
-  if (info.appid) {
-    try {
-      const steamDetails = await fetchSteamDetails(info.appid);
-      if (steamDetails) {
-        if (steamDetails.categories.length > 0) {
-          featureSource = steamDetails.categories;
-        }
-        if (!platforms && steamDetails.platforms.length > 0) {
-          platforms = steamDetails.platforms.join(", ");
-        }
-        headerImage = steamDetails.headerImage;
-      }
-    } catch (err) {
-      console.error("Steam details fetch failed:", err.message);
-    }
-  }
-
-  if (!platforms) platforms = "unknown";
-
-  let priceLine = "unavailable";
-  let dealUrl = null;
-  try {
-    const priceData = await fetchPrices([match.id]);
-    const entry = priceData && priceData[0];
-    const deals = await mergeLiveSteamDeal((entry && entry.deals) || [], info.appid || null);
-    const deal = pickBestDeal(deals);
-    if (deal) {
-      const cutNote = dealNote(deal);
-      priceLine = formatMoney(deal.price.amountInt, deal.price.currency) + cutNote;
-      dealUrl = deal.url;
-    }
-  } catch (err) {
-    priceLine = "unavailable";
-  }
-
-  const releaseDate = formatReleaseDate(info.releaseDate);
-  const title = releaseDate ? match.title + " (" + releaseDate + ")" : match.title;
-
-  const embed = new EmbedBuilder()
-    .setTitle(title)
-    .addFields(
-      { name: "Price", value: priceLine, inline: true },
-      { name: "Platform(s)", value: platforms, inline: true }
-    );
-
-  if (headerImage) {
-    embed.setImage(headerImage);
-  }
-
-  for (const label of Object.keys(FEATURE_TAG_PATTERNS)) {
-    const pattern = FEATURE_TAG_PATTERNS[label];
-    const hits = featureSource.filter((t) => pattern.test(t));
-    embed.addFields({ name: label, value: hits.length > 0 ? "✅" : "❌", inline: true });
-  }
-
-  const storeUrl = dealUrl || (info.appid ? "https://store.steampowered.com/app/" + info.appid : null);
-  if (storeUrl) {
-    embed.addFields({ name: "Store page", value: "[🔗 link](" + storeUrl + ")", inline: true });
-  }
-
-  if (info.urls && info.urls.game) {
-    embed.addFields({ name: "More info", value: "[🔗 link](" + info.urls.game + ")", inline: true });
-  }
-
-  const ownerCount = await countOwners(match.id, info.appid);
-  embed.addFields({
-    name: "Owned by",
-    value: ownerCount + " Member" + (ownerCount === 1 ? "" : "s"),
-    inline: true
-  });
-
-  await message.reply({ embeds: [embed] });
-}
 
 
 
@@ -1336,9 +1056,6 @@ const HELP_LINES = [
   { order: 30, text: "!list - show everything being watched" },
   { order: 40, text: "!price GAME - check a game's current best price without watching it" },
   { order: 50, text: "!prices GAME - list every store the game is on sale at, cheapest first" },
-  { order: 60, text: "!history GAME - show every recorded sale over the past 12 months, with date and price" },
-  { order: 70, text: "!predict GAME - guess when it might go on sale next, based on its full sale history" },
-  { order: 80, text: "!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it" },
   { order: 170, text: "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts" },
   { order: 180, text: "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all" },
   { order: 190, text: "!memories - show everything I remember about you" },
@@ -1497,7 +1214,7 @@ const client = new Client({
   partials: [Partials.Channel]
 });
 
-const pluginContext = { client, cron, loadRoles, findGameRole, GREETING_CHANNEL_NAME, sortedRoleEntries, roleMemberCounts, buildRolePickerComponents, ROLE_PICKER_MAX, searchGame, normalizeTitle, ensureGameRole, isEmoji, fetchGameInfo, findOwnerIds, pickSearchMatch, STEAM_API_KEY, fetchOwnedGames, loadOwned, saveOwned, loadSteamLinks, saveSteamLinks, resolveSteamId };
+const pluginContext = { client, cron, loadRoles, findGameRole, GREETING_CHANNEL_NAME, sortedRoleEntries, roleMemberCounts, buildRolePickerComponents, ROLE_PICKER_MAX, searchGame, normalizeTitle, ensureGameRole, isEmoji, fetchGameInfo, findOwnerIds, pickSearchMatch, STEAM_API_KEY, fetchOwnedGames, loadOwned, saveOwned, loadSteamLinks, saveSteamLinks, resolveSteamId, MONTH_NAMES, fetchHistory, formatMoney, fetchFullHistory, dealNote, fetchPrices, fetchSteamDetails, formatReleaseDate, mergeLiveSteamDeal, pickBestDeal };
 
 client.once("clientReady", async () => {
   console.log("Logged in as " + client.user.tag);
@@ -1572,12 +1289,6 @@ client.on("messageCreate", async (message) => {
     await handleAllPrices(message, content.slice(8).trim());
   } else if (lower.startsWith("!price ")) {
     await handlePrice(message, content.slice(7).trim());
-  } else if (lower.startsWith("!history ")) {
-    await handleHistory(message, content.slice(9).trim());
-  } else if (lower.startsWith("!predict ")) {
-    await handlePredict(message, content.slice(9).trim());
-  } else if (lower.startsWith("!info ")) {
-    await handleInfo(message, content.slice(6).trim());
   } else if (lower.startsWith("!remember ")) {
     await handleRemember(message, content.slice(10).trim());
   } else if (lower.startsWith("!forget ")) {
