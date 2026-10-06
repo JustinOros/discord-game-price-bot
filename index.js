@@ -3,9 +3,8 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const fs = require("fs");
 const cron = require("node-cron");
 const yaml = require("js-yaml");
-const util = require("util");
-const execFileAsync = util.promisify(require("child_process").execFile);
 const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, GuildScheduledEventStatus, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require("discord.js");
+const { loadPlugins, findCommand, collectHelpEntries } = require("./core/plugins");
 
 const rawLog = console.log.bind(console);
 const rawError = console.error.bind(console);
@@ -26,16 +25,6 @@ const WEB_SEARCH_TIMEOUT_MS = 12000;
 const AI_COOLDOWN_MS = 5000;
 const GREETING_CHANNEL_NAME = "general";
 const EVENT_REMINDER_MINUTES = 5;
-const DOCKER_SSH_HOST = process.env.DOCKER_SSH_HOST;
-const DOCKER_SSH_USER = process.env.DOCKER_SSH_USER;
-const DOCKER_SSH_KEY_PATH = process.env.DOCKER_SSH_KEY_PATH;
-const DOCKER_ROLE_ID = process.env.DOCKER_ROLE_ID;
-const DOCKER_PROTECTED_CONTAINERS = (process.env.DOCKER_PROTECTED_CONTAINERS || "")
-  .split(",")
-  .map((name) => name.trim().toLowerCase())
-  .filter((name) => name.length > 0);
-const DOCKER_ENABLED = !!(DOCKER_SSH_HOST && DOCKER_SSH_USER && DOCKER_SSH_KEY_PATH && DOCKER_ROLE_ID);
-const DOCKER_SSH_TIMEOUT_MS = 15000;
 const POPULAR_TOP_N = 10;
 const ALL_PRICES_TOP_N = 10;
 const SALE_ENDING_SOON_HOURS = 48;
@@ -65,6 +54,12 @@ if (!DISCORD_BOT_TOKEN || !ITAD_API_KEY) {
   console.error("DISCORD_BOT_TOKEN and ITAD_API_KEY must be set in .env");
   process.exit(1);
 }
+
+const DISABLED_PLUGINS = (process.env.DISABLED_PLUGINS || "")
+  .split(",")
+  .map((name) => name.trim())
+  .filter((name) => name.length > 0);
+const plugins = loadPlugins(path.join(__dirname, "plugins"), DISABLED_PLUGINS);
 
 function loadReadme() {
   try {
@@ -2032,172 +2027,37 @@ async function handleWiki(message, query) {
   }
 }
 
-function shQuote(str) {
-  return "'" + String(str).replace(/'/g, "'\\''") + "'";
-}
-
-async function runDockerCommand(args) {
-  const remoteCommand = "docker " + args.map(shQuote).join(" ");
-  const { stdout } = await execFileAsync(
-    "ssh",
-    [
-      "-i", DOCKER_SSH_KEY_PATH,
-      "-o", "StrictHostKeyChecking=no",
-      "-o", "ConnectTimeout=10",
-      DOCKER_SSH_USER + "@" + DOCKER_SSH_HOST,
-      remoteCommand
-    ],
-    { timeout: DOCKER_SSH_TIMEOUT_MS }
-  );
-  return stdout;
-}
-
-async function fetchDockerContainers() {
-  const stdout = await runDockerCommand(["ps", "-a", "--format", "{{.ID}}|{{.Names}}|{{.Status}}"]);
-  return stdout
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0)
-    .map((line) => {
-      const parts = line.split("|");
-      return { id: parts[0], name: parts[1], status: parts[2] };
-    });
-}
-
-function isProtectedContainer(name) {
-  return DOCKER_PROTECTED_CONTAINERS.includes(name.toLowerCase());
-}
-
-async function handleDockerPs(message) {
-  try {
-    const containers = await fetchDockerContainers().then((list) =>
-      list.filter((c) => !isProtectedContainer(c.name))
-    );
-    if (containers.length === 0) {
-      await message.reply("No containers found.");
-      return;
-    }
-    const lines = containers.map((c) => c.name + " - " + c.status);
-    await message.reply("```\n" + lines.join("\n") + "\n```");
-  } catch (err) {
-    console.error("docker ps failed:", err.message);
-    await message.reply("Could not reach the Docker host.");
-  }
-}
-
-async function handleDockerRestart(message, name) {
-  if (!name) {
-    await message.reply("Usage: !docker restart CONTAINER NAME");
-    return;
-  }
-
-  if (isProtectedContainer(name)) {
-    await message.reply("The \"" + name + "\" container is protected and can't be restarted through the bot.");
-    return;
-  }
-
-  let containers;
-  try {
-    containers = await fetchDockerContainers();
-  } catch (err) {
-    console.error("docker ps failed:", err.message);
-    await message.reply("Could not reach the Docker host.");
-    return;
-  }
-
-  const match = containers.find((c) =>
-    c.name.toLowerCase() === name.toLowerCase() || c.id === name || c.id.startsWith(name.toLowerCase())
-  );
-  if (!match) {
-    await message.reply("No container named \"" + name + "\" found. Use !docker ps to see the list.");
-    return;
-  }
-
-  if (isProtectedContainer(match.name)) {
-    await message.reply("The \"" + match.name + "\" container is protected and can't be restarted through the bot.");
-    return;
-  }
-
-  try {
-    await runDockerCommand(["restart", match.name]);
-    await message.reply("Restarted \"" + match.name + "\".");
-  } catch (err) {
-    console.error("docker restart failed:", err.message);
-    await message.reply("Could not restart \"" + match.name + "\".");
-  }
-}
-
-async function hasDockerRole(message) {
-  if (message.guild) {
-    return message.member.roles.cache.has(DOCKER_ROLE_ID);
-  }
-  for (const guild of message.client.guilds.cache.values()) {
-    let member = guild.members.cache.get(message.author.id);
-    if (!member) {
-      member = await guild.members.fetch(message.author.id).catch(() => null);
-    }
-    if (member && member.roles.cache.has(DOCKER_ROLE_ID)) return true;
-  }
-  return false;
-}
-
-async function handleDocker(message, input) {
-  if (!DOCKER_ENABLED) {
-    await message.reply("Docker control isn't set up. Set DOCKER_SSH_HOST, DOCKER_SSH_USER, DOCKER_SSH_KEY_PATH, and DOCKER_ROLE_ID in .env to enable it.");
-    return;
-  }
-  if (!(await hasDockerRole(message))) {
-    await message.reply("You don't have permission to use !docker.");
-    return;
-  }
-
-  const parts = input.trim().split(/\s+/).filter((p) => p.length > 0);
-  const subcommand = (parts[0] || "").toLowerCase();
-
-  if (subcommand === "ps") {
-    await handleDockerPs(message);
-    return;
-  }
-  if (subcommand === "restart") {
-    await handleDockerRestart(message, parts.slice(1).join(" "));
-    return;
-  }
-  await message.reply("Usage: !docker ps or !docker restart CONTAINER NAME");
-}
+const HELP_LINES = [
+  "!watch GAME - start watching a game for sales",
+  "!remove GAME - stop watching a game (!unwatch also works)",
+  "!list - show everything being watched",
+  "!price GAME - check a game's current best price without watching it",
+  "!prices GAME - list every store the game is on sale at, cheapest first",
+  "!history GAME - show every recorded sale over the past 12 months, with date and price",
+  "!predict GAME - guess when it might go on sale next, based on its full sale history",
+  "!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it",
+  "!own GAME - mark a game as owned by you",
+  "!unown GAME - remove a game from your owned list",
+  "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically",
+  "!who GAME - list who has confirmed they own a game",
+  "!popular - list games owned by more than one member, most owned first",
+  "!roles - list every game role and how many members have each",
+  "!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead",
+  "!unroll GAME - leave a game's role",
+  "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts",
+  "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all",
+  "!memories - show everything I remember about you",
+  "!check - run the sale check right now instead of waiting for the daily run",
+  "!shops - list every store I check prices at",
+  "!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points",
+  "!score - show the top 10 members by trivia points",
+  "!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+].map((text, i) => ({ order: (i + 1) * 10, text: text }));
 
 async function handleHelp(message, note) {
-  const dockerLines = (DOCKER_ENABLED && (await hasDockerRole(message)))
-    ? "!docker ps - list containers on the game server (requires the Docker role)\n" +
-      "!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n"
-    : "";
-  const description =
-    "Commands:\n" +
-    "!watch GAME - start watching a game for sales\n" +
-    "!remove GAME - stop watching a game (!unwatch also works)\n" +
-    "!list - show everything being watched\n" +
-    "!price GAME - check a game's current best price without watching it\n" +
-    "!prices GAME - list every store the game is on sale at, cheapest first\n" +
-    "!history GAME - show every recorded sale over the past 12 months, with date and price\n" +
-    "!predict GAME - guess when it might go on sale next, based on its full sale history\n" +
-    "!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n" +
-    "!own GAME - mark a game as owned by you\n" +
-    "!unown GAME - remove a game from your owned list\n" +
-    "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n" +
-    "!who GAME - list who has confirmed they own a game\n" +
-    "!popular - list games owned by more than one member, most owned first\n" +
-    "!roles - list every game role and how many members have each\n" +
-    "!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n" +
-    "!unroll GAME - leave a game's role\n" +
-    dockerLines +
-    "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n" +
-    "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n" +
-    "!memories - show everything I remember about you\n" +
-    "!check - run the sale check right now instead of waiting for the daily run\n" +
-    "!shops - list every store I check prices at\n" +
-    "!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n" +
-    "!score - show the top 10 members by trivia points\n" +
-    "!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer" +
-    (note ? "\n\n" + note : "");
+  const entries = HELP_LINES.concat(await collectHelpEntries(plugins, message));
+  entries.sort((a, b) => a.order - b.order);
+  const description = "Commands:\n" + entries.map((entry) => entry.text).join("\n") + (note ? "\n\n" + note : "");
   const embed = new EmbedBuilder().setDescription(description);
   await message.reply({ embeds: [embed] });
 }
@@ -2529,8 +2389,9 @@ client.on("messageCreate", async (message) => {
       return;
     }
 
-    if (dmContent === "!docker" || dmContent.startsWith("!docker ")) {
-      await handleDocker(message, message.content.trim().slice(7).trim());
+    const dmCommand = findCommand(plugins, message.content.trim(), true);
+    if (dmCommand) {
+      await dmCommand.command.run(message, dmCommand.args);
       return;
     }
 
@@ -2559,6 +2420,12 @@ client.on("messageCreate", async (message) => {
       console.error("Trivia answer check failed:", err.message);
     }
     if (triviaHandled) return;
+  }
+
+  const pluginCommand = findCommand(plugins, content, false);
+  if (pluginCommand) {
+    await pluginCommand.command.run(message, pluginCommand.args);
+    return;
   }
 
   if (lower.startsWith("!watch ")) {
@@ -2593,8 +2460,6 @@ client.on("messageCreate", async (message) => {
     await handleRole(message, content.slice(6).trim());
   } else if (lower.startsWith("!unroll ")) {
     await handleUnroll(message, content.slice(8).trim());
-  } else if (lower === "!docker" || lower.startsWith("!docker ")) {
-    await handleDocker(message, content.slice(7).trim());
   } else if (lower.startsWith("!remember ")) {
     await handleRemember(message, content.slice(10).trim());
   } else if (lower.startsWith("!forget ")) {
