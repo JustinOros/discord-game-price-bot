@@ -3,7 +3,8 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const fs = require("fs");
 const cron = require("node-cron");
 const yaml = require("js-yaml");
-const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require("discord.js");
+const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder } = require("discord.js");
+const { createRoles } = require("./core/roles");
 const { loadPlugins, findCommand, collectHelpEntries, startPlugins, registerPlugins, runChatHooks } = require("./core/plugins");
 
 const rawLog = console.log.bind(console);
@@ -32,7 +33,6 @@ const GAMES_PATH = path.join(__dirname, "games.json");
 const OWNED_PATH = path.join(__dirname, "owned.json");
 const STEAMLINKS_PATH = path.join(__dirname, "steamlinks.json");
 const MAPS_PATH = path.join(__dirname, "maps.json");
-const ROLES_PATH = path.join(__dirname, "roles.yaml");
 const README_PATH = path.join(__dirname, "README.md");
 const PERSONALITY_PATH = path.join(__dirname, "personality.yaml");
 const MEMORY_PATH = path.join(__dirname, "memory.yaml");
@@ -361,230 +361,17 @@ function saveOwned(owned) {
   fs.writeFileSync(OWNED_PATH, JSON.stringify(owned, null, 2) + "\n");
 }
 
-const ROLE_EMOJI_POOL = [
-  "🎮", "🕹️", "🎲", "🎯", "🏆", "🥇", "🥈", "🥉", "🎖️", "🏅",
-  "⚔️", "🛡️", "🏹", "🗡️", "🔪", "🪓", "💣", "🧨", "🔫", "🔱",
-  "🧙", "🧝", "🧛", "🧟", "🐉", "🐲", "👑", "💎", "🔮", "🗝️",
-  "🔑", "🚀", "🛸", "🤖", "👾", "💀", "☠️", "🔥", "❄️", "⚡",
-  "🌊", "🌪️", "🌋", "🌟", "⭐", "✨", "🌙", "☀️", "🍀", "🌵",
-  "🌲", "🍄", "🦅", "🐺", "🦊", "🦁", "🐯", "🐻", "🐸", "🐍",
-  "🕷️", "🦂", "🦇", "🦄", "🐴", "🐙", "🦑", "🦖", "🦕", "🐊",
-  "🦈", "🐳", "🎃", "🥷", "🧭", "🏰", "🛶", "⛵", "🚁", "🚂",
-  "🎸", "🎺", "🥁", "🎻", "🍕", "🍔", "🌮", "🍩", "☕", "🍺"
-];
-
-function loadRoles() {
-  try {
-    const data = yaml.load(fs.readFileSync(ROLES_PATH, "utf8"));
-    return (data && typeof data === "object") ? data : {};
-  } catch (err) {
-    return {};
-  }
-}
-
-function saveRoles(roles) {
-  fs.writeFileSync(ROLES_PATH, yaml.dump(roles));
-}
-
-function pickRoleEmoji(roles) {
-  const used = new Set(Object.values(roles).map((r) => r.emoji));
-  const available = ROLE_EMOJI_POOL.filter((e) => !used.has(e));
-  const pool = available.length > 0 ? available : ROLE_EMOJI_POOL;
-  return pool[Math.floor(Math.random() * pool.length)];
-}
-
-const EMOJI_PATTERN = /^\p{Extended_Pictographic}(️|‍\p{Extended_Pictographic})*$/u;
-const EMOJI_SUGGEST_TIMEOUT_MS = 8000;
-
-function isEmoji(str) {
-  return EMOJI_PATTERN.test(str);
-}
-
-async function suggestGameEmoji(title) {
-  if (!AI_ENABLED) return null;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), EMOJI_SUGGEST_TIMEOUT_MS);
-  try {
-    const res = await fetch(OLLAMA_URL + "/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: OLLAMA_MODEL,
-        stream: false,
-        options: { num_predict: 10 },
-        messages: [
-          { role: "system", content: "You only ever reply with a single emoji character, nothing else - no words, no explanation, no punctuation." },
-          { role: "user", content: "Pick one emoji that best fits the video game \"" + title + "\"." }
-        ]
-      }),
-      signal: controller.signal
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const text = ((data.message && data.message.content) || "").trim();
-    const match = text.match(/\p{Extended_Pictographic}(️|‍\p{Extended_Pictographic})*/u);
-    return match ? match[0] : null;
-  } catch (err) {
-    return null;
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
-async function pickFittingEmoji(roles, title) {
-  const suggested = await suggestGameEmoji(title);
-  if (suggested) {
-    const used = new Set(Object.values(roles).map((r) => r.emoji));
-    if (!used.has(suggested)) return suggested;
-  }
-  return pickRoleEmoji(roles);
-}
-
-function findGameRole(roles, query) {
-  const normalized = normalizeTitle(query);
-  if (roles[normalized]) return { key: normalized, entry: roles[normalized] };
-  for (const key of Object.keys(roles)) {
-    if (normalized.includes(key) || key.includes(normalized)) return { key: key, entry: roles[key] };
-  }
-  return null;
-}
-
-function sortedRoleEntries() {
-  const roles = loadRoles();
-  return Object.values(roles).sort((a, b) => a.title.localeCompare(b.title));
-}
-
-const ROLE_PICKER_MAX = 25;
-
-function roleMemberCounts(guild, entries) {
-  const counts = {};
-  entries.forEach((entry) => {
-    const role = guild && guild.roles.cache.get(entry.roleId);
-    counts[entry.roleId] = role ? role.members.size : 0;
-  });
-  return counts;
-}
-
-function buildRolePickerComponents(entries, counts) {
-  if (entries.length === 0) return { components: [], overflow: false };
-
-  const labelFor = (entry) => {
-    const count = counts ? counts[entry.roleId] : undefined;
-    return count === undefined ? entry.title : entry.title + " (" + count + ")";
-  };
-
-  if (entries.length <= ROLE_PICKER_MAX) {
-    const rows = [];
-    for (let i = 0; i < entries.length; i += 5) {
-      const row = new ActionRowBuilder();
-      entries.slice(i, i + 5).forEach((entry) => {
-        row.addComponents(
-          new ButtonBuilder()
-            .setCustomId("role:" + entry.roleId)
-            .setLabel(labelFor(entry).slice(0, 80))
-            .setEmoji(entry.emoji)
-            .setStyle(ButtonStyle.Secondary)
-        );
-      });
-      rows.push(row);
-    }
-    return { components: rows, overflow: false };
-  }
-
-  const shown = entries.slice(0, ROLE_PICKER_MAX);
-  const menu = new StringSelectMenuBuilder()
-    .setCustomId("role-select")
-    .setPlaceholder("Choose a game role")
-    .addOptions(shown.map((entry) => ({
-      label: labelFor(entry).slice(0, 100),
-      value: entry.roleId,
-      emoji: entry.emoji
-    })));
-  return { components: [new ActionRowBuilder().addComponents(menu)], overflow: true };
-}
-
-function cleanTitle(title) {
-  return title.replace(/[®™©]/g, "").replace(/\s+/g, " ").trim();
-}
-
-async function ensureGameRole(guild, title, preferredEmoji) {
-  const cleanedTitle = cleanTitle(title);
-  const roles = loadRoles();
-  const key = normalizeTitle(title);
-  const entry = roles[key];
-
-  if (entry) {
-    const existing = guild.roles.cache.get(entry.roleId) || await guild.roles.fetch(entry.roleId).catch(() => null);
-    if (existing) {
-      let changed = false;
-      if (entry.title !== cleanedTitle) {
-        entry.title = cleanedTitle;
-        changed = true;
-      }
-      if (preferredEmoji && preferredEmoji !== entry.emoji) {
-        entry.emoji = preferredEmoji;
-        changed = true;
-      }
-
-      const tryNative = entry.iconMode !== "name";
-      const desiredName = tryNative ? cleanedTitle : (entry.emoji + " " + cleanedTitle);
-      const nameOk = existing.name === desiredName;
-      const iconOk = !tryNative || existing.unicodeEmoji === entry.emoji;
-
-      if (!nameOk || !iconOk) {
-        if (tryNative) {
-          try {
-            await existing.edit({ name: cleanedTitle, unicodeEmoji: entry.emoji });
-            entry.iconMode = "native";
-          } catch (err) {
-            try {
-              await existing.setName(entry.emoji + " " + cleanedTitle);
-              entry.iconMode = "name";
-            } catch (err2) {
-              console.error("Could not update role:", err2.message);
-            }
-          }
-        } else {
-          try {
-            await existing.setName(entry.emoji + " " + cleanedTitle);
-          } catch (err) {
-            console.error("Could not update role:", err.message);
-          }
-        }
-        changed = true;
-      }
-
-      if (changed) {
-        roles[key] = entry;
-        saveRoles(roles);
-      }
-      return { role: existing, emoji: entry.emoji, created: false, title: cleanedTitle };
-    }
-  }
-
-  const emoji = preferredEmoji || await pickFittingEmoji(roles, cleanedTitle);
-  let role;
-  let iconMode;
-  try {
-    role = await guild.roles.create({
-      name: cleanedTitle,
-      unicodeEmoji: emoji,
-      mentionable: true,
-      reason: "Game role for " + cleanedTitle
-    });
-    iconMode = "native";
-  } catch (err) {
-    role = await guild.roles.create({
-      name: emoji + " " + cleanedTitle,
-      mentionable: true,
-      reason: "Game role for " + cleanedTitle
-    });
-    iconMode = "name";
-  }
-  roles[key] = { title: cleanedTitle, roleId: role.id, emoji: emoji, iconMode: iconMode };
-  saveRoles(roles);
-  return { role: role, emoji: emoji, created: true, title: cleanedTitle };
-}
+const {
+  loadRoles,
+  saveRoles,
+  findGameRole,
+  sortedRoleEntries,
+  ROLE_PICKER_MAX,
+  roleMemberCounts,
+  buildRolePickerComponents,
+  ensureGameRole,
+  isEmoji
+} = createRoles({ normalizeTitle, AI_ENABLED, OLLAMA_URL, OLLAMA_MODEL });
 
 function loadSteamLinks() {
   return JSON.parse(fs.readFileSync(STEAMLINKS_PATH, "utf8"));
@@ -1476,109 +1263,6 @@ async function handleOwn(message, query) {
   await message.reply("Marked \"" + match.title + "\" as owned" + (roleNote || "."));
 }
 
-async function handleRoles(message) {
-  const entries = sortedRoleEntries();
-  if (entries.length === 0) {
-    await message.reply("No game roles yet. Use !own GAME or !role GAME to create one.");
-    return;
-  }
-
-  const guild = message.guild;
-  if (guild) {
-    try {
-      await guild.members.fetch();
-    } catch (err) {
-      console.error("Could not refresh member cache:", err.message);
-    }
-  }
-
-  const counts = roleMemberCounts(guild, entries);
-  const picker = buildRolePickerComponents(entries, counts);
-  const content = picker.overflow
-    ? "Use the dropdown below to add yourself to a role (showing the first " + ROLE_PICKER_MAX + " alphabetically - use !role GAME for any others):"
-    : "Click a button below to add or remove yourself from a role:";
-  await message.reply({ content: content, components: picker.components });
-}
-
-async function handleRole(message, input) {
-  if (!input) {
-    await message.reply("Usage: !role GAME NAME or !role EMOJI GAME NAME");
-    return;
-  }
-  if (!message.guild) {
-    await message.reply("Roles only work inside a server, not in DMs.");
-    return;
-  }
-
-  let customEmoji = null;
-  let query = input;
-  const firstSpace = input.indexOf(" ");
-  const firstToken = firstSpace === -1 ? input : input.slice(0, firstSpace);
-  if (isEmoji(firstToken)) {
-    customEmoji = firstToken;
-    query = firstSpace === -1 ? "" : input.slice(firstSpace + 1).trim();
-  }
-
-  if (!query) {
-    await message.reply("Usage: !role GAME NAME or !role EMOJI GAME NAME");
-    return;
-  }
-
-  let roleTitle = query.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-  try {
-    const results = await searchGame(query);
-    const needle = normalizeTitle(query);
-    const exact = (results || []).find((r) => normalizeTitle(r.title) === needle);
-    if (exact) roleTitle = exact.title;
-  } catch (err) {
-    console.error("Role title search failed:", err.message);
-  }
-
-  try {
-    const roleResult = await ensureGameRole(message.guild, roleTitle, customEmoji);
-    if (message.member.roles.cache.has(roleResult.role.id)) {
-      await message.reply("You already have the " + roleResult.emoji + " " + roleResult.title + " role.");
-      return;
-    }
-    await message.member.roles.add(roleResult.role.id);
-    await message.reply((roleResult.created ? "Created the " : "Added you to the ") + roleResult.emoji + " " + roleResult.title + " role.");
-  } catch (err) {
-    console.error("Role assignment failed:", err.message);
-    await message.reply("Could not assign that role - make sure I have Manage Roles permission and my role is above the roles I manage.");
-  }
-}
-
-async function handleUnroll(message, query) {
-  if (!query) {
-    await message.reply("Usage: !unroll GAME NAME");
-    return;
-  }
-  if (!message.guild) {
-    await message.reply("Roles only work inside a server, not in DMs.");
-    return;
-  }
-
-  const roles = loadRoles();
-  const found = findGameRole(roles, query);
-  if (!found) {
-    await message.reply("No role exists for \"" + query + "\".");
-    return;
-  }
-
-  if (!message.member.roles.cache.has(found.entry.roleId)) {
-    await message.reply("You don't have the " + found.entry.emoji + " " + found.entry.title + " role.");
-    return;
-  }
-
-  try {
-    await message.member.roles.remove(found.entry.roleId);
-    await message.reply("Removed you from the " + found.entry.emoji + " " + found.entry.title + " role.");
-  } catch (err) {
-    console.error("Role removal failed:", err.message);
-    await message.reply("Could not remove that role - make sure I have Manage Roles permission.");
-  }
-}
-
 async function handleUnown(message, query) {
   if (!query) {
     await message.reply("Usage: !unown GAME NAME");
@@ -1873,30 +1557,26 @@ async function handleWiki(message, query) {
 }
 
 const HELP_LINES = [
-  "!watch GAME - start watching a game for sales",
-  "!remove GAME - stop watching a game (!unwatch also works)",
-  "!list - show everything being watched",
-  "!price GAME - check a game's current best price without watching it",
-  "!prices GAME - list every store the game is on sale at, cheapest first",
-  "!history GAME - show every recorded sale over the past 12 months, with date and price",
-  "!predict GAME - guess when it might go on sale next, based on its full sale history",
-  "!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it",
-  "!own GAME - mark a game as owned by you",
-  "!unown GAME - remove a game from your owned list",
-  "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically",
-  "!who GAME - list who has confirmed they own a game",
-  "!popular - list games owned by more than one member, most owned first",
-  "!roles - list every game role and how many members have each",
-  "!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead",
-  "!unroll GAME - leave a game's role",
-  "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts",
-  "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all",
-  "!memories - show everything I remember about you",
-  "!check - run the sale check right now instead of waiting for the daily run",
-  "!shops - list every store I check prices at",
-].map((text, i) => ({ order: (i + 1) * 10, text: text })).concat([
+  { order: 10, text: "!watch GAME - start watching a game for sales" },
+  { order: 20, text: "!remove GAME - stop watching a game (!unwatch also works)" },
+  { order: 30, text: "!list - show everything being watched" },
+  { order: 40, text: "!price GAME - check a game's current best price without watching it" },
+  { order: 50, text: "!prices GAME - list every store the game is on sale at, cheapest first" },
+  { order: 60, text: "!history GAME - show every recorded sale over the past 12 months, with date and price" },
+  { order: 70, text: "!predict GAME - guess when it might go on sale next, based on its full sale history" },
+  { order: 80, text: "!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it" },
+  { order: 90, text: "!own GAME - mark a game as owned by you" },
+  { order: 100, text: "!unown GAME - remove a game from your owned list" },
+  { order: 110, text: "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically" },
+  { order: 120, text: "!who GAME - list who has confirmed they own a game" },
+  { order: 130, text: "!popular - list games owned by more than one member, most owned first" },
+  { order: 170, text: "!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts" },
+  { order: 180, text: "!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all" },
+  { order: 190, text: "!memories - show everything I remember about you" },
+  { order: 200, text: "!check - run the sale check right now instead of waiting for the daily run" },
+  { order: 210, text: "!shops - list every store I check prices at" },
   { order: 240, text: "!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer" }
-]);
+];
 
 async function handleHelp(message, note) {
   const entries = HELP_LINES.concat(await collectHelpEntries(plugins, message));
@@ -2048,7 +1728,7 @@ const client = new Client({
   partials: [Partials.Channel]
 });
 
-const pluginContext = { client, cron, loadRoles, findGameRole, GREETING_CHANNEL_NAME, sortedRoleEntries, roleMemberCounts, buildRolePickerComponents, ROLE_PICKER_MAX };
+const pluginContext = { client, cron, loadRoles, findGameRole, GREETING_CHANNEL_NAME, sortedRoleEntries, roleMemberCounts, buildRolePickerComponents, ROLE_PICKER_MAX, searchGame, normalizeTitle, ensureGameRole, isEmoji };
 
 client.once("clientReady", async () => {
   console.log("Logged in as " + client.user.tag);
@@ -2068,60 +1748,6 @@ client.once("clientReady", async () => {
 
 registerPlugins(plugins, pluginContext);
 
-async function handleRoleInteraction(interaction, roleId) {
-  const roles = loadRoles();
-  const entry = Object.values(roles).find((r) => r.roleId === roleId);
-  if (!entry) {
-    await interaction.reply({ content: "That role no longer exists.", flags: MessageFlags.Ephemeral });
-    return;
-  }
-
-  await interaction.deferUpdate();
-
-  const hadRole = interaction.member.roles.cache.has(roleId);
-  let confirmation;
-  try {
-    if (hadRole) {
-      await interaction.member.roles.remove(roleId);
-      confirmation = "Removed you from the " + entry.emoji + " " + entry.title + " role.";
-    } else {
-      await interaction.member.roles.add(roleId);
-      confirmation = "Added you to the " + entry.emoji + " " + entry.title + " role.";
-    }
-  } catch (err) {
-    console.error("Role button interaction failed:", err.message);
-    await interaction.followUp({ content: "Could not update that role - make sure I have Manage Roles permission and my role is above the roles I manage.", flags: MessageFlags.Ephemeral });
-    return;
-  }
-
-  const entries = sortedRoleEntries();
-  const counts = roleMemberCounts(interaction.guild, entries);
-  const role = interaction.guild.roles.cache.get(roleId);
-  const cacheHasMember = role ? role.members.has(interaction.member.id) : false;
-  const shouldHaveMember = !hadRole;
-  if (counts[roleId] !== undefined && cacheHasMember !== shouldHaveMember) {
-    counts[roleId] = Math.max(0, counts[roleId] + (shouldHaveMember ? 1 : -1));
-  }
-  const picker = buildRolePickerComponents(entries, counts);
-  try {
-    await interaction.editReply({ components: picker.components });
-  } catch (err) {
-    console.error("Could not refresh role picker message:", err.message);
-  }
-  await interaction.followUp({ content: confirmation, flags: MessageFlags.Ephemeral });
-}
-
-client.on("interactionCreate", async (interaction) => {
-  if (interaction.isButton() && interaction.customId.startsWith("role:")) {
-    await handleRoleInteraction(interaction, interaction.customId.slice(5));
-    return;
-  }
-  if (interaction.isStringSelectMenu() && interaction.customId === "role-select") {
-    await handleRoleInteraction(interaction, interaction.values[0]);
-    return;
-  }
-});
-
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
 
@@ -2136,7 +1762,7 @@ client.on("messageCreate", async (message) => {
 
     const dmCommand = findCommand(plugins, message.content.trim(), true);
     if (dmCommand) {
-      await dmCommand.command.run(message, dmCommand.args);
+      await dmCommand.command.run(message, dmCommand.args, pluginContext);
       return;
     }
 
@@ -2163,7 +1789,7 @@ client.on("messageCreate", async (message) => {
 
   const pluginCommand = findCommand(plugins, content, false);
   if (pluginCommand) {
-    await pluginCommand.command.run(message, pluginCommand.args);
+    await pluginCommand.command.run(message, pluginCommand.args, pluginContext);
     return;
   }
 
@@ -2193,12 +1819,6 @@ client.on("messageCreate", async (message) => {
     await handleWho(message, content.slice(5).trim());
   } else if (lower === "!popular") {
     await handlePopular(message);
-  } else if (lower === "!roles") {
-    await handleRoles(message);
-  } else if (lower.startsWith("!role ")) {
-    await handleRole(message, content.slice(6).trim());
-  } else if (lower.startsWith("!unroll ")) {
-    await handleUnroll(message, content.slice(8).trim());
   } else if (lower.startsWith("!remember ")) {
     await handleRemember(message, content.slice(10).trim());
   } else if (lower.startsWith("!forget ")) {

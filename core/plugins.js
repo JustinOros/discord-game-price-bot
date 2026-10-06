@@ -18,7 +18,9 @@ function loadPlugins(pluginsDir, disabled) {
       console.error("Could not load plugin " + name + ":", err.message);
     }
   }
-  return plugins;
+  return plugins.map((plugin, index) => ({ plugin, index }))
+    .sort((a, b) => ((a.plugin.priority || 100) - (b.plugin.priority || 100)) || (a.index - b.index))
+    .map((item) => item.plugin);
 }
 
 function findCommand(plugins, content, inDm) {
@@ -27,7 +29,7 @@ function findCommand(plugins, content, inDm) {
     for (const command of plugin.commands || []) {
       if (inDm && !command.dm) continue;
       const token = "!" + command.name;
-      if (lower === token || (!command.exact && lower.startsWith(token + " "))) {
+      if ((!command.needsArgs && lower === token) || (!command.exact && lower.startsWith(token + " "))) {
         return { plugin: plugin, command: command, args: content.slice(token.length).trim() };
       }
     }
