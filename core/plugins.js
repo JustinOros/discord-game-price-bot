@@ -27,7 +27,7 @@ function findCommand(plugins, content, inDm) {
     for (const command of plugin.commands || []) {
       if (inDm && !command.dm) continue;
       const token = "!" + command.name;
-      if (lower === token || lower.startsWith(token + " ")) {
+      if (lower === token || (!command.exact && lower.startsWith(token + " "))) {
         return { plugin: plugin, command: command, args: content.slice(token.length).trim() };
       }
     }
@@ -72,4 +72,12 @@ function registerPlugins(plugins, context) {
   }
 }
 
-module.exports = { loadPlugins, findCommand, collectHelpEntries, startPlugins, registerPlugins };
+async function runChatHooks(plugins, message, content) {
+  for (const plugin of plugins) {
+    if (typeof plugin.onChat !== "function") continue;
+    if (await plugin.onChat(message, content)) return true;
+  }
+  return false;
+}
+
+module.exports = { loadPlugins, findCommand, collectHelpEntries, startPlugins, registerPlugins, runChatHooks };
