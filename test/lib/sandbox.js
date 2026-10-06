@@ -98,7 +98,7 @@ function listFiles(dir, base, out) {
 }
 
 function createSandbox(repoRoot, overrides, options) {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "gpb-test-"));
+  const dir = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "gpb-test-")));
   const sourceFiles = new Set();
 
   for (const entry of fs.readdirSync(repoRoot, { withFileTypes: true })) {
