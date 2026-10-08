@@ -6595,7 +6595,7 @@
                 "docker 'restart' 'gitea'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -6710,7 +6710,7 @@
                 "docker 'restart' 'sotf-server'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -7005,7 +7005,7 @@
                 "docker 'restart' 'gitea'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -7051,7 +7051,7 @@
                 "docker 'restart' 'gitea'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -7097,7 +7097,7 @@
                 "docker 'restart' 'gitea'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -7143,7 +7143,7 @@
                 "docker 'restart' 'gitea'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -7327,7 +7327,7 @@
                 "docker 'restart' 'sotf-server'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -7718,7 +7718,7 @@
                 "docker 'restart' 'retroassembly'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -7849,7 +7849,7 @@
                 "docker 'restart' 'Plex-Media-Server'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -8142,7 +8142,7 @@
                 "docker 'restart' 'it'\\''s-odd name'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],
@@ -8315,7 +8315,7 @@
                 "docker 'restart' 'gitea'"
               ],
               "options": {
-                "timeout": 15000
+                "timeout": 90000
               }
             }
           ],

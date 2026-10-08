@@ -11,12 +11,13 @@ const DOCKER_PROTECTED_CONTAINERS = (process.env.DOCKER_PROTECTED_CONTAINERS || 
   .filter((name) => name.length > 0);
 const DOCKER_ENABLED = !!(DOCKER_SSH_HOST && DOCKER_SSH_USER && DOCKER_SSH_KEY_PATH && DOCKER_ROLE_ID);
 const DOCKER_SSH_TIMEOUT_MS = 15000;
+const DOCKER_RESTART_TIMEOUT_MS = 90000;
 
 function shQuote(str) {
   return "'" + String(str).replace(/'/g, "'\\''") + "'";
 }
 
-async function runDockerCommand(args) {
+async function runDockerCommand(args, timeoutMs) {
   const remoteCommand = "docker " + args.map(shQuote).join(" ");
   const { stdout } = await execFileAsync(
     "ssh",
@@ -27,7 +28,7 @@ async function runDockerCommand(args) {
       DOCKER_SSH_USER + "@" + DOCKER_SSH_HOST,
       remoteCommand
     ],
-    { timeout: DOCKER_SSH_TIMEOUT_MS }
+    { timeout: timeoutMs || DOCKER_SSH_TIMEOUT_MS }
   );
   return stdout;
 }
@@ -99,7 +100,7 @@ async function handleDockerRestart(message, name) {
   }
 
   try {
-    await runDockerCommand(["restart", match.name]);
+    await runDockerCommand(["restart", match.name], DOCKER_RESTART_TIMEOUT_MS);
     await message.reply("Restarted \"" + match.name + "\".");
   } catch (err) {
     console.error("docker restart failed:", err.message);
