@@ -50,6 +50,12 @@ module.exports = [
     await ctx.say("erin", "!own Elden Ring", { member: null, label: "erin: !own Elden Ring without a cached member" });
   }, { files: { "owned.json": {} } }),
 
+  sc("own-with-custom-emoji", async (ctx) => {
+    await ctx.say("alice", "!own 🌴 Hollow Knight");
+    await ctx.say("bob", "!own 🌴");
+    await ctx.say("bob", "!own 🍓 Terraria");
+  }, { files: { "owned.json": {} } }),
+
   sc("own-existing-role-repair-paths", async (ctx) => {
     const celeste = ctx.g1.roles.cache.get("R-CELESTE");
     celeste.name = "Celeste Old Name";

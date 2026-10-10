@@ -1,447 +1,266 @@
-const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, ".env") });
-const fs = require("fs");
-const cron = require("node-cron");
-const yaml = require("js-yaml");
-const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder } = require("discord.js");
-const { createRoles } = require("./core/roles");
-const { loadPlugins, findCommand, collectHelpEntries, startPlugins, registerPlugins, runChatHooks } = require("./core/plugins");
+const POPULAR_TOP_N = 10;
 
-const rawLog = console.log.bind(console);
-const rawError = console.error.bind(console);
-console.log = (...args) => rawLog(new Date().toISOString(), ...args);
-console.error = (...args) => rawError(new Date().toISOString(), ...args);
-
-const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
-const ITAD_API_KEY = process.env.ITAD_API_KEY;
-const STEAM_API_KEY = process.env.STEAM_API_KEY;
-const ITAD_COUNTRY = (process.env.ITAD_COUNTRY || "US").toUpperCase();
-const AI_ENABLED = process.env.AI_ENABLED !== "false";
-const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "llama3.2";
-const GREETING_CHANNEL_NAME = "general";
-const ITAD_BASE = "https://api.isthereanydeal.com";
-const OWNED_PATH = path.join(__dirname, "owned.json");
-const STEAMLINKS_PATH = path.join(__dirname, "steamlinks.json");
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
-if (!DISCORD_BOT_TOKEN || !ITAD_API_KEY) {
-  console.error("DISCORD_BOT_TOKEN and ITAD_API_KEY must be set in .env");
-  process.exit(1);
-}
-
-const DISABLED_PLUGINS = (process.env.DISABLED_PLUGINS || "")
-  .split(",")
-  .map((name) => name.trim())
-  .filter((name) => name.length > 0);
-const plugins = loadPlugins(path.join(__dirname, "plugins"), DISABLED_PLUGINS);
-
-
-
-function loadOwned() {
-  return JSON.parse(fs.readFileSync(OWNED_PATH, "utf8"));
-}
-
-function saveOwned(owned) {
-  fs.writeFileSync(OWNED_PATH, JSON.stringify(owned, null, 2) + "\n");
-}
-
-const {
-  loadRoles,
-  saveRoles,
-  findGameRole,
-  sortedRoleEntries,
-  ROLE_PICKER_MAX,
-  roleMemberCounts,
-  buildRolePickerComponents,
-  ensureGameRole,
-  isEmoji
-} = createRoles({ normalizeTitle, AI_ENABLED, OLLAMA_URL, OLLAMA_MODEL });
-
-function loadSteamLinks() {
-  return JSON.parse(fs.readFileSync(STEAMLINKS_PATH, "utf8"));
-}
-
-function saveSteamLinks(links) {
-  fs.writeFileSync(STEAMLINKS_PATH, JSON.stringify(links, null, 2) + "\n");
-}
-
-
-
-async function searchGame(title) {
-  const url = ITAD_BASE + "/games/search/v1?key=" + ITAD_API_KEY +
-    "&title=" + encodeURIComponent(title) + "&results=5";
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("search failed: " + res.status);
-  return res.json();
-}
-
-function normalizeTitle(str) {
-  return str.toLowerCase().replace(/[®™©]/g, "").replace(/\s+/g, " ").trim();
-}
-
-function pickSearchMatch(query, results) {
-  if (!results || results.length === 0) return null;
-
-  const needle = normalizeTitle(query);
-  const exact = results.find((r) => normalizeTitle(r.title) === needle);
-  if (exact) return exact;
-
-  const containing = results.filter((r) => normalizeTitle(r.title).includes(needle));
-  if (containing.length > 0) {
-    containing.sort((a, b) => a.title.length - b.title.length);
-    return containing[0];
+async function handleWho(message, query, ctx) {
+  const { fetchGameInfo, findOwnerIds, pickSearchMatch, searchGame } = ctx;
+  if (!query) {
+    await message.reply("Usage: !who GAME NAME");
+    return;
   }
 
-  return results[0];
-}
-
-async function fetchPrices(ids) {
-  const url = ITAD_BASE + "/games/prices/v3?key=" + ITAD_API_KEY + "&country=" + ITAD_COUNTRY;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(ids)
-  });
-  if (!res.ok) throw new Error("prices failed: " + res.status);
-  return res.json();
-}
-
-async function fetchShops() {
-  const url = ITAD_BASE + "/service/shops/v1?key=" + ITAD_API_KEY;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("shops failed: " + res.status);
-  return res.json();
-}
-
-function formatReleaseDate(releaseDate) {
-  if (!releaseDate) return null;
-  const parts = releaseDate.split("-");
-  if (parts.length !== 3) return null;
-  const year = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10);
-  const day = parseInt(parts[2], 10);
-  if (!year || !month || !day) return null;
-  return day + " " + MONTH_NAMES[month - 1].slice(0, 3) + " " + year;
-}
-
-function toItadDateTime(date) {
-  return date.toISOString().split(".")[0] + "+00:00";
-}
-
-async function fetchSteamDetails(appid) {
-  const url = "https://store.steampowered.com/api/appdetails?appids=" + appid +
-    "&cc=" + ITAD_COUNTRY.toLowerCase() + "&filters=categories,platforms,basic";
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("steam appdetails failed: " + res.status);
-  const data = await res.json();
-  const entry = data && data[appid];
-  if (!entry || !entry.success || !entry.data) return null;
-
-  const categories = (entry.data.categories || []).map((c) => c.description);
-
-  const flags = entry.data.platforms || {};
-  const platforms = [];
-  if (flags.windows) platforms.push("Windows");
-  if (flags.mac) platforms.push("Mac");
-  if (flags.linux) platforms.push("Linux");
-
-  return { categories: categories, platforms: platforms, headerImage: entry.data.header_image || null };
-}
-
-async function fetchSteamLiveDeal(appid) {
-  const url = "https://store.steampowered.com/api/appdetails?appids=" + appid +
-    "&cc=" + ITAD_COUNTRY.toLowerCase() + "&filters=price_overview";
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("steam price failed: " + res.status);
-  const data = await res.json();
-  const entry = data && data[appid];
-  if (!entry || !entry.success || !entry.data) return null;
-
-  const overview = entry.data.price_overview;
-  if (!overview) return null;
-
-  return {
-    shop: { name: "Steam" },
-    price: { amountInt: overview.final, currency: overview.currency },
-    regular: { amountInt: overview.initial, currency: overview.currency },
-    cut: overview.discount_percent,
-    url: "https://store.steampowered.com/app/" + appid
-  };
-}
-
-async function mergeLiveSteamDeal(deals, appid) {
-  let merged = deals.filter((deal) => deal.shop.name !== "Steam");
-  if (!appid) return merged;
-
+  let results;
   try {
-    const steamDeal = await fetchSteamLiveDeal(appid);
-    if (steamDeal) merged = merged.concat(steamDeal);
+    results = await searchGame(query);
   } catch (err) {
-    console.error("Steam live price fetch failed:", err.message);
+    await message.reply("Search failed, try again in a moment.");
+    return;
   }
 
-  return merged;
-}
-
-function parseSteamProfileInput(input) {
-  const trimmed = input.trim();
-  let m = trimmed.match(/steamcommunity\.com\/profiles\/(\d{17})/i);
-  if (m) return { type: "id", value: m[1] };
-  m = trimmed.match(/steamcommunity\.com\/id\/([^\/\s]+)/i);
-  if (m) return { type: "vanity", value: m[1] };
-  if (/^\d{17}$/.test(trimmed)) return { type: "id", value: trimmed };
-  return { type: "vanity", value: trimmed };
-}
-
-async function resolveSteamId(input) {
-  const parsed = parseSteamProfileInput(input);
-  if (parsed.type === "id") return parsed.value;
-
-  const url = "https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=" +
-    STEAM_API_KEY + "&vanityurl=" + encodeURIComponent(parsed.value);
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("resolve vanity url failed: " + res.status);
-  const data = await res.json();
-  if (data.response && data.response.success === 1) return data.response.steamid;
-  return null;
-}
-
-async function fetchOwnedGames(steamId) {
-  const url = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
-    STEAM_API_KEY + "&steamid=" + steamId + "&format=json&include_played_free_games=true&include_appinfo=true";
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("owned games failed: " + res.status);
-  const data = await res.json();
-  const games = (data.response && data.response.games) || [];
-  return games.map((g) => ({ appid: g.appid, name: g.name }));
-}
-
-async function fetchOwnedAppIds(steamId) {
-  const games = await fetchOwnedGames(steamId);
-  return games.map((g) => g.appid);
-}
-
-async function fetchGameInfo(id) {
-  const url = ITAD_BASE + "/games/info/v2?key=" + ITAD_API_KEY + "&id=" + encodeURIComponent(id);
-  const res = await fetch(url);
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error("info failed: " + res.status + " " + body);
+  if (!results || results.length === 0) {
+    await message.reply("Could not find a game called \"" + query + "\".");
+    return;
   }
-  return res.json();
-}
 
-async function fetchHistorySince(id, since) {
-  const url = ITAD_BASE + "/games/history/v2?key=" + ITAD_API_KEY +
-    "&id=" + encodeURIComponent(id) + "&country=" + ITAD_COUNTRY + "&since=" + encodeURIComponent(since);
-  const res = await fetch(url);
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error("history failed: " + res.status + " " + body);
-  }
-  return res.json();
-}
+  const match = pickSearchMatch(query, results);
 
-async function fetchHistory(id) {
-  const since = toItadDateTime(new Date(Date.now() - 366 * 24 * 60 * 60 * 1000));
-  return fetchHistorySince(id, since);
-}
-
-async function fetchFullHistory(id) {
-  const since = toItadDateTime(new Date("2000-01-01T00:00:00Z"));
-  return fetchHistorySince(id, since);
-}
-
-function pickBestDeal(deals) {
-  if (!deals || deals.length === 0) return null;
-  return deals.reduce((best, d) => {
-    if (!best) return d;
-    return d.price.amountInt < best.price.amountInt ? d : best;
-  }, null);
-}
-
-function formatMoney(cents, currency) {
-  const amount = cents / 100;
+  let appid = null;
   try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency: currency || "USD" }).format(amount);
+    const info = await fetchGameInfo(match.id);
+    appid = info.appid || null;
   } catch (err) {
-    return "$" + amount.toFixed(2);
+    appid = null;
   }
+
+  const ownerIds = await findOwnerIds(match.id, appid);
+
+  if (ownerIds.length === 0) {
+    await message.reply(
+      "Nobody on this Discord server has confirmed owning \"" + match.title +
+      "\" yet. (type !own GAME to confirm ownership)"
+    );
+    return;
+  }
+
+  const lines = ["\"" + match.title + "\" has been marked owned by:"];
+  ownerIds.forEach((id) => lines.push("<@" + id + ">"));
+  lines.push("");
+  lines.push("Type \"!own GAME\" or \"!my-steam-profile LINK\" to update your owned games.");
+
+  await message.reply({ content: lines.join("\n"), allowedMentions: { users: [] } });
 }
 
-function formatExpiry(expiryIso) {
-  if (!expiryIso) return null;
-  const expiryDate = new Date(expiryIso);
-  if (isNaN(expiryDate.getTime())) return null;
-  const hoursLeft = (expiryDate.getTime() - Date.now()) / (1000 * 60 * 60);
-  if (hoursLeft <= 0) return null;
-  if (hoursLeft < 24) return "ends within a day";
-  const daysLeft = Math.round(hoursLeft / 24);
-  if (daysLeft === 1) return "ends tomorrow";
-  if (daysLeft <= 21) return "ends in " + daysLeft + " days";
-  return "ends " + formatReleaseDate(expiryDate.toISOString().slice(0, 10));
-}
+async function handlePopular(message, ctx) {
+  const { STEAM_API_KEY, fetchGameInfo, fetchOwnedGames, loadOwned, loadSteamLinks } = ctx;
+  const tally = {};
 
-function dealNote(deal, label) {
-  if (!deal || deal.cut <= 0) return "";
-  const expiryText = formatExpiry(deal.expiry);
-  return " (" + deal.cut + "% off" + (label ? " " + label : "") + (expiryText ? ", " + expiryText : "") + ")";
-}
+  function addOwner(key, title, userId) {
+    if (!tally[key]) tally[key] = { title: title, owners: new Set() };
+    tally[key].owners.add(userId);
+  }
 
-
-
-
-
-
-
-
-async function findOwnerIds(gameId, appid) {
   const owned = loadOwned();
-  const ownerIds = new Set();
+  const appidCache = {};
 
   for (const userId of Object.keys(owned)) {
-    if (owned[userId].some((g) => g.id === gameId)) {
-      ownerIds.add(userId);
+    for (const game of owned[userId]) {
+      if (!(game.id in appidCache)) {
+        try {
+          const info = await fetchGameInfo(game.id);
+          appidCache[game.id] = info.appid || null;
+        } catch (err) {
+          appidCache[game.id] = null;
+        }
+      }
+      const appid = appidCache[game.id];
+      const key = appid ? "steam:" + appid : "itad:" + game.id;
+      addOwner(key, game.title, userId);
     }
   }
 
-  if (appid && STEAM_API_KEY) {
+  if (STEAM_API_KEY) {
     const links = loadSteamLinks();
     for (const userId of Object.keys(links)) {
-      if (ownerIds.has(userId)) continue;
+      let games;
       try {
-        const appIds = await fetchOwnedAppIds(links[userId]);
-        if (appIds.includes(appid)) {
-          ownerIds.add(userId);
-        }
+        games = await fetchOwnedGames(links[userId]);
       } catch (err) {
         console.error("Owned games check failed for " + userId + ":", err.message);
+        continue;
+      }
+      for (const game of games) {
+        addOwner("steam:" + game.appid, game.name, userId);
       }
     }
   }
 
-  return Array.from(ownerIds);
+  const popular = Object.values(tally)
+    .filter((g) => g.owners.size > 1)
+    .map((g) => ({ title: g.title, count: g.owners.size }))
+    .sort((a, b) => b.count - a.count || a.title.localeCompare(b.title));
+
+  if (popular.length === 0) {
+    await message.reply("Nobody owns any games?! Type !own GAME to add a game you own to the list!");
+    return;
+  }
+
+  const top = popular.slice(0, POPULAR_TOP_N);
+  const lines = ["Here's what members are playing!"];
+  top.forEach((g) => lines.push(g.title + ": " + g.count + " member" + (g.count === 1 ? "" : "s")));
+
+  const remaining = popular.length - top.length;
+  if (remaining > 0) {
+    lines.push("...and " + remaining + " more game" + (remaining === 1 ? "" : "s") + " with multiple owners.");
+  }
+
+  await message.reply(lines.join("\n"));
 }
 
+async function handleOwn(message, query, ctx) {
+  const { ensureGameRole, isEmoji, loadOwned, pickSearchMatch, saveOwned, searchGame } = ctx;
+  if (!query) {
+    await message.reply("Usage: !own GAME NAME");
+    return;
+  }
 
+  let customEmoji = null;
+  const firstSpace = query.indexOf(" ");
+  const firstToken = firstSpace === -1 ? query : query.slice(0, firstSpace);
+  if (isEmoji(firstToken)) {
+    customEmoji = firstToken;
+    query = firstSpace === -1 ? "" : query.slice(firstSpace + 1).trim();
+    if (!query) {
+      await message.reply("Usage: !own GAME NAME or !own EMOJI GAME NAME");
+      return;
+    }
+  }
 
+  let results;
+  try {
+    results = await searchGame(query);
+  } catch (err) {
+    await message.reply("Search failed, try again in a moment.");
+    return;
+  }
 
+  if (!results || results.length === 0) {
+    await message.reply("Could not find a game called \"" + query + "\".");
+    return;
+  }
 
+  const match = pickSearchMatch(query, results);
+  const owned = loadOwned();
+  const list = owned[message.author.id] || [];
 
+  if (list.some((g) => g.id === match.id)) {
+    await message.reply("You already have \"" + match.title + "\" marked as owned.");
+    return;
+  }
 
+  list.push({ id: match.id, title: match.title });
+  owned[message.author.id] = list;
+  saveOwned(owned);
 
-
-
-
-
-
-
-
-const HELP_LINES = [
-];
-
-async function handleHelp(message, note) {
-  const entries = HELP_LINES.concat(await collectHelpEntries(plugins, message));
-  entries.sort((a, b) => a.order - b.order);
-  const description = "Commands:\n" + entries.map((entry) => entry.text).join("\n") + (note ? "\n\n" + note : "");
-  const embed = new EmbedBuilder().setDescription(description);
-  await message.reply({ embeds: [embed] });
-}
-
-
-
-const dmGreetedUsers = new Set();
-
-
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildScheduledEvents
-  ],
-  partials: [Partials.Channel]
-});
-
-const pluginContext = { client, cron, loadRoles, findGameRole, GREETING_CHANNEL_NAME, sortedRoleEntries, roleMemberCounts, buildRolePickerComponents, ROLE_PICKER_MAX, searchGame, normalizeTitle, ensureGameRole, isEmoji, fetchGameInfo, findOwnerIds, pickSearchMatch, STEAM_API_KEY, fetchOwnedGames, loadOwned, saveOwned, loadSteamLinks, saveSteamLinks, resolveSteamId, MONTH_NAMES, fetchHistory, formatMoney, fetchFullHistory, dealNote, fetchPrices, fetchSteamDetails, formatReleaseDate, mergeLiveSteamDeal, pickBestDeal, fetchShops, formatExpiry };
-
-client.once("clientReady", async () => {
-  console.log("Logged in as " + client.user.tag);
-  startPlugins(plugins, pluginContext);
-
-  for (const guild of client.guilds.cache.values()) {
+  let roleNote = "";
+  if (message.guild && message.member) {
     try {
-      await guild.members.fetch();
-      console.log("Cached " + guild.memberCount + " members for " + guild.name + ".");
+      const roleResult = await ensureGameRole(message.guild, match.title, customEmoji);
+      await message.member.roles.add(roleResult.role.id);
+      roleNote = " and gave you the " + roleResult.emoji + " " + roleResult.title + " role.";
     } catch (err) {
-      console.error("Could not cache members for " + guild.name + ":", err.message);
+      console.error("Role assignment failed:", err.message);
     }
   }
-});
 
-registerPlugins(plugins, pluginContext);
+  await message.reply("Marked \"" + match.title + "\" as owned" + (roleNote || "."));
+}
 
-client.on("messageCreate", async (message) => {
-  if (message.author.bot) return;
-
-  if (!message.guild) {
-    const dmContent = message.content.trim().toLowerCase();
-
-    if (dmContent === "!help") {
-      await handleHelp(message, "Heads up: these commands only work in a text channel on your server, not here in DMs.");
-      dmGreetedUsers.add(message.author.id);
-      return;
-    }
-
-    const dmCommand = findCommand(plugins, message.content.trim(), true);
-    if (dmCommand) {
-      await dmCommand.command.run(message, dmCommand.args, pluginContext);
-      return;
-    }
-
-    const displayName = message.author.globalName || message.author.username;
-    if (dmGreetedUsers.has(message.author.id)) {
-      await message.reply("Type !help for a list of my commands to be used in Text Channels.");
-    } else {
-      dmGreetedUsers.add(message.author.id);
-      await message.reply({
-        content: "Hello " + displayName + ", I am a Discord Game Price Bot made by Justin Oros. " +
-          "https://github.com/JustinOros/discord-game-price-bot",
-        flags: MessageFlags.SuppressEmbeds
-      });
-    }
+async function handleUnown(message, query, ctx) {
+  const { loadOwned, pickSearchMatch, saveOwned, searchGame } = ctx;
+  if (!query) {
+    await message.reply("Usage: !unown GAME NAME");
     return;
   }
 
-  const content = message.content.trim();
-  const lower = content.toLowerCase();
-
-  if (!content.startsWith("!")) {
-    if (await runChatHooks(plugins, message, content)) return;
-  }
-
-  const pluginCommand = findCommand(plugins, content, false);
-  if (pluginCommand) {
-    await pluginCommand.command.run(message, pluginCommand.args, pluginContext);
+  let results;
+  try {
+    results = await searchGame(query);
+  } catch (err) {
+    await message.reply("Search failed, try again in a moment.");
     return;
   }
 
-  if (lower === "!help") {
-    await handleHelp(message);
+  if (!results || results.length === 0) {
+    await message.reply("Could not find a game called \"" + query + "\".");
+    return;
   }
-});
 
-process.on("unhandledRejection", (err) => {
-  console.error("Unhandled error:", err && err.message ? err.message : err);
-});
+  const match = pickSearchMatch(query, results);
+  const owned = loadOwned();
+  const list = owned[message.author.id] || [];
 
-client.login(DISCORD_BOT_TOKEN).catch((err) => {
-  console.error("Login failed:", err && err.message ? err.message : err);
-  process.exit(1);
-});
+  if (!list.some((g) => g.id === match.id)) {
+    await message.reply("You don't have \"" + match.title + "\" marked as owned.");
+    return;
+  }
+
+  owned[message.author.id] = list.filter((g) => g.id !== match.id);
+  saveOwned(owned);
+
+  await message.reply("Removed \"" + match.title + "\" from your owned list.");
+}
+
+async function handleLinkSteam(message, input, ctx) {
+  const { STEAM_API_KEY, loadSteamLinks, resolveSteamId, saveSteamLinks } = ctx;
+  if (!STEAM_API_KEY) {
+    await message.reply("Steam linking is not set up on this bot yet - it needs a Steam Web API key added to .env.");
+    return;
+  }
+
+  if (!input) {
+    await message.reply("Usage: !my-steam-profile YOUR_STEAM_PROFILE_URL");
+    return;
+  }
+
+  let steamId;
+  try {
+    steamId = await resolveSteamId(input);
+  } catch (err) {
+    console.error("Steam profile resolve failed:", err.message);
+    await message.reply("Could not look up that Steam profile right now.");
+    return;
+  }
+
+  if (!steamId) {
+    await message.reply(
+      "Could not find a Steam profile matching that. Use your full profile URL, like " +
+      "https://steamcommunity.com/id/yourname or https://steamcommunity.com/profiles/7656119..."
+    );
+    return;
+  }
+
+  const links = loadSteamLinks();
+  links[message.author.id] = steamId;
+  saveSteamLinks(links);
+
+  await message.reply(
+    "Linked your Discord account to that Steam profile. !info will now count you automatically for any game " +
+    "you own there, as long as your Steam profile's game details are set to public."
+  );
+}
+
+module.exports = {
+  name: "ownership",
+  commands: [
+    { name: "own", needsArgs: true, run: (message, args, ctx) => handleOwn(message, args, ctx) },
+    { name: "unown", needsArgs: true, run: (message, args, ctx) => handleUnown(message, args, ctx) },
+    { name: "my-steam-profile", needsArgs: true, run: (message, args, ctx) => handleLinkSteam(message, args, ctx) },
+    { name: "who", needsArgs: true, run: (message, args, ctx) => handleWho(message, args, ctx) },
+    { name: "popular", exact: true, run: (message, args, ctx) => handlePopular(message, ctx) }
+  ],
+  help: [
+    { order: 90, text: "!own GAME - mark a game as owned by you" },
+    { order: 100, text: "!unown GAME - remove a game from your owned list" },
+    { order: 110, text: "!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically" },
+    { order: 120, text: "!who GAME - list who has confirmed they own a game" },
+    { order: 130, text: "!popular - list games owned by more than one member, most owned first" }
+  ]
+};

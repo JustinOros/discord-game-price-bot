@@ -16601,6 +16601,201 @@
         }
       }
     },
+    "own-with-custom-emoji": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !own 🌴 Hollow Knight",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.isthereanydeal.com/games/search/v1?key=<ITAD_API_KEY>&title=Hollow%20Knight&results=5",
+              "status": 200
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.roles.create",
+              "guild": "G1",
+              "options": {
+                "name": "Hollow Knight",
+                "unicodeEmoji": "🌴",
+                "mentionable": true,
+                "reason": "Game role for Hollow Knight"
+              },
+              "createdId": "ROLE-1"
+            },
+            {
+              "op": "member.roles.add",
+              "guild": "G1",
+              "member": "U1",
+              "roleId": "ROLE-1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Marked \"Hollow Knight\" as owned and gave you the 🌴 Hollow Knight role."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !own 🌴",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "Usage: !own GAME NAME or !own EMOJI GAME NAME"
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !own 🍓 Terraria",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.isthereanydeal.com/games/search/v1?key=<ITAD_API_KEY>&title=Terraria&results=5",
+              "status": 200
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.roles.create",
+              "guild": "G1",
+              "options": {
+                "name": "Terraria",
+                "unicodeEmoji": "🍓",
+                "mentionable": true,
+                "reason": "Game role for Terraria"
+              },
+              "createdId": "ROLE-2"
+            },
+            {
+              "op": "member.roles.add",
+              "guild": "G1",
+              "member": "U2",
+              "roleId": "ROLE-2"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Marked \"Terraria\" as owned and gave you the 🍓 Terraria role."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "owned.json": {
+          "status": "modified",
+          "lines": [
+            "{",
+            "  \"U1\": [",
+            "    {",
+            "      \"id\": \"itad-hollow-knight\",",
+            "      \"title\": \"Hollow Knight\"",
+            "    }",
+            "  ],",
+            "  \"U2\": [",
+            "    {",
+            "      \"id\": \"itad-terraria\",",
+            "      \"title\": \"Terraria\"",
+            "    }",
+            "  ]",
+            "}",
+            ""
+          ]
+        },
+        "roles.yaml": {
+          "status": "modified",
+          "lines": [
+            "hades:",
+            "  title: Hades",
+            "  roleId: R-HADES",
+            "  emoji: ⚔️",
+            "  iconMode: native",
+            "celeste:",
+            "  title: Celeste",
+            "  roleId: R-CELESTE",
+            "  emoji: 🍓",
+            "  iconMode: native",
+            "elden ring:",
+            "  title: Elden Ring",
+            "  roleId: R-ELDEN",
+            "  emoji: 🗡️",
+            "  iconMode: native",
+            "hollow knight:",
+            "  title: Hollow Knight",
+            "  roleId: ROLE-1",
+            "  emoji: 🌴",
+            "  iconMode: native",
+            "terraria:",
+            "  title: Terraria",
+            "  roleId: ROLE-2",
+            "  emoji: 🍓",
+            "  iconMode: native",
+            ""
+          ]
+        }
+      }
+    },
     "own-with-ollama-down": {
       "steps": [
         {
