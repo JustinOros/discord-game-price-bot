@@ -115,10 +115,22 @@ async function handlePopular(message, ctx) {
 }
 
 async function handleOwn(message, query, ctx) {
-  const { ensureGameRole, loadOwned, pickSearchMatch, saveOwned, searchGame } = ctx;
+  const { ensureGameRole, isEmoji, loadOwned, pickSearchMatch, saveOwned, searchGame } = ctx;
   if (!query) {
     await message.reply("Usage: !own GAME NAME");
     return;
+  }
+
+  let customEmoji = null;
+  const firstSpace = query.indexOf(" ");
+  const firstToken = firstSpace === -1 ? query : query.slice(0, firstSpace);
+  if (isEmoji(firstToken)) {
+    customEmoji = firstToken;
+    query = firstSpace === -1 ? "" : query.slice(firstSpace + 1).trim();
+    if (!query) {
+      await message.reply("Usage: !own GAME NAME or !own EMOJI GAME NAME");
+      return;
+    }
   }
 
   let results;
@@ -150,7 +162,7 @@ async function handleOwn(message, query, ctx) {
   let roleNote = "";
   if (message.guild && message.member) {
     try {
-      const roleResult = await ensureGameRole(message.guild, match.title);
+      const roleResult = await ensureGameRole(message.guild, match.title, customEmoji);
       await message.member.roles.add(roleResult.role.id);
       roleNote = " and gave you the " + roleResult.emoji + " " + roleResult.title + " role.";
     } catch (err) {
