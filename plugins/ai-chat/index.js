@@ -21,6 +21,18 @@ const MAX_MEMORY_LENGTH = 300;
 
 let ctx = null;
 
+const SECRET_NAMES = "DISCORD_BOT_TOKEN|ITAD_API_KEY|STEAM_API_KEY|TAVILY_API_KEY|LINODE_API_KEY|ROOT_PASS|DOCKER_[A-Z_]+|OLLAMA_[A-Z_]+";
+const SECRET_PROBE = new RegExp(
+  "\\.env\\b|(^|[^a-z0-9_])env($|[^a-z0-9_])|environment\\s+(variables?|vars?|file)|process\\.env|printenv|\\b(" + SECRET_NAMES + ")\\b|" +
+  "\\b(show|print|dump|reveal|leak|tell|give|share|paste|display|read|cat|list|send)\\b.{0,40}\\b(secrets?|api[ _-]?keys?|tokens?|passwords?|credentials?|private keys?)\\b",
+  "i"
+);
+const SECRET_REFUSAL = "Sorry, I can't discuss or share my .env file or any secrets.";
+
+function asksForSecrets(text) {
+  return SECRET_PROBE.test(text);
+}
+
 function loadReadme() {
   try {
     return fs.readFileSync(README_PATH, "utf8");
@@ -418,6 +430,10 @@ async function handleWiki(message, query) {
     await message.reply("Ask a game question after !wiki, like !wiki where is the key card on The Forest");
     return;
   }
+  if (asksForSecrets(query)) {
+    await message.reply(SECRET_REFUSAL);
+    return;
+  }
   if (!canUseAI(message.author.id)) return;
   try {
     const history = getAiHistory(message.author.id);
@@ -443,6 +459,10 @@ async function handleWiki(message, query) {
 
 async function onChat(message, content) {
   if (!(AI_ENABLED && (TRIGGER_MENTION.test(content) || await isReplyToBot(message)))) return false;
+  if (asksForSecrets(content)) {
+    await message.reply(SECRET_REFUSAL);
+    return true;
+  }
   if (canUseAI(message.author.id)) {
     try {
       const history = getAiHistory(message.author.id);
