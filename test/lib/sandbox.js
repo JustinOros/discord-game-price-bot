@@ -81,7 +81,10 @@ function copyDir(src, dest) {
     if (entry.name === "node_modules" || entry.name === ".git" || entry.name === ".DS_Store") continue;
     const from = path.join(src, entry.name);
     const to = path.join(dest, entry.name);
-    if (entry.isDirectory()) copyDir(from, to);
+    if (entry.isDirectory()) {
+      if (fs.existsSync(path.join(from, ".local-only"))) continue;
+      copyDir(from, to);
+    }
     else if (entry.isFile()) fs.copyFileSync(from, to);
   }
 }
