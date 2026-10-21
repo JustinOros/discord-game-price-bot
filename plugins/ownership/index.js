@@ -147,6 +147,7 @@ async function handleOwn(message, query, ctx) {
   }
 
   const match = pickSearchMatch(query, results);
+  const roleTitle = query.split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   const owned = loadOwned();
   const list = owned[message.author.id] || [];
 
@@ -162,7 +163,7 @@ async function handleOwn(message, query, ctx) {
   let roleNote = "";
   if (message.guild && message.member) {
     try {
-      const roleResult = await ensureGameRole(message.guild, match.title, customEmoji);
+      const roleResult = await ensureGameRole(message.guild, roleTitle, customEmoji);
       await message.member.roles.add(roleResult.role.id);
       roleNote = " and gave you the " + roleResult.emoji + " " + roleResult.title + " role.";
     } catch (err) {
