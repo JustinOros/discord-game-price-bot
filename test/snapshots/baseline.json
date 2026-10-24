@@ -17475,6 +17475,1211 @@
       "pendingTimers": 0,
       "files": {}
     },
+    "mood-images-are-off-by-default": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: bmo hello",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3354,
+                    "headSha1": "6ac3fe8aca2e22893f2b490e2d1f8a8e01ca7747",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo hello"
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Hey Alice! I see 0 earlier lines, 3 shared facts, and context none."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "mood-images-fallbacks": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: bmo [[mood-weird]]",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3295,
+                    "headSha1": "f27ec9da2f0362a5875da646b0e01cfdf1759d4f",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo [[mood-weird]]"
+                  }
+                ]
+              },
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": true,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 8,
+                  "temperature": 0
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "You pick the mood a cartoon robot is in from the words it just said. Reply with exactly one word from this list and nothing else: happy, neutral, sad."
+                  },
+                  {
+                    "role": "user",
+                    "content": "I am feeling the weirdest thing today."
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "description": "I am feeling the weirdest thing today.",
+                    "thumbnail": {
+                      "url": "attachment://mood.png"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": "<TMP>/moods/neutral.png",
+                    "name": "mood.png"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "advance 6000ms"
+        },
+        {
+          "label": "alice: bmo [[mood-broken]]",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3295,
+                    "headSha1": "f27ec9da2f0362a5875da646b0e01cfdf1759d4f",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo [[mood-weird]]"
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "I am feeling the weirdest thing today."
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo [[mood-broken]]"
+                  }
+                ]
+              },
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": true,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 8,
+                  "temperature": 0
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "You pick the mood a cartoon robot is in from the words it just said. Reply with exactly one word from this list and nothing else: happy, neutral, sad."
+                  },
+                  {
+                    "role": "user",
+                    "content": "This one has brokenmood in it."
+                  }
+                ]
+              },
+              "status": 500
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "description": "This one has brokenmood in it.",
+                    "thumbnail": {
+                      "url": "attachment://mood.png"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": "<TMP>/moods/neutral.png",
+                    "name": "mood.png"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "mood-images-no-fallback-image-means-plain-text": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: bmo [[mood-weird]]",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3295,
+                    "headSha1": "f27ec9da2f0362a5875da646b0e01cfdf1759d4f",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo [[mood-weird]]"
+                  }
+                ]
+              },
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": true,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 8,
+                  "temperature": 0
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "You pick the mood a cartoon robot is in from the words it just said. Reply with exactly one word from this list and nothing else: happy, sad."
+                  },
+                  {
+                    "role": "user",
+                    "content": "I am feeling the weirdest thing today."
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "I am feeling the weirdest thing today."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "mood-images-on-picks-by-mood": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: bmo hello",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3295,
+                    "headSha1": "f27ec9da2f0362a5875da646b0e01cfdf1759d4f",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo hello"
+                  }
+                ]
+              },
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": true,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 8,
+                  "temperature": 0
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "You pick the mood a cartoon robot is in from the words it just said. Reply with exactly one word from this list and nothing else: happy, sad."
+                  },
+                  {
+                    "role": "user",
+                    "content": "Hey Alice! I see 0 earlier lines, 3 shared facts, and context none."
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "description": "Hey Alice! I see 0 earlier lines, 3 shared facts, and context none.",
+                    "thumbnail": {
+                      "url": "attachment://mood.png"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": "<TMP>/moods/happy.png",
+                    "name": "mood.png"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "advance 6000ms"
+        },
+        {
+          "label": "alice: bmo and again",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3295,
+                    "headSha1": "f27ec9da2f0362a5875da646b0e01cfdf1759d4f",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo hello"
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Hey Alice! I see 0 earlier lines, 3 shared facts, and context none."
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo and again"
+                  }
+                ]
+              },
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": true,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 8,
+                  "temperature": 0
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "You pick the mood a cartoon robot is in from the words it just said. Reply with exactly one word from this list and nothing else: happy, sad."
+                  },
+                  {
+                    "role": "user",
+                    "content": "Hey Alice! I see 2 earlier lines, 3 shared facts, and context none."
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "description": "Hey Alice! I see 2 earlier lines, 3 shared facts, and context none.",
+                    "thumbnail": {
+                      "url": "attachment://mood.png"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": "<TMP>/moods/sad.PNG",
+                    "name": "mood.png"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "advance 6000ms"
+        },
+        {
+          "label": "bob: !wiki best weapon in elden ring",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.isthereanydeal.com/games/search/v1?key=<ITAD_API_KEY>&title=elden%20ring&results=5",
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "https://api.tavily.com/search",
+              "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer <TAVILY_API_KEY>"
+              },
+              "body": {
+                "query": "Elden Ring wiki guide overview characters items mechanics",
+                "max_results": 5,
+                "search_depth": "advanced",
+                "include_answer": false,
+                "include_domains": [
+                  "mapgenie.io"
+                ],
+                "include_domains_mode": "boost"
+              },
+              "hasSignal": true,
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "https://api.tavily.com/search",
+              "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer <TAVILY_API_KEY>"
+              },
+              "body": {
+                "query": "Elden Ring best weapon in elden ring",
+                "max_results": 5,
+                "search_depth": "advanced",
+                "include_answer": true,
+                "include_domains": [
+                  "mapgenie.io"
+                ],
+                "include_domains_mode": "boost"
+              },
+              "hasSignal": true,
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 400,
+                  "num_ctx": 8192,
+                  "temperature": 0.3
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3295,
+                    "headSha1": "f27ec9da2f0362a5875da646b0e01cfdf1759d4f",
+                    "tail": "\n\nYou are talking with Bob right now. Address them as Bob or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend\n\nThis question is about the video game Elden Ring. For anything specific to the game - names of perks, characters, killers, items, locations, numbers, and strategies - use ONLY the reference material below, and never invent or guess names or details. Never mix in things from other games, comics, or movies. If the material does not cover part of what was asked, say you are not sure about that part instead of making something up. Give a complete, useful answer in up to five short sentences, still in character, with no lists.\n\nReference material about Elden Ring:\nLive search results for this exact question:\n1. The Forest Interactive Map - The key card sits in the bunker near the lake. (https://mapgenie.io/the-forest/maps/world)\n2. Second result - Another page about the same thing. (https://example.test/second)\n3. Third result - Yet another page. (https://example.test/third)\n4. Fourth result - Fourth page. (https://example.test/fourth)\n5. Fifth result - Fifth page. (https://example.test/fifth)\n\nGeneral background on Elden Ring:\nThe Forest Interactive Map: The key card sits in the bunker near the lake.\nSecond result: Another page about the same thing.\nThird result: Yet another page.\nFourth result: Fourth page.\nFifth result: Fifth page."
+                  },
+                  {
+                    "role": "user",
+                    "content": "best weapon in elden ring"
+                  }
+                ]
+              },
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": true,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 8,
+                  "temperature": 0
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "content": "You pick the mood a cartoon robot is in from the words it just said. Reply with exactly one word from this list and nothing else: happy, sad."
+                  },
+                  {
+                    "role": "user",
+                    "content": "Hey Bob! I see 0 earlier lines, 3 shared facts, and context none.\n\n🗺️ Map: Not found."
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:12.000Z Tavily search for \"Elden Ring wiki guide overview characters items mechanics\" returned 6 results"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:12.000Z Tavily search for \"Elden Ring best weapon in elden ring\" returned 6 results"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "description": "Hey Bob! I see 0 earlier lines, 3 shared facts, and context none.\n\n🗺️ Map: Not found.",
+                    "thumbnail": {
+                      "url": "attachment://mood.png"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": "<TMP>/moods/happy.png",
+                    "name": "mood.png"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "advance 6000ms"
+        },
+        {
+          "label": "bob: !help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ],
+                    "thumbnail": {
+                      "url": "attachment://mood.png"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": "<TMP>/moods/happy.png",
+                    "name": "mood.png"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "knowledge/elden-ring.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"title\": \"Elden Ring\",",
+            "  \"fetchedAt\": 1791288012000,",
+            "  \"text\": \"The Forest Interactive Map: The key card sits in the bunker near the lake.\\nSecond result: Another page about the same thing.\\nThird result: Yet another page.\\nFourth result: Fourth page.\\nFifth result: Fifth page.\"",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "mood-images-on-without-any-images": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: bmo hello",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3295,
+                    "headSha1": "f27ec9da2f0362a5875da646b0e01cfdf1759d4f",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo hello"
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Hey Alice! I see 0 earlier lines, 3 shared facts, and context none."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "mood-images-single-image-needs-no-model-call": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: bmo hello",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3295,
+                    "headSha1": "f27ec9da2f0362a5875da646b0e01cfdf1759d4f",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo hello"
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "description": "Hey Alice! I see 0 earlier lines, 3 shared facts, and context none.",
+                    "thumbnail": {
+                      "url": "attachment://mood.gif"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": "<TMP>/moods/happy.gif",
+                    "name": "mood.gif"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
     "no-arg-commands-are-ignored": {
       "steps": [
         {

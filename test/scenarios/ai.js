@@ -48,6 +48,65 @@ module.exports = [
     await ctx.say("alice", "bmo [[selfname]]");
   }),
 
+  sc("mood-images-are-off-by-default", async (ctx) => {
+    await ctx.say("alice", "bmo hello");
+    await ctx.say("alice", "!help");
+  }, { files: { "moods/happy.png": "png", "moods/sad.png": "png" } }),
+
+  sc("mood-images-on-picks-by-mood", async (ctx) => {
+    await ctx.say("alice", "bmo hello");
+    await ctx.advance(SIX);
+    await ctx.say("alice", "bmo and again");
+    await ctx.advance(SIX);
+    await ctx.say("bob", "!wiki best weapon in elden ring");
+    await ctx.advance(SIX);
+    await ctx.say("bob", "!help");
+  }, {
+    files: {
+      "personality.yaml": { name: "BMO", trigger: "bmo", persona: "You are BMO.\n", moodImages: true },
+      "moods/happy.png": "png",
+      "moods/sad.PNG": "png",
+      "moods/notes.txt": "not an image"
+    }
+  }),
+
+  sc("mood-images-single-image-needs-no-model-call", async (ctx) => {
+    await ctx.say("alice", "bmo hello");
+  }, {
+    files: {
+      "personality.yaml": { name: "BMO", trigger: "bmo", persona: "You are BMO.\n", moodImages: true },
+      "moods/happy.gif": "gif"
+    }
+  }),
+
+  sc("mood-images-fallbacks", async (ctx) => {
+    await ctx.say("alice", "bmo [[mood-weird]]");
+    await ctx.advance(SIX);
+    await ctx.say("alice", "bmo [[mood-broken]]");
+  }, {
+    files: {
+      "personality.yaml": { name: "BMO", trigger: "bmo", persona: "You are BMO.\n", moodImages: true },
+      "moods/happy.png": "png",
+      "moods/sad.png": "png",
+      "moods/neutral.png": "png"
+    }
+  }),
+
+  sc("mood-images-no-fallback-image-means-plain-text", async (ctx) => {
+    await ctx.say("alice", "bmo [[mood-weird]]");
+  }, {
+    files: {
+      "personality.yaml": { name: "BMO", trigger: "bmo", persona: "You are BMO.\n", moodImages: true },
+      "moods/happy.png": "png",
+      "moods/sad.png": "png"
+    }
+  }),
+
+  sc("mood-images-on-without-any-images", async (ctx) => {
+    await ctx.say("alice", "bmo hello");
+    await ctx.say("alice", "!help");
+  }, { files: { "personality.yaml": { name: "BMO", trigger: "bmo", persona: "You are BMO.\n", moodImages: true } } }),
+
   sc("ai-reply-to-bot", async (ctx) => {
     await ctx.say("alice", "bmo hello there");
     const botMessage = ctx.lastSent();

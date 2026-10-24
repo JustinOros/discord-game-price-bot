@@ -340,7 +340,21 @@ class Fixtures {
       return { status: 200, body: { message: { role: "assistant", content: hit ? hit[1] : "NONE" } } };
     }
 
+    if (typeof first === "string" && first.startsWith("You pick the mood")) {
+      const said = String(messages[messages.length - 1].content);
+      if (said.includes("brokenmood")) return { status: 500, body: "mood exploded" };
+      if (said.includes("weirdest")) return { status: 200, body: { message: { role: "assistant", content: "bananas" } } };
+      if (said.includes(" 0 earlier lines")) return { status: 200, body: { message: { role: "assistant", content: "Happy." } } };
+      return { status: 200, body: { message: { role: "assistant", content: "I would say sad" } } };
+    }
+
     const last = messages.length > 0 ? String(messages[messages.length - 1].content) : "";
+    if (last.includes("[[mood-weird]]")) {
+      return { status: 200, body: { message: { role: "assistant", content: "I am feeling the weirdest thing today." } } };
+    }
+    if (last.includes("[[mood-broken]]")) {
+      return { status: 200, body: { message: { role: "assistant", content: "This one has brokenmood in it." } } };
+    }
     if (last.includes("[[ollama-500]]")) return { status: 500, body: "ollama exploded" };
     if (last.includes("[[ollama-throw]]")) throw new Error("connect ECONNREFUSED 127.0.0.1:11434");
     if (last.includes("[[ollama-empty]]")) return { status: 200, body: { message: { role: "assistant", content: "" } } };

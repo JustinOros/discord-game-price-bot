@@ -3,6 +3,7 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { EmbedBuilder } = require("discord.js");
 const { createGameKnowledge } = require("./gameknowledge");
+const { createMood } = require("../../core/mood");
 
 const AI_ENABLED = process.env.AI_ENABLED !== "false";
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
@@ -405,6 +406,23 @@ function listKnownTitles() {
   return titles;
 }
 
+const mood = createMood({ rootDir: ROOT, completeShort: completeShort });
+
+async function replyWithMood(message, text) {
+  let image = null;
+  try {
+    image = await mood.pickImage(text);
+  } catch (err) {
+    console.error("Mood image failed:", err.message);
+  }
+  if (!image) return message.reply(text);
+  const embed = new EmbedBuilder()
+    .setColor(mood.color)
+    .setDescription(text)
+    .setThumbnail("attachment://" + image.name);
+  return message.reply({ embeds: [embed], files: [{ attachment: image.path, name: image.name }] });
+}
+
 const gameKnowledge = createGameKnowledge({
   cacheDir: KNOWLEDGE_DIR,
   normalizeTitle: (text) => ctx.normalizeTitle(text),
@@ -554,7 +572,7 @@ async function handleWiki(message, query) {
       const knownMap = findKnownGameMap(query);
       const mapLink = knownMap ? appendMapSearch(knownMap.url, extractMapSearchTerm(query, knownMap.name)) : null;
       const content = aiReply + "\n\n🗺️ Map: " + (mapLink ? "[mapgenie.io](<" + mapLink + ">)" : "Not found.");
-      await message.reply(content);
+      await replyWithMood(message, content);
       rememberAiExchange(message.author.id, query, aiReply);
     }
   } catch (err) {
@@ -587,7 +605,7 @@ async function onChat(message, content) {
         aiReply = capToSentences(gameContext.answer.trim(), GAME_ANSWER_MAX_SENTENCES);
       }
       if (aiReply) {
-        await message.reply(aiReply);
+        await replyWithMood(message, aiReply);
         rememberAiExchange(message.author.id, content, aiReply);
       }
     } catch (err) {

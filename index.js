@@ -5,6 +5,7 @@ const cron = require("node-cron");
 const yaml = require("js-yaml");
 const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder } = require("discord.js");
 const { createRoles } = require("./core/roles");
+const { createMood } = require("./core/mood");
 const { loadPlugins, findCommand, collectHelpEntries, startPlugins, registerPlugins, runChatHooks } = require("./core/plugins");
 
 const rawLog = console.log.bind(console);
@@ -344,7 +345,8 @@ async function findOwnerIds(gameId, appid) {
 const HELP_LINES = [
 ];
 
-const HELP_COLOR = 0x5fd4b0;
+const mood = createMood({ rootDir: __dirname, completeShort: async () => null });
+const HELP_COLOR = mood.color;
 const HELP_FIELD_MAX = 1000;
 const HELP_CATEGORIES = [
   { name: "💰 Prices & Watching", ranges: [[10, 59], [200, 219]] },
@@ -410,11 +412,16 @@ async function handleHelp(message, note) {
     .setDescription("Here is everything I can do. GAME means any game title.")
     .addFields(buildHelpFields(entries).slice(0, 25));
 
-  if (client.user && typeof client.user.displayAvatarURL === "function") {
+  const moodImage = mood.imageFor("happy");
+  const payload = { embeds: [embed] };
+  if (moodImage) {
+    embed.setThumbnail("attachment://" + moodImage.name);
+    payload.files = [{ attachment: moodImage.path, name: moodImage.name }];
+  } else if (client.user && typeof client.user.displayAvatarURL === "function") {
     embed.setThumbnail(client.user.displayAvatarURL());
   }
   if (note) embed.setFooter({ text: note });
-  await message.reply({ embeds: [embed] });
+  await message.reply(payload);
 }
 
 const dmGreetedUsers = new Set();
