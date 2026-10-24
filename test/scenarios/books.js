@@ -229,5 +229,17 @@ module.exports = [
     await ctx.say("alice", "!goodreads leaderboard 2025");
     await ctx.say("alice", "!goodreads leaderboard 2024");
     await ctx.say("alice", "!books leaderboard 2024");
+  }),
+
+  sc("goodreads-keeps-paging-after-a-short-page", async (ctx) => {
+    SETUP(ctx);
+    const read = [];
+    for (let i = 1; i <= 290; i++) {
+      const year = i <= 100 ? 2026 : (i <= 190 ? 2025 : 2024);
+      read.push({ id: "short-" + i, title: "Short Page Book " + i, author: "S", rating: 4, readAt: "Mon, 02 Jun " + year + " 00:00:00 -0700", pages: 10 });
+    }
+    ctx.fx.goodreads.feeds["1005"] = { pageLengths: [100, 99, 100], read: read, "to-read": [], "currently-reading": [] };
+    await ctx.say("alice", "!goodreads link 1005");
+    await ctx.say("alice", "!goodreads leaderboard 2024");
   })
 ];

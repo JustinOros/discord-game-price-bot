@@ -2,6 +2,7 @@ const FEED_BASE = "https://www.goodreads.com/review/list_rss/";
 const FETCH_TIMEOUT_MS = 10000;
 const PAGE_SIZE = 100;
 const MAX_PAGES = 12;
+const SHORT_PAGE_SLACK = 10;
 
 const NAMED_ENTITIES = { amp: "&", lt: "<", gt: ">", quot: "\"", apos: "'", nbsp: " " };
 
@@ -81,7 +82,7 @@ async function fetchShelf(link, shelf, options) {
   if (!first.ok) return first;
   let items = first.items;
   let lastCount = first.rawCount;
-  for (let page = 2; page <= maxPages && lastCount >= PAGE_SIZE; page++) {
+  for (let page = 2; page <= maxPages && lastCount >= PAGE_SIZE - SHORT_PAGE_SLACK; page++) {
     const next = await fetchPage(link, shelf, page);
     if (!next.ok) break;
     lastCount = next.rawCount;

@@ -541,7 +541,10 @@ class Fixtures {
     const shelf = req.query.get("shelf") || "read";
     const all = feed[shelf] || [];
     const page = Number(req.query.get("page")) || 1;
-    const items = all.slice((page - 1) * 100, page * 100);
+    const lengths = feed.pageLengths || [];
+    let start = 0;
+    for (let n = 1; n < page; n++) start += lengths[n - 1] || 100;
+    const items = all.slice(start, start + (lengths[page - 1] || 100));
     return { status: 200, body: grXml(id, shelf, items) };
   }
 
