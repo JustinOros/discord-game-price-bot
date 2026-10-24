@@ -18807,6 +18807,407 @@
       "pendingTimers": 0,
       "files": {}
     },
+    "goodreads-reads-past-the-first-hundred-books": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1004",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1004?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1004?shelf=read&per_page=100&sort=date_read&order=d&page=2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1004?shelf=read&per_page=100&sort=date_read&order=d&page=3",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1004. I'll post when you finish a book (230 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads leaderboard 2026",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2026",
+                    "description": "🥇 **Alice** - 100 books (10,000 pages)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads leaderboard 2025",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2025",
+                    "description": "🥇 **Alice** - 60 books (6,000 pages)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads leaderboard 2024",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2024",
+                    "description": "🥇 **Alice** - 70 books (7,000 pages)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books leaderboard 2024",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2024",
+                    "description": "🥇 **Alice** - 70 books"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1004\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"big-1\",",
+            "      \"big-2\",",
+            "      \"big-3\",",
+            "      \"big-4\",",
+            "      \"big-5\",",
+            "      \"big-6\",",
+            "      \"big-7\",",
+            "      \"big-8\",",
+            "      \"big-9\",",
+            "      \"big-10\",",
+            "      \"big-11\",",
+            "      \"big-12\",",
+            "      \"big-13\",",
+            "      \"big-14\",",
+            "      \"big-15\",",
+            "      \"big-16\",",
+            "      \"big-17\",",
+            "      \"big-18\",",
+            "      \"big-19\",",
+            "      \"big-20\",",
+            "      \"big-21\",",
+            "      \"big-22\",",
+            "      \"big-23\",",
+            "      \"big-24\",",
+            "      \"big-25\",",
+            "      \"big-26\",",
+            "      \"big-27\",",
+            "      \"big-28\",",
+            "      \"big-29\",",
+            "      \"big-30\",",
+            "      \"big-31\",",
+            "      \"big-32\",",
+            "      \"big-33\",",
+            "      \"big-34\",",
+            "      \"big-35\",",
+            "      \"big-36\",",
+            "      \"big-37\",",
+            "      \"big-38\",",
+            "      \"big-39\",",
+            "      \"big-40\",",
+            "      \"big-41\",",
+            "      \"big-42\",",
+            "      \"big-43\",",
+            "      \"big-44\",",
+            "      \"big-45\",",
+            "      \"big-46\",",
+            "      \"big-47\",",
+            "      \"big-48\",",
+            "      \"big-49\",",
+            "      \"big-50\",",
+            "      \"big-51\",",
+            "      \"big-52\",",
+            "      \"big-53\",",
+            "      \"big-54\",",
+            "      \"big-55\",",
+            "      \"big-56\",",
+            "      \"big-57\",",
+            "      \"big-58\",",
+            "      \"big-59\",",
+            "      \"big-60\",",
+            "      \"big-61\",",
+            "      \"big-62\",",
+            "      \"big-63\",",
+            "      \"big-64\",",
+            "      \"big-65\",",
+            "      \"big-66\",",
+            "      \"big-67\",",
+            "      \"big-68\",",
+            "      \"big-69\",",
+            "      \"big-70\",",
+            "      \"big-71\",",
+            "      \"big-72\",",
+            "      \"big-73\",",
+            "      \"big-74\",",
+            "      \"big-75\",",
+            "      \"big-76\",",
+            "      \"big-77\",",
+            "      \"big-78\",",
+            "      \"big-79\",",
+            "      \"big-80\",",
+            "      \"big-81\",",
+            "      \"big-82\",",
+            "      \"big-83\",",
+            "      \"big-84\",",
+            "      \"big-85\",",
+            "      \"big-86\",",
+            "      \"big-87\",",
+            "      \"big-88\",",
+            "      \"big-89\",",
+            "      \"big-90\",",
+            "      \"big-91\",",
+            "      \"big-92\",",
+            "      \"big-93\",",
+            "      \"big-94\",",
+            "      \"big-95\",",
+            "      \"big-96\",",
+            "      \"big-97\",",
+            "      \"big-98\",",
+            "      \"big-99\",",
+            "      \"big-100\",",
+            "      \"big-101\",",
+            "      \"big-102\",",
+            "      \"big-103\",",
+            "      \"big-104\",",
+            "      \"big-105\",",
+            "      \"big-106\",",
+            "      \"big-107\",",
+            "      \"big-108\",",
+            "      \"big-109\",",
+            "      \"big-110\",",
+            "      \"big-111\",",
+            "      \"big-112\",",
+            "      \"big-113\",",
+            "      \"big-114\",",
+            "      \"big-115\",",
+            "      \"big-116\",",
+            "      \"big-117\",",
+            "      \"big-118\",",
+            "      \"big-119\",",
+            "      \"big-120\",",
+            "      \"big-121\",",
+            "      \"big-122\",",
+            "      \"big-123\",",
+            "      \"big-124\",",
+            "      \"big-125\",",
+            "      \"big-126\",",
+            "      \"big-127\",",
+            "      \"big-128\",",
+            "      \"big-129\",",
+            "      \"big-130\",",
+            "      \"big-131\",",
+            "      \"big-132\",",
+            "      \"big-133\",",
+            "      \"big-134\",",
+            "      \"big-135\",",
+            "      \"big-136\",",
+            "      \"big-137\",",
+            "      \"big-138\",",
+            "      \"big-139\",",
+            "      \"big-140\",",
+            "      \"big-141\",",
+            "      \"big-142\",",
+            "      \"big-143\",",
+            "      \"big-144\",",
+            "      \"big-145\",",
+            "      \"big-146\",",
+            "      \"big-147\",",
+            "      \"big-148\",",
+            "      \"big-149\",",
+            "      \"big-150\",",
+            "      \"big-151\",",
+            "      \"big-152\",",
+            "      \"big-153\",",
+            "      \"big-154\",",
+            "      \"big-155\",",
+            "      \"big-156\",",
+            "      \"big-157\",",
+            "      \"big-158\",",
+            "      \"big-159\",",
+            "      \"big-160\",",
+            "      \"big-161\",",
+            "      \"big-162\",",
+            "      \"big-163\",",
+            "      \"big-164\",",
+            "      \"big-165\",",
+            "      \"big-166\",",
+            "      \"big-167\",",
+            "      \"big-168\",",
+            "      \"big-169\",",
+            "      \"big-170\",",
+            "      \"big-171\",",
+            "      \"big-172\",",
+            "      \"big-173\",",
+            "      \"big-174\",",
+            "      \"big-175\",",
+            "      \"big-176\",",
+            "      \"big-177\",",
+            "      \"big-178\",",
+            "      \"big-179\",",
+            "      \"big-180\",",
+            "      \"big-181\",",
+            "      \"big-182\",",
+            "      \"big-183\",",
+            "      \"big-184\",",
+            "      \"big-185\",",
+            "      \"big-186\",",
+            "      \"big-187\",",
+            "      \"big-188\",",
+            "      \"big-189\",",
+            "      \"big-190\",",
+            "      \"big-191\",",
+            "      \"big-192\",",
+            "      \"big-193\",",
+            "      \"big-194\",",
+            "      \"big-195\",",
+            "      \"big-196\",",
+            "      \"big-197\",",
+            "      \"big-198\",",
+            "      \"big-199\",",
+            "      \"big-200\",",
+            "      \"big-201\",",
+            "      \"big-202\",",
+            "      \"big-203\",",
+            "      \"big-204\",",
+            "      \"big-205\",",
+            "      \"big-206\",",
+            "      \"big-207\",",
+            "      \"big-208\",",
+            "      \"big-209\",",
+            "      \"big-210\",",
+            "      \"big-211\",",
+            "      \"big-212\",",
+            "      \"big-213\",",
+            "      \"big-214\",",
+            "      \"big-215\",",
+            "      \"big-216\",",
+            "      \"big-217\",",
+            "      \"big-218\",",
+            "      \"big-219\",",
+            "      \"big-220\",",
+            "      \"big-221\",",
+            "      \"big-222\",",
+            "      \"big-223\",",
+            "      \"big-224\",",
+            "      \"big-225\",",
+            "      \"big-226\",",
+            "      \"big-227\",",
+            "      \"big-228\",",
+            "      \"big-229\",",
+            "      \"big-230\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
     "goodreads-role-by-id": {
       "steps": [
         {

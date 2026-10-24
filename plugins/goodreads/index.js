@@ -70,11 +70,11 @@ function monthYear(text) {
   return MONTHS[date.getUTCMonth()] + " " + date.getUTCFullYear();
 }
 
-async function shelfFor(link, shelf, fresh) {
-  const key = link.userId + "|" + (link.key || "") + "|" + shelf;
+async function shelfFor(link, shelf, fresh, firstPageOnly) {
+  const key = link.userId + "|" + (link.key || "") + "|" + shelf + (firstPageOnly ? "|first" : "");
   const cached = feedCache.get(key);
   if (!fresh && cached && Date.now() - cached.at < CACHE_TTL_MS) return cached.result;
-  const result = await fetchShelf(link, shelf);
+  const result = await fetchShelf(link, shelf, { firstPageOnly: !!firstPageOnly });
   if (result.ok) feedCache.set(key, { at: Date.now(), result: result });
   return result;
 }
@@ -406,7 +406,7 @@ async function checkFeeds() {
     let changed = false;
     for (const userId of Object.keys(links)) {
       const link = links[userId];
-      const result = await shelfFor(link, "read", true);
+      const result = await shelfFor(link, "read", true, true);
       if (!result.ok) continue;
 
       const seen = new Set(link.seen || []);

@@ -1,6 +1,7 @@
 const FEED_BASE = "https://www.goodreads.com/review/list_rss/";
 const FETCH_TIMEOUT_MS = 10000;
 const PAGE_SIZE = 100;
+const MAX_PAGES = 5;
 
 const NAMED_ENTITIES = { amp: "&", lt: "<", gt: ">", quot: "\"", apos: "'", nbsp: " " };
 
@@ -49,16 +50,16 @@ function parseFeed(xml) {
   return { title: tagValue(head, "title"), items: items };
 }
 
-function feedUrl(link, shelf) {
+function feedUrl(link, shelf, page) {
   return FEED_BASE + encodeURIComponent(link.userId) + "?" + (link.key ? "key=" + encodeURIComponent(link.key) + "&" : "") +
-    "shelf=" + encodeURIComponent(shelf) + "&per_page=" + PAGE_SIZE + "&sort=date_read&order=d";
+    "shelf=" + encodeURIComponent(shelf) + "&per_page=" + PAGE_SIZE + "&sort=date_read&order=d" + (page > 1 ? "&page=" + page : "");
 }
 
-async function fetchShelf(link, shelf) {
+async function fetchPage(link, shelf, page) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
-    const res = await fetch(feedUrl(link, shelf), {
+    const res = await fetch(feedUrl(link, shelf, page), {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; discord-game-price-bot)", "Accept": "application/rss+xml, application/xml, text/xml" },
       signal: controller.signal
     });
@@ -71,6 +72,21 @@ async function fetchShelf(link, shelf) {
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function fetchShelf(link, shelf, options) {
+  const maxPages = options && options.firstPageOnly ? 1 : MAX_PAGES;
+  const first = await fetchPage(link, shelf, 1);
+  if (!first.ok) return first;
+  let items = first.items;
+  let last = first.items;
+  for (let page = 2; page <= maxPages && last.length >= PAGE_SIZE; page++) {
+    const next = await fetchPage(link, shelf, page);
+    if (!next.ok) break;
+    last = next.items;
+    items = items.concat(next.items);
+  }
+  return { ok: true, status: 200, items: items };
 }
 
 function parseLinkInput(text) {

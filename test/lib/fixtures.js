@@ -539,7 +539,9 @@ class Fixtures {
     if (!feed) return { status: 404, body: "not found" };
     if (feed.needsKey && req.query.get("key") !== feed.needsKey) return { status: 403, body: "forbidden" };
     const shelf = req.query.get("shelf") || "read";
-    const items = feed[shelf] || [];
+    const all = feed[shelf] || [];
+    const page = Number(req.query.get("page")) || 1;
+    const items = all.slice((page - 1) * 100, page * 100);
     return { status: 200, body: grXml(id, shelf, items) };
   }
 
