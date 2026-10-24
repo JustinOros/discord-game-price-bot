@@ -23872,7 +23872,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! GoldenEye 007 on the Nintendo 64 was planned to allow you to play as all previous Bond actors, with the exception of who?\nA) George Lazenby\nB) Timothy Dalton\nC) Roger Moore\nD) Sean Connery\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! GoldenEye 007 on the Nintendo 64 was planned to allow you to play as all previous Bond actors, with the exception of who?\nA) George Lazenby\nB) Timothy Dalton\nC) Roger Moore\nD) Sean Connery\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ],
@@ -29271,7 +29271,7 @@
               "via": "message.reply",
               "to": "M-2",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30082,7 +30082,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30106,7 +30106,7 @@
               "via": "message.reply",
               "to": "M-3",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30130,7 +30130,7 @@
               "via": "message.reply",
               "to": "M-5",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30154,7 +30154,7 @@
               "via": "message.reply",
               "to": "M-7",
               "payload": {
-                "content": "Video game trivia! What year did Steam first launch?\nA) 2001\nB) 2003\nC) 2005\nD) 2008\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! What year did Steam first launch?\nA) 2001\nB) 2003\nC) 2005\nD) 2008\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30249,7 +30249,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30273,7 +30273,7 @@
               "via": "message.reply",
               "to": "M-3",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30297,7 +30297,7 @@
               "via": "message.reply",
               "to": "M-5",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30321,7 +30321,7 @@
               "via": "message.reply",
               "to": "M-7",
               "payload": {
-                "content": "Video game trivia! What year did Steam first launch?\nA) 2001\nB) 2003\nC) 2005\nD) 2008\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! What year did Steam first launch?\nA) 2001\nB) 2003\nC) 2005\nD) 2008\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30345,7 +30345,7 @@
               "via": "message.reply",
               "to": "M-9",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30369,7 +30369,7 @@
               "via": "message.reply",
               "to": "M-11",
               "payload": {
-                "content": "Video game trivia! What year did Steam first launch?\nA) 2001\nB) 2003\nC) 2005\nD) 2008\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! What year did Steam first launch?\nA) 2001\nB) 2003\nC) 2005\nD) 2008\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30393,7 +30393,7 @@
               "via": "message.reply",
               "to": "M-13",
               "payload": {
-                "content": "Video game trivia! What engine powers Fortnite?\nA) Source\nB) Unity\nC) Unreal Engine\nD) CryEngine\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! What engine powers Fortnite?\nA) Source\nB) Unity\nC) Unreal Engine\nD) CryEngine\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30479,7 +30479,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30593,7 +30593,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ],
@@ -30666,7 +30666,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ],
@@ -30678,7 +30678,7 @@
           ]
         },
         {
-          "label": "advance 60s",
+          "label": "advance 30s",
           "outgoing": [
             {
               "via": "channel.send",
@@ -30751,7 +30751,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               },
               "failed": true
             }
@@ -30770,7 +30770,7 @@
               "via": "message.reply",
               "to": "M-2",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -30837,7 +30837,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ],
@@ -30980,13 +30980,13 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
         },
         {
-          "label": "advance 59999ms"
+          "label": "advance 29999ms"
         },
         {
           "label": "advance 1ms more, timeout fires",
@@ -31007,7 +31007,7 @@
               "via": "message.reply",
               "to": "M-2",
               "payload": {
-                "content": "Video game trivia! What engine powers Fortnite?\nA) Source\nB) Unity\nC) Unreal Engine\nD) CryEngine\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! What engine powers Fortnite?\nA) Source\nB) Unity\nC) Unreal Engine\nD) CryEngine\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -31108,13 +31108,13 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
         },
         {
-          "label": "advance 60s, timeout send fails",
+          "label": "advance 30s, timeout send fails",
           "outgoing": [
             {
               "via": "channel.send",
@@ -31128,7 +31128,7 @@
           "console": [
             {
               "level": "error",
-              "text": "2026-10-06T12:01:00.000Z Trivia timeout message failed: Missing Permissions"
+              "text": "2026-10-06T12:00:30.000Z Trivia timeout message failed: Missing Permissions"
             }
           ]
         }
@@ -31194,7 +31194,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -31206,7 +31206,7 @@
               "via": "message.reply",
               "to": "M-2",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ]
@@ -31314,7 +31314,7 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 60 seconds, first correct answer wins!"
+                "content": "Video game trivia! Which company developed the original Half-Life?\nA) Valve\nB) id Software\nC) Epic Games\nD) Bethesda\nYou have 30 seconds, first correct answer wins!"
               }
             }
           ],

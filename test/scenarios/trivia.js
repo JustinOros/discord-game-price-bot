@@ -25,7 +25,7 @@ module.exports = [
     await ctx.say("alice", LETTERS[q.answer].toLowerCase() + ")", { label: "alice answers right" });
     await ctx.say("bob", LETTERS[q.answer], { label: "bob answers after round ended" });
     await ctx.say("alice", "!score");
-    await ctx.advance(61000, "advance past the original timeout");
+    await ctx.advance(31000, "advance past the original timeout");
   }),
 
   sc("trivia-answer-formats", async (ctx) => {
@@ -48,19 +48,19 @@ module.exports = [
 
   sc("trivia-timeout", async (ctx) => {
     await ctx.say("alice", "!trivia");
-    await ctx.advance(59999, "advance 59999ms");
+    await ctx.advance(29999, "advance 29999ms");
     await ctx.advance(1, "advance 1ms more, timeout fires");
     await ctx.say("bob", "!trivia", { label: "bob: new round after timeout" });
     const q = currentQuestion(ctx);
     await ctx.say("carol", LETTERS[q.answer], { label: "carol answers the new round" });
-    await ctx.advance(61000, "advance past the second timeout, nothing should be sent");
+    await ctx.advance(31000, "advance past the second timeout, nothing should be sent");
     ctx.note("pendingTimersAfter", ctx.clock.pendingTimers());
   }),
 
   sc("trivia-timeout-send-failure", async (ctx) => {
     await ctx.say("alice", "!trivia");
     ctx.failNext("send");
-    await ctx.advance(60000, "advance 60s, timeout send fails");
+    await ctx.advance(30000, "advance 30s, timeout send fails");
   }),
 
   sc("trivia-two-channels", async (ctx) => {
@@ -103,7 +103,7 @@ module.exports = [
   sc("trivia-file-missing-uses-fallback", async (ctx) => {
     await ctx.say("alice", "!trivia");
     ctx.note("firstLine", String(ctx.lastPayload().content).split("\n")[0]);
-    await ctx.advance(60000, "advance 60s");
+    await ctx.advance(30000, "advance 30s");
   }, { files: { "trivia.json": null } }),
 
   sc("trivia-file-invalid-uses-fallback", async (ctx) => {

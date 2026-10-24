@@ -25,7 +25,8 @@ function awardTriviaPoints(userId) {
   return scores[userId];
 }
 
-const TRIVIA_TIME_LIMIT_MS = 60 * 1000;
+const TRIVIA_TIME_LIMIT_SECONDS = 30;
+const TRIVIA_TIME_LIMIT_MS = TRIVIA_TIME_LIMIT_SECONDS * 1000;
 const TRIVIA_LETTERS = ["A", "B", "C", "D"];
 const activeTrivia = new Map();
 
@@ -68,7 +69,7 @@ async function handleTrivia(message) {
 
   const lines = ["Video game trivia! " + picked.question];
   picked.choices.forEach((choice, i) => lines.push(TRIVIA_LETTERS[i] + ") " + choice));
-  lines.push("You have 60 seconds, first correct answer wins!");
+  lines.push("You have " + TRIVIA_TIME_LIMIT_SECONDS + " seconds, first correct answer wins!");
 
   try {
     await message.reply(lines.join("\n"));
