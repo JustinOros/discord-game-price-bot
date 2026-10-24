@@ -12908,7 +12908,16 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Goodreads commands",
+                    "description": "`!goodreads link USERID`\nlink your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently [@member]`\nshow what you, or the member you mention, are reading right now\n\n`!goodreads shelf [@member] [read|to-read|currently-reading]`\nshow a shelf, the read shelf by default\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give\n\n`!goodreads compare @member [@member]`\nshared books and a taste match score, with you or between two members",
+                    "footer": {
+                      "text": "!gr works as a shortcut for !goodreads. New finished books are posted in #books."
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -14690,7 +14699,16 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Goodreads commands",
+                    "description": "`!goodreads link USERID`\nlink your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently [@member]`\nshow what you, or the member you mention, are reading right now\n\n`!goodreads shelf [@member] [read|to-read|currently-reading]`\nshow a shelf, the read shelf by default\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give\n\n`!goodreads compare @member [@member]`\nshared books and a taste match score, with you or between two members",
+                    "footer": {
+                      "text": "!gr works as a shortcut for !goodreads. New finished books are posted in #books."
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -14837,7 +14855,16 @@
               "via": "message.reply",
               "to": "M-4",
               "payload": {
-                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Goodreads commands",
+                    "description": "`!goodreads link USERID`\nlink your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently [@member]`\nshow what you, or the member you mention, are reading right now\n\n`!goodreads shelf [@member] [read|to-read|currently-reading]`\nshow a shelf, the read shelf by default\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give\n\n`!goodreads compare @member [@member]`\nshared books and a taste match score, with you or between two members",
+                    "footer": {
+                      "text": "!gr works as a shortcut for !goodreads. New finished books are posted in #books."
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -14849,7 +14876,70 @@
               "via": "message.reply",
               "to": "M-5",
               "payload": {
-                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Goodreads commands",
+                    "description": "`!goodreads link USERID`\nlink your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently [@member]`\nshow what you, or the member you mention, are reading right now\n\n`!goodreads shelf [@member] [read|to-read|currently-reading]`\nshow a shelf, the read shelf by default\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give\n\n`!goodreads compare @member [@member]`\nshared books and a taste match score, with you or between two members",
+                    "footer": {
+                      "text": "!gr works as a shortcut for !goodreads. New finished books are posted in #books."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Goodreads commands",
+                    "description": "`!goodreads link USERID`\nlink your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently [@member]`\nshow what you, or the member you mention, are reading right now\n\n`!goodreads shelf [@member] [read|to-read|currently-reading]`\nshow a shelf, the read shelf by default\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give\n\n`!goodreads compare @member [@member]`\nshared books and a taste match score, with you or between two members",
+                    "footer": {
+                      "text": "!gr works as a shortcut for !goodreads. New finished books are posted in #books."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr HELP",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Goodreads commands",
+                    "description": "`!goodreads link USERID`\nlink your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently [@member]`\nshow what you, or the member you mention, are reading right now\n\n`!goodreads shelf [@member] [read|to-read|currently-reading]`\nshow a shelf, the read shelf by default\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give\n\n`!goodreads compare @member [@member]`\nshared books and a taste match score, with you or between two members",
+                    "footer": {
+                      "text": "!gr works as a shortcut for !goodreads. New finished books are posted in #books."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "erin: no books role cannot see goodreads help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "content": "You need the books role to use !goodreads."
               }
             }
           ]
@@ -14859,9 +14949,18 @@
           "outgoing": [
             {
               "via": "message.reply",
-              "to": "M-6",
+              "to": "M-9",
               "payload": {
-                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Goodreads commands",
+                    "description": "`!goodreads link USERID`\nlink your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently [@member]`\nshow what you, or the member you mention, are reading right now\n\n`!goodreads shelf [@member] [read|to-read|currently-reading]`\nshow a shelf, the read shelf by default\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give\n\n`!goodreads compare @member [@member]`\nshared books and a taste match score, with you or between two members",
+                    "footer": {
+                      "text": "!gr works as a shortcut for !goodreads. New finished books are posted in #books."
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -14871,7 +14970,7 @@
           "outgoing": [
             {
               "via": "message.reply",
-              "to": "M-7",
+              "to": "M-10",
               "payload": {
                 "embeds": [
                   {
@@ -14897,7 +14996,7 @@
                       },
                       {
                         "name": "📚 Books",
-                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year"
+                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year"
                       },
                       {
                         "name": "🧠 Memory",
@@ -14919,7 +15018,7 @@
           "outgoing": [
             {
               "via": "message.reply",
-              "to": "M-8",
+              "to": "M-11",
               "payload": {
                 "content": "Hello Alice G, I am a Discord Game Price Bot made by Justin Oros. https://github.com/JustinOros/discord-game-price-bot",
                 "flags": 4
@@ -14992,7 +15091,16 @@
               "via": "message.reply",
               "to": "M-1",
               "payload": {
-                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Goodreads commands",
+                    "description": "`!goodreads link USERID`\nlink your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently [@member]`\nshow what you, or the member you mention, are reading right now\n\n`!goodreads shelf [@member] [read|to-read|currently-reading]`\nshow a shelf, the read shelf by default\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give\n\n`!goodreads compare @member [@member]`\nshared books and a taste match score, with you or between two members",
+                    "footer": {
+                      "text": "!gr works as a shortcut for !goodreads. New finished books are posted in #books."
+                    }
+                  }
+                ]
               }
             }
           ]

@@ -19,8 +19,16 @@ const SHELVES = ["read", "to-read", "currently-reading"];
 const MEDALS = ["🥇", "🥈", "🥉"];
 const MIN_LEADERBOARD_YEAR = 1900;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const USAGE = "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], " +
-  "who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]";
+const GOODREADS_HELP = [
+  ["!goodreads link USERID", "link your account with the number from your Goodreads profile address (or paste the whole profile link); your profile and shelves must be public"],
+  ["!goodreads unlink", "remove your Goodreads link"],
+  ["!goodreads currently [@member]", "show what you, or the member you mention, are reading right now"],
+  ["!goodreads shelf [@member] [read|to-read|currently-reading]", "show a shelf, the read shelf by default"],
+  ["!goodreads who BOOK", "show who here has read a book and how they rated it"],
+  ["!goodreads overlap", "books that are on more than one member's to-read shelf"],
+  ["!goodreads leaderboard [YEAR]", "rank members by books finished this year, or in the year you give"],
+  ["!goodreads compare @member [@member]", "shared books and a taste match score, with you or between two members"]
+];
 
 let ctx = null;
 let checking = false;
@@ -101,6 +109,13 @@ async function shelfFor(link, shelf, fresh) {
   const result = await fetchShelf(link, shelf);
   if (result.ok) feedCache.set(key, { at: Date.now(), result: result });
   return result;
+}
+
+function helpEmbed(config) {
+  const channel = String(config.announceChannel || "books");
+  const lines = GOODREADS_HELP.map((entry) => "`" + entry[0] + "`\n" + entry[1]);
+  return embed("Goodreads commands", lines.join("\n\n"))
+    .setFooter({ text: "!gr works as a shortcut for !goodreads. New finished books are posted in #" + channel + "." });
 }
 
 function embed(title, description) {
@@ -381,7 +396,7 @@ async function handleGoodreads(message, args) {
   else if (sub === "overlap") await handleOverlap(message, links);
   else if (sub === "leaderboard") await handleLeaderboard(message, rest, links);
   else if (sub === "compare") await handleCompare(message, rest, links);
-  else await message.reply(USAGE);
+  else await message.reply({ embeds: [helpEmbed(config)] });
 }
 
 function findAnnounceChannel(guild, config) {
@@ -464,7 +479,7 @@ module.exports = {
     { name: "gr", run: (message, args) => handleGoodreads(message, args) }
   ],
   help: [
-    { order: 250, text: "!goodreads link USERID - link your Goodreads account (profile and shelves must be public) so I post when you finish a book; !gr works too (books role)", visible: visible },
+    { order: 250, text: "!goodreads link USERID - link your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)", visible: visible },
     { order: 251, text: "!goodreads unlink - remove your Goodreads link", visible: visible },
     { order: 252, text: "!goodreads currently - show what you or @member are reading right now", visible: visible },
     { order: 253, text: "!goodreads shelf - show your or @member's read, to-read or currently-reading shelf", visible: visible },

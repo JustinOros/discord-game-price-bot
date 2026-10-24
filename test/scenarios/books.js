@@ -10,6 +10,9 @@ module.exports = [
     await ctx.say("erin", "!help", { label: "erin: no books role, help hides the books lines" });
     await ctx.say("alice", "!goodreads");
     await ctx.say("alice", "!gr nonsense");
+    await ctx.say("alice", "!goodreads help");
+    await ctx.say("alice", "!gr HELP", { label: "alice: !gr HELP" });
+    await ctx.say("erin", "!goodreads help", { label: "erin: no books role cannot see goodreads help" });
     await ctx.say("alice", "!GOODREADS", { label: "alice: upper case command" });
     await ctx.say("alice", "!help", { label: "alice: books role, help shows the books lines" });
     await ctx.dm("alice", "!goodreads link 1001");
