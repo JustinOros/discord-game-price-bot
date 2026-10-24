@@ -516,7 +516,9 @@ class Fixtures {
     m = p.match(/^\/api\/libraries\/([^/]+)\/items$/);
     if (m) {
       const list = m[1] === "lib-1" ? Object.values(abs.items).sort((a, b) => b.addedAt - a.addedAt) : [];
-      return { status: 200, body: { results: list.slice(0, Number(req.query.get("limit")) || 10) } };
+      const size = Number(req.query.get("limit")) || 10;
+      const page = Number(req.query.get("page")) || 0;
+      return { status: 200, body: { results: list.slice(page * size, (page + 1) * size) } };
     }
     m = p.match(/^\/api\/libraries\/([^/]+)\/search$/);
     if (m) {

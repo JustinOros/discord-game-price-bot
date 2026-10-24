@@ -139,7 +139,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
               "status": 200
             }
           ]
@@ -169,7 +169,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
               "status": 200
             }
           ],
@@ -226,7 +226,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
               "status": 200
             }
           ]
@@ -246,7 +246,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
               "status": 200
             },
             {
@@ -313,7 +313,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
               "status": 200
             }
           ]
@@ -524,6 +524,768 @@
             "    }",
             "  },",
             "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "abs-bulk-new-books-one-over-then-many-pages": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-1/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-1/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-2/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-2/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-3/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-3/cover",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Over Book 1",
+                    "description": "by A\n1h 00m",
+                    "url": "https://abs.test/item/bulk-1",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Over Book 2",
+                    "description": "by A\n1h 00m",
+                    "url": "https://abs.test/item/bulk-2",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Over Book 3",
+                    "description": "by A\n1h 00m",
+                    "url": "https://abs.test/item/bulk-3",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "content": "...and 1 more book added to Audiobookshelf!"
+              }
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/many-1/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/many-1/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/many-2/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/many-2/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/many-3/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/many-3/cover",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Many 1",
+                    "description": "by M\n1m",
+                    "url": "https://abs.test/item/many-1",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Many 2",
+                    "description": "by M\n1m",
+                    "url": "https://abs.test/item/many-2",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Many 3",
+                    "description": "by M\n1m",
+                    "url": "https://abs.test/item/many-3",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "content": "...and 227 more books added to Audiobookshelf!"
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {},",
+            "  \"newestAddedAt\": 1900000230000",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "abs-bulk-new-books-show-three-and-a-count": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-1/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-1/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-2/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-2/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-3/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/bulk-3/cover",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Bulk Book 1",
+                    "description": "by Bulk Author\n1h 00m",
+                    "url": "https://abs.test/item/bulk-1",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Bulk Book 2",
+                    "description": "by Bulk Author\n2h 00m",
+                    "url": "https://abs.test/item/bulk-2",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Bulk Book 3",
+                    "description": "by Bulk Author\n3h 00m",
+                    "url": "https://abs.test/item/bulk-3",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "content": "...and 3 more books added to Audiobookshelf!"
+              }
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {},",
+            "  \"newestAddedAt\": 1800000006000",
             "}",
             ""
           ]
@@ -1759,7 +2521,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=5",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=5&page=0",
               "status": 200
             }
           ],
@@ -5030,7 +5792,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
               "status": 200
             },
             {
@@ -5065,7 +5827,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
               "status": 200
             },
             {
@@ -5127,7 +5889,7 @@
             },
             {
               "method": "GET",
-              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
               "status": 200
             },
             {
