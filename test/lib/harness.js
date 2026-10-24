@@ -404,6 +404,20 @@ async function runScenario(scn) {
     addEvent(guild, spec) {
       return guild.addEvent(spec);
     },
+    setupBooks(userKeys) {
+      const guild = world.g1;
+      guild.addRole({ id: "ROLE-BOOKS", name: "Books", unicodeEmoji: null });
+      guild.addChannel({ id: "CH-books", name: "books" });
+      userKeys.forEach((key) => {
+        const user = world.users[key];
+        let member = guild.members.cache.get(user.id);
+        if (!member) member = guild.addMember(user, {});
+        member.roles.apply("add", "ROLE-BOOKS");
+      });
+    },
+    mention(userKey) {
+      return "<@" + world.users[userKey].id + ">";
+    },
     manyRoles(count) {
       const roles = {};
       for (let i = 1; i <= count; i++) {

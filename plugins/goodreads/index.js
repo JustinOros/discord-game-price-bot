@@ -57,8 +57,8 @@ function hasBooksRole(message, config) {
   if (!message.guild || !message.member) return false;
   const roles = Array.from(message.member.roles.cache.values());
   if (config.roleId) return roles.some((role) => String(role.id) === String(config.roleId));
-  const wanted = String(config.roleName || "books").toLowerCase();
-  return roles.some((role) => String(role.name).toLowerCase() === wanted);
+  const wanted = normalize(config.roleName || "books");
+  return roles.some((role) => normalize(role.name) === wanted);
 }
 
 function normalize(text) {

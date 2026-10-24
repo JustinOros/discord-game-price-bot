@@ -14934,6 +14934,85 @@
       "pendingTimers": 0,
       "files": {}
     },
+    "goodreads-role-name-matching": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: emoji in the role name still matches",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: a different role containing books does not match",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "You need the books role to use !goodreads."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
     "goodreads-unlink": {
       "steps": [
         {

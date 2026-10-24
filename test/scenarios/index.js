@@ -9,6 +9,7 @@ module.exports = [].concat(
   require("./ai"),
   require("./trivia"),
   require("./docker"),
+  require("./books"),
   require("./chat"),
   require("./extras")
 );

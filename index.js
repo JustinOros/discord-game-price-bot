@@ -350,9 +350,10 @@ const HELP_COLOR = mood.color;
 const HELP_FIELD_MAX = 1000;
 const HELP_CATEGORIES = [
   { name: "💰 Prices & Watching", ranges: [[10, 59], [200, 219]] },
-  { name: "📊 Game Info", ranges: [[60, 89], [240, 259]] },
+  { name: "📊 Game Info", ranges: [[60, 89], [240, 249]] },
   { name: "🕹️ Ownership", ranges: [[90, 139]] },
   { name: "🏷️ Game Roles", ranges: [[140, 160]] },
+  { name: "📚 Books", ranges: [[250, 269]] },
   { name: "🖥️ Game Servers", ranges: [[161, 169]] },
   { name: "🧠 Memory", ranges: [[170, 199]] },
   { name: "🎲 Trivia", ranges: [[220, 239]] }

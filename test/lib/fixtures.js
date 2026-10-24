@@ -28,6 +28,60 @@ function matches(matcher, req) {
   return false;
 }
 
+function grItem(book) {
+  return "<item>\n<guid>https://www.goodreads.com/review/show/" + book.id + "</guid>\n" +
+    "<title><![CDATA[" + book.title + "]]></title>\n" +
+    "<link><![CDATA[https://www.goodreads.com/review/show/" + book.id + "?utm_medium=api]]></link>\n" +
+    "<book_id>" + book.id + "</book_id>\n" +
+    "<book_image_url><![CDATA[https://img.test/" + book.id + "-s.jpg]]></book_image_url>\n" +
+    "<book_large_image_url><![CDATA[https://img.test/" + book.id + "-l.jpg]]></book_large_image_url>\n" +
+    "<author_name>" + (book.author || "Someone") + "</author_name>\n" +
+    "<user_rating>" + (book.rating === undefined ? 0 : book.rating) + "</user_rating>\n" +
+    "<user_read_at><![CDATA[" + (book.readAt || "") + "]]></user_read_at>\n" +
+    "<user_date_added><![CDATA[Mon, 01 Jan 2024 00:00:00 -0800]]></user_date_added>\n" +
+    "<user_review><![CDATA[" + (book.review || "") + "]]></user_review>\n" +
+    "<book><num_pages>" + (book.pages === undefined ? "" : book.pages) + "</num_pages></book>\n" +
+    "</item>\n";
+}
+
+function grXml(id, shelf, items) {
+  return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\"><channel>\n" +
+    "<title>Reader " + id + "'s bookshelf: " + shelf + "</title>\n" + items.map(grItem).join("") + "</channel></rss>\n";
+}
+
+const GR_FEEDS = {
+  "1001": {
+    read: [
+      { id: "11", title: "Dune", author: "Frank Herbert", rating: 5, readAt: "Sat, 13 Sep 2025 00:00:00 -0700", pages: 612 },
+      { id: "12", title: "Project Hail Mary", author: "Andy Weir", rating: 4, readAt: "Tue, 01 Jul 2025 00:00:00 -0700", pages: 476 },
+      { id: "13", title: "Fish & Chips: A Tale", author: "Pat O'Brien &amp; Co", rating: 0, readAt: "", pages: 120 }
+    ],
+    "to-read": [
+      { id: "21", title: "The Hobbit", author: "J.R.R. Tolkien" },
+      { id: "22", title: "Neuromancer", author: "William Gibson" },
+      { id: "23", title: "Hyperion", author: "Dan Simmons" }
+    ],
+    "currently-reading": [
+      { id: "31", title: "Children of Time", author: "Adrian Tchaikovsky", pages: 600 },
+      { id: "32", title: "Piranesi", author: "Susanna Clarke", pages: 272 }
+    ]
+  },
+  "1002": {
+    read: [
+      { id: "11", title: "Dune", author: "Frank Herbert", rating: 3, readAt: "Mon, 02 Jun 2025 00:00:00 -0700", pages: 612 },
+      { id: "14", title: "Neuromancer", author: "William Gibson", rating: 4, readAt: "Fri, 02 Feb 2024 00:00:00 -0800", pages: 271 }
+    ],
+    "to-read": [
+      { id: "21", title: "The Hobbit", author: "J.R.R. Tolkien" },
+      { id: "23", title: "Hyperion", author: "Dan Simmons" },
+      { id: "24", title: "Solo Pick", author: "Only Bob" }
+    ],
+    "currently-reading": []
+  },
+  "1003": { read: [], "to-read": [{ id: "21", title: "The Hobbit", author: "J.R.R. Tolkien" }], "currently-reading": [] },
+  "7777": { needsKey: "SECRETKEY", read: [{ id: "11", title: "Dune", author: "Frank Herbert", rating: 2, readAt: "Mon, 02 Jun 2025 00:00:00 -0700" }], "to-read": [], "currently-reading": [] }
+};
+
 class Fixtures {
   constructor(env, readmeText) {
     this.env = env;
@@ -37,6 +91,7 @@ class Fixtures {
     this.recordFullSystem = false;
     this.extraSearch = {};
     this.shops = SHOPS;
+    this.goodreads = { feeds: JSON.parse(JSON.stringify(GR_FEEDS)) };
   }
 
   on(matcher, responder, options) {
@@ -179,6 +234,7 @@ class Fixtures {
     if (host === "api.steampowered.com") return this.routeSteamApi(req, p);
     if (p === "/api/chat") return this.routeOllama(req);
     if (host === "api.tavily.com") return this.routeTavily(req);
+    if (host === "www.goodreads.com") return this.routeGoodreads(req);
     return { status: 404, body: "unmocked " + req.method + " " + req.url };
   }
 
@@ -393,6 +449,20 @@ class Fixtures {
       status: 200,
       body: { message: { role: "assistant", content: "Hey " + name + "! I see " + earlier + " earlier lines, " + facts + " shared facts, and context " + context + "." } }
     };
+  }
+
+  routeGoodreads(req) {
+    const match = req.u.pathname.match(/^\/review\/list_rss\/(\d+)$/);
+    if (!match) return { status: 404, body: "unmocked goodreads path" };
+    const id = match[1];
+    if (id === "9600") throw new Error("getaddrinfo ENOTFOUND www.goodreads.com");
+    if (id === "9500") return { status: 200, body: "<html><body>Please sign in</body></html>" };
+    const feed = this.goodreads.feeds[id];
+    if (!feed) return { status: 404, body: "not found" };
+    if (feed.needsKey && req.query.get("key") !== feed.needsKey) return { status: 403, body: "forbidden" };
+    const shelf = req.query.get("shelf") || "read";
+    const items = feed[shelf] || [];
+    return { status: 200, body: grXml(id, shelf, items) };
   }
 
   routeTavily(req) {
