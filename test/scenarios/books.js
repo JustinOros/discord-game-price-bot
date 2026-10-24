@@ -221,7 +221,7 @@ module.exports = [
     const read = [];
     for (let i = 1; i <= 230; i++) {
       const year = i <= 100 ? 2026 : (i <= 160 ? 2025 : 2024);
-      read.push({ id: "big-" + i, title: "Big Book " + i, author: "B", rating: 4, readAt: "Mon, 02 Jun " + year + " 00:00:00 -0700", pages: 100 });
+      read.push({ id: "big-" + i, title: i === 150 ? "" : "Big Book " + i, author: "B", rating: 4, readAt: "Mon, 02 Jun " + year + " 00:00:00 -0700", pages: 100 });
     }
     ctx.fx.goodreads.feeds["1004"] = { read: read, "to-read": [], "currently-reading": [] };
     await ctx.say("alice", "!goodreads link 1004");

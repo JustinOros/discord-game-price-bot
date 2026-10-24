@@ -1,7 +1,7 @@
 const FEED_BASE = "https://www.goodreads.com/review/list_rss/";
 const FETCH_TIMEOUT_MS = 10000;
 const PAGE_SIZE = 100;
-const MAX_PAGES = 5;
+const MAX_PAGES = 12;
 
 const NAMED_ENTITIES = { amp: "&", lt: "<", gt: ">", quot: "\"", apos: "'", nbsp: " " };
 
@@ -47,7 +47,8 @@ function parseFeed(xml) {
       review: tagValue(block, "user_review")
     };
   }).filter((item) => item.title);
-  return { title: tagValue(head, "title"), items: items };
+  const rawCount = (xml.match(/<item[\s>]/gi) || []).length;
+  return { title: tagValue(head, "title"), items: items, rawCount: rawCount };
 }
 
 function feedUrl(link, shelf, page) {
@@ -66,7 +67,7 @@ async function fetchPage(link, shelf, page) {
     if (!res.ok) return { ok: false, status: res.status, items: [] };
     const parsed = parseFeed(await res.text());
     if (!parsed) return { ok: false, status: 200, items: [] };
-    return { ok: true, status: 200, items: parsed.items };
+    return { ok: true, status: 200, items: parsed.items, rawCount: parsed.rawCount };
   } catch (err) {
     return { ok: false, status: 0, items: [] };
   } finally {
@@ -79,11 +80,11 @@ async function fetchShelf(link, shelf, options) {
   const first = await fetchPage(link, shelf, 1);
   if (!first.ok) return first;
   let items = first.items;
-  let last = first.items;
-  for (let page = 2; page <= maxPages && last.length >= PAGE_SIZE; page++) {
+  let lastCount = first.rawCount;
+  for (let page = 2; page <= maxPages && lastCount >= PAGE_SIZE; page++) {
     const next = await fetchPage(link, shelf, page);
     if (!next.ok) break;
-    last = next.items;
+    lastCount = next.rawCount;
     items = items.concat(next.items);
   }
   return { ok: true, status: 200, items: items };

@@ -18882,7 +18882,7 @@
               "via": "channel.send",
               "channel": "CH-general",
               "payload": {
-                "content": "Linked Alice to Goodreads user 1004. I'll post when you finish a book (230 already on your read shelf, so I won't announce those)."
+                "content": "Linked Alice to Goodreads user 1004. I'll post when you finish a book (229 already on your read shelf, so I won't announce those)."
               }
             }
           ]
@@ -18916,7 +18916,7 @@
                   {
                     "color": 12035466,
                     "title": "Reading leaderboard 2025",
-                    "description": "🥇 **Alice** - 60 books (6,000 pages)"
+                    "description": "🥇 **Alice** - 59 books (5,900 pages)"
                   }
                 ]
               }
@@ -19119,7 +19119,6 @@
             "      \"big-147\",",
             "      \"big-148\",",
             "      \"big-149\",",
-            "      \"big-150\",",
             "      \"big-151\",",
             "      \"big-152\",",
             "      \"big-153\",",
