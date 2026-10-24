@@ -4606,6 +4606,10 @@
             {
               "cron": "* * * * *",
               "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -4623,7 +4627,8 @@
               "key": "cronExpressions",
               "value": [
                 "0 15 * * *",
-                "* * * * *"
+                "* * * * *",
+                "*/30 * * * *"
               ]
             }
           ]
@@ -4710,6 +4715,10 @@
             },
             {
               "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             }
           ],
@@ -4806,6 +4815,10 @@
             },
             {
               "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             }
           ],
@@ -5343,6 +5356,10 @@
             {
               "cron": "* * * * *",
               "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -5566,6 +5583,10 @@
             },
             {
               "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             }
           ],
@@ -6150,6 +6171,10 @@
             {
               "cron": "* * * * *",
               "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -6271,6 +6296,10 @@
             },
             {
               "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             }
           ],
@@ -8814,6 +8843,10 @@
             {
               "cron": "* * * * *",
               "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -8932,6 +8965,10 @@
             },
             {
               "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             }
           ],
@@ -9111,6 +9148,10 @@
             {
               "cron": "* * * * *",
               "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -9238,6 +9279,10 @@
             },
             {
               "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             }
           ],
@@ -9412,6 +9457,10 @@
             {
               "cron": "* * * * *",
               "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -9549,6 +9598,10 @@
             },
             {
               "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             }
           ],
@@ -11942,6 +11995,3422 @@
             "  \"title\": \"Elden Ring\",",
             "  \"fetchedAt\": 1791288000000,",
             "  \"text\": \"The Forest Interactive Map: The key card sits in the bunker near the lake.\\nSecond result: Another page about the same thing.\\nThird result: Yet another page.\\nFourth result: Fourth page.\\nFifth result: Fifth page.\"",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-announce-edge-cases": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !goodreads link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "poll with edge cases and one broken feed",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished No Pages No Review",
+                    "description": "by Someone\nnot rated",
+                    "url": "https://www.goodreads.com/review/show/61?utm_medium=api",
+                    "thumbnail": {
+                      "url": "https://img.test/61-l.jpg"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Long Review",
+                    "description": "by Wordy\n★★★★☆\n||xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...||",
+                    "url": "https://www.goodreads.com/review/show/62?utm_medium=api",
+                    "thumbnail": {
+                      "url": "https://img.test/62-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\",",
+            "      \"62\",",
+            "      \"61\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-announce-send-failure": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "poll where the channel send fails",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Cannot Post",
+                    "description": "by Sad\n★★☆☆☆",
+                    "url": "https://www.goodreads.com/review/show/81?utm_medium=api",
+                    "thumbnail": {
+                      "url": "https://img.test/81-l.jpg"
+                    }
+                  }
+                ]
+              },
+              "failed": true
+            }
+          ],
+          "console": [
+            {
+              "level": "error",
+              "text": "2026-10-06T12:00:00.000Z Goodreads announcement failed: Missing Permissions"
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\",",
+            "      \"81\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-announce-without-channel-or-member": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "poll with the announce channel missing",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\",",
+            "      \"71\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-announces-new-finished-books": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "poll with nothing new",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "poll with one new book",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Hyperion",
+                    "description": "by Dan Simmons\n★★★★★ - 482 pages\n||Loved it, the ending is unreal.||",
+                    "url": "https://www.goodreads.com/review/show/41?utm_medium=api",
+                    "thumbnail": {
+                      "url": "https://img.test/41-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "poll again, nothing repeats",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "poll with five new books, only three are announced",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Batch 3",
+                    "description": "by Author 3\n★★★☆☆",
+                    "url": "https://www.goodreads.com/review/show/53?utm_medium=api",
+                    "thumbnail": {
+                      "url": "https://img.test/53-l.jpg"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Batch 4",
+                    "description": "by Author 4\n★★★★☆",
+                    "url": "https://www.goodreads.com/review/show/54?utm_medium=api",
+                    "thumbnail": {
+                      "url": "https://img.test/54-l.jpg"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Batch 5",
+                    "description": "by Author 5\n★★★★★",
+                    "url": "https://www.goodreads.com/review/show/55?utm_medium=api",
+                    "thumbnail": {
+                      "url": "https://img.test/55-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "poll again, the other two were skipped for good",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\",",
+            "      \"41\",",
+            "      \"55\",",
+            "      \"54\",",
+            "      \"53\",",
+            "      \"52\",",
+            "      \"51\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-config-missing": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+              }
+            }
+          ]
+        },
+        {
+          "label": "default poll registered"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "goodreads-currently-and-shelf": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !goodreads link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: !goodreads link 1003",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1003?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads currently",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice is reading",
+                    "description": "**Children of Time** by Adrian Tchaikovsky\n**Piranesi** by Susanna Clarke",
+                    "thumbnail": {
+                      "url": "https://img.test/31-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: bob is not reading anything",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "content": "Bob isn't reading anything right now."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: erin has not linked",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "content": "erin hasn't linked a Goodreads account yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads shelf",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice's read shelf",
+                    "description": "**Dune** by Frank Herbert - ★★★★★, Sep 2025\n**Project Hail Mary** by Andy Weir - ★★★★☆, Jul 2025\n**Fish & Chips: A Tale** by Pat O'Brien & Co - not rated",
+                    "thumbnail": {
+                      "url": "https://img.test/11-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads shelf read",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice's read shelf",
+                    "description": "**Dune** by Frank Herbert - ★★★★★, Sep 2025\n**Project Hail Mary** by Andy Weir - ★★★★☆, Jul 2025\n**Fish & Chips: A Tale** by Pat O'Brien & Co - not rated",
+                    "thumbnail": {
+                      "url": "https://img.test/11-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads shelf to-read",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=to-read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-9",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice's to-read shelf",
+                    "description": "**The Hobbit** by J.R.R. Tolkien\n**Neuromancer** by William Gibson\n**Hyperion** by Dan Simmons",
+                    "thumbnail": {
+                      "url": "https://img.test/21-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads shelf currently-reading",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-10",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice's currently-reading shelf",
+                    "description": "**Children of Time** by Adrian Tchaikovsky\n**Piranesi** by Susanna Clarke",
+                    "thumbnail": {
+                      "url": "https://img.test/31-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: bob's to-read shelf",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=to-read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-11",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Bob's to-read shelf",
+                    "description": "**The Hobbit** by J.R.R. Tolkien\n**Hyperion** by Dan Simmons\n**Solo Pick** by Only Bob",
+                    "thumbnail": {
+                      "url": "https://img.test/21-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads shelf bogus",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-12",
+              "payload": {
+                "content": "Shelf must be read, to-read or currently-reading."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: carol's read shelf is empty",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-13",
+              "payload": {
+                "content": "Nothing on Carol's read shelf yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: erin has not linked",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-14",
+              "payload": {
+                "content": "erin hasn't linked a Goodreads account yet."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  },",
+            "  \"U3\": {",
+            "    \"userId\": \"1003\",",
+            "    \"key\": null,",
+            "    \"seen\": []",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-disabled": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "goodreads-feed-failures-in-commands": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "advance 360000ms"
+        },
+        {
+          "label": "alice: !goodreads currently",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 404
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "I couldn't read Alice's Goodreads feed right now."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads shelf",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "I couldn't read Alice's Goodreads feed right now."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads who dune",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "Nobody here has marked \"dune\" as read."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads overlap",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=to-read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "content": "No books are on more than one member's to-read shelf yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads compare <@U2>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "content": "Bob hasn't linked a Goodreads account yet."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-leaderboard": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !goodreads link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: !goodreads link 1003",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1003?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: nobody finished a book this year",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "Nobody has finished a book in 2026 yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads leaderboard 2025",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2025",
+                    "description": "🥇 **Alice** - 2 books (1,088 pages)\n🥈 **Bob** - 1 book (612 pages)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: single entry",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2024",
+                    "description": "🥇 **Bob** - 1 book (271 pages)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads leaderboard 1999",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "content": "Nobody has finished a book in 1999 yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "advance 360000ms"
+        },
+        {
+          "label": "alice: ties are broken by pages",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1003?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2025",
+                    "description": "🥇 **Alice** - 2 books (1,088 pages)\n🥈 **Bob** - 2 books (612 pages)\n🥉 **Carol** - 1 book (400 pages)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads leaderboard abc",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-9",
+              "payload": {
+                "content": "Usage: !goodreads leaderboard [YEAR], like !goodreads leaderboard 2026"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads leaderboard 2099",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-10",
+              "payload": {
+                "content": "Usage: !goodreads leaderboard [YEAR], like !goodreads leaderboard 2026"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads leaderboard 20255",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-11",
+              "payload": {
+                "content": "Usage: !goodreads leaderboard [YEAR], like !goodreads leaderboard 2026"
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  },",
+            "  \"U3\": {",
+            "    \"userId\": \"1003\",",
+            "    \"key\": null,",
+            "    \"seen\": []",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-leaderboard-skips-failed-feeds": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !goodreads link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "advance 360000ms"
+        },
+        {
+          "label": "alice: bob's feed fails and is skipped",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2025",
+                    "description": "🥇 **Alice** - 2 books (1,088 pages)"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-link-variants": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: profile url",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: !goodreads link abc",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Usage: !goodreads link USERID (the number in your Goodreads profile link, like goodreads.com/user/show/12345678)"
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: !goodreads link",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "Usage: !goodreads link USERID (the number in your Goodreads profile link, like goodreads.com/user/show/12345678)"
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: private or unknown profile",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/9404?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "I couldn't read that Goodreads feed. Make sure the ID is right and your profile and shelves are set to public in your Goodreads privacy settings."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: feed is not rss",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/9500?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "I couldn't read that Goodreads feed. Make sure the ID is right and your profile and shelves are set to public in your Goodreads privacy settings."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: network failure",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/9600?shelf=read&per_page=100&sort=date_read&order=d",
+              "networkError": "getaddrinfo ENOTFOUND www.goodreads.com"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "I couldn't read that Goodreads feed. Make sure the ID is right and your profile and shelves are set to public in your Goodreads privacy settings."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: feed needs a key",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/7777?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 403
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "I couldn't read that Goodreads feed. Make sure the ID is right and your profile and shelves are set to public in your Goodreads privacy settings."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: rss url with key",
+          "outgoing": [
+            {
+              "via": "message.delete",
+              "to": "M-9"
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Carol to Goodreads user 7777. I'll post when you finish a book (1 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ],
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/7777?key=SECRETKEY&shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "alice: relinking replaces the old link",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1003?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1003\",",
+            "    \"key\": null,",
+            "    \"seen\": []",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  },",
+            "  \"U3\": {",
+            "    \"userId\": \"7777\",",
+            "    \"key\": \"SECRETKEY\",",
+            "    \"seen\": [",
+            "      \"11\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-links-file-corrupt": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads currently",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Alice hasn't linked a Goodreads account yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "modified",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-overlap-with-nothing-shared": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads overlap",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=to-read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "No books are on more than one member's to-read shelf yet."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-poll-interval-defaults": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "default poll registered"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "goodreads-poll-interval-setting": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/10 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "ten minute poll registered"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "goodreads-role-by-id": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+              }
+            }
+          ]
+        },
+        {
+          "label": "erin: !goodreads",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "You need the books role to use !goodreads."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "goodreads-role-gate-and-help": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "erin: !goodreads link 1001",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "You need the books role to use !goodreads."
+              }
+            }
+          ]
+        },
+        {
+          "label": "erin: !gr",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "You need the books role to use !goodreads."
+              }
+            }
+          ]
+        },
+        {
+          "label": "erin: no books role, help hides the books lines",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr nonsense",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: upper case command",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "content": "Usage: !goodreads link USERID, unlink, currently [@member], shelf [@member] [read|to-read|currently-reading], who BOOK, overlap, leaderboard [YEAR], or compare @member [@member]"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: books role, help shows the books lines",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "📚 Books",
+                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "dm alice: !goodreads link 1001",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "content": "Hello Alice G, I am a Discord Game Price Bot made by Justin Oros. https://github.com/JustinOros/discord-game-price-bot",
+                "flags": 4
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !grab is not the alias"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "goodreads-unlink": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads unlink",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "You don't have a Goodreads account linked."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: wrong id",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "That ID doesn't match the Goodreads account you linked."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: not an id",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "That ID doesn't match the Goodreads account you linked."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: right id",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "content": "Unlinked your Goodreads account."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: no id needed",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "content": "Unlinked your Goodreads account."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{}",
+            ""
+          ]
+        }
+      }
+    },
+    "goodreads-who-overlap-compare": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !goodreads link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: !goodreads link 1003",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1003?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads who dune",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Who has read Dune",
+                    "description": "Alice - ★★★★★\nBob - ★★★☆☆"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads who hail mary",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Who has read Project Hail Mary",
+                    "description": "Alice - ★★★★☆"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads who something nobody read",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "content": "Nobody here has marked \"something nobody read\" as read."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads who",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "content": "Usage: !goodreads who BOOK"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads overlap",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=to-read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=to-read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1003?shelf=to-read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "On more than one to-read shelf",
+                    "description": "**The Hobbit** - Alice, Bob, Carol\n**Hyperion** - Alice, Bob"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads compare <@U2>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-9",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading overlap",
+                    "description": "Alice and Bob have read 1 book in common. Taste match: 50% across 1 book you both rated.\n\n**Dune** - Alice ★★★★★, Bob ★★★☆☆"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: compare two other members",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-10",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading overlap",
+                    "description": "Alice and Bob have read 1 book in common. Taste match: 50% across 1 book you both rated.\n\n**Dune** - Alice ★★★★★, Bob ★★★☆☆"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: nothing in common",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-11",
+              "payload": {
+                "content": "Alice and Carol haven't read any of the same books yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: compare with self",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-12",
+              "payload": {
+                "content": "Pick two different members to compare."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: erin has not linked",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-13",
+              "payload": {
+                "content": "erin hasn't linked a Goodreads account yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !goodreads compare",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-14",
+              "payload": {
+                "content": "Usage: !goodreads compare @member [@member]"
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  },",
+            "  \"U3\": {",
+            "    \"userId\": \"1003\",",
+            "    \"key\": null,",
+            "    \"seen\": []",
+            "  }",
             "}",
             ""
           ]
@@ -23851,6 +27320,10 @@
             },
             {
               "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             }
           ],
