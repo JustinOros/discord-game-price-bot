@@ -6,6 +6,7 @@ const yaml = require("js-yaml");
 const { Client, GatewayIntentBits, Partials, MessageFlags, EmbedBuilder } = require("discord.js");
 const { createRoles } = require("./core/roles");
 const { createMood } = require("./core/mood");
+const { attachBooks } = require("./core/booksCommand");
 const { loadPlugins, findCommand, collectHelpEntries, startPlugins, registerPlugins, runChatHooks } = require("./core/plugins");
 
 const rawLog = console.log.bind(console);
@@ -457,6 +458,7 @@ client.once("clientReady", async () => {
 });
 
 registerPlugins(plugins, pluginContext);
+attachBooks(plugins, pluginContext);
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;

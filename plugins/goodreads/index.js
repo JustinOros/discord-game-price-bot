@@ -3,17 +3,16 @@ const path = require("path");
 const yaml = require("js-yaml");
 const { EmbedBuilder } = require("discord.js");
 const { fetchShelf, parseLinkInput } = require("./feed");
+const books = require("../../core/books");
+const { EMBED_COLOR, LIST_LIMIT, COMMAND_LIMIT, normalize, stars, memberName, mentionedIds, stripMentions, embed } = books;
 
 const ROOT = path.join(__dirname, "..", "..");
 const LINKS_PATH = path.join(ROOT, "goodreads.json");
 const CONFIG_PATH = path.join(__dirname, "config.yaml");
-const EMBED_COLOR = 0xb7a58a;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const DEFAULT_POLL_MINUTES = 30;
 const MAX_ANNOUNCE_PER_USER = 3;
 const MAX_SEEN_PER_USER = 500;
-const LIST_LIMIT = 10;
-const COMMAND_LIMIT = 25;
 const REVIEW_PREVIEW_CHARS = 300;
 const SHELVES = ["read", "to-read", "currently-reading"];
 const MEDALS = ["🥇", "🥈", "🥉"];
@@ -62,44 +61,13 @@ function saveLinks(links) {
 }
 
 function hasBooksRole(message, config) {
-  if (!message.guild || !message.member) return false;
-  const roles = Array.from(message.member.roles.cache.values());
-  if (config.roleId) return roles.some((role) => String(role.id) === String(config.roleId));
-  const wanted = normalize(config.roleName || "books");
-  return roles.some((role) => normalize(role.name) === wanted);
-}
-
-function normalize(text) {
-  return String(text || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-}
-
-function stars(rating) {
-  if (!rating) return "not rated";
-  return "★".repeat(rating) + "☆".repeat(Math.max(0, 5 - rating));
+  return books.hasBooksRole(message, config);
 }
 
 function monthYear(text) {
   const date = new Date(text);
   if (!text || Number.isNaN(date.getTime())) return "";
   return MONTHS[date.getUTCMonth()] + " " + date.getUTCFullYear();
-}
-
-function memberName(guild, id) {
-  const member = guild && guild.members.cache.get(id);
-  if (!member) return "<@" + id + ">";
-  return member.displayName || (member.user && (member.user.globalName || member.user.username)) || "<@" + id + ">";
-}
-
-function mentionedIds(text) {
-  const ids = [];
-  const pattern = /<@!?(\w+)>/g;
-  let match;
-  while ((match = pattern.exec(text)) !== null) ids.push(match[1]);
-  return ids;
-}
-
-function stripMentions(text) {
-  return text.replace(/<@!?\w+>/g, " ").replace(/\s+/g, " ").trim();
 }
 
 async function shelfFor(link, shelf, fresh) {
@@ -116,10 +84,6 @@ function helpEmbed(config) {
   const lines = GOODREADS_HELP.map((entry) => "`" + entry[0] + "`\n" + entry[1]);
   return embed("Goodreads commands", lines.join("\n\n"))
     .setFooter({ text: "!gr works as a shortcut for !goodreads. New finished books are posted in #" + channel + "." });
-}
-
-function embed(title, description) {
-  return new EmbedBuilder().setColor(EMBED_COLOR).setTitle(title).setDescription(description.slice(0, 4000));
 }
 
 async function handleLink(message, args, links) {
@@ -463,12 +427,61 @@ async function checkFeeds() {
   }
 }
 
+const bookSource = {
+  name: "Goodreads",
+  config: loadConfig,
+  isLinked(discordId) {
+    return !!loadLinks()[discordId];
+  },
+  async currently(discordId) {
+    const link = loadLinks()[discordId];
+    if (!link) return [];
+    const result = await shelfFor(link, "currently-reading");
+    if (!result.ok) return [];
+    return result.items.map((item) => ({ title: item.title, author: item.author, image: item.image, verb: "reading" }));
+  },
+  async finished(discordId, options) {
+    const link = loadLinks()[discordId];
+    if (!link) return [];
+    const result = await shelfFor(link, "read");
+    if (!result.ok) return [];
+    const year = options && options.year;
+    return result.items.filter((item) => !year || readYear(item.readAt) === year).map((item) => ({
+      title: item.title,
+      author: item.author,
+      year: readYear(item.readAt),
+      rating: item.rating,
+      pages: item.pages
+    }));
+  },
+  async find(discordId, query) {
+    const link = loadLinks()[discordId];
+    if (!link) return [];
+    const wanted = normalize(query);
+    const found = [];
+    const read = await shelfFor(link, "read");
+    if (read.ok) {
+      read.items.filter((item) => normalize(item.title).includes(wanted)).forEach((item) => {
+        found.push({ title: item.title, status: "finished", detail: stars(item.rating) });
+      });
+    }
+    const current = await shelfFor(link, "currently-reading");
+    if (current.ok) {
+      current.items.filter((item) => normalize(item.title).includes(wanted)).forEach((item) => {
+        found.push({ title: item.title, status: "reading", detail: "" });
+      });
+    }
+    return found;
+  }
+};
+
 const visible = async (message) => hasBooksRole(message, loadConfig());
 
 module.exports = {
   name: "goodreads",
   register(context) {
     ctx = context;
+    books.registerSource(context, bookSource);
   },
   onReady(context) {
     ctx = context;

@@ -1,5 +1,1872 @@
 {
   "scenarios": {
+    "abs-announcements": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Project Hail Mary",
+                    "description": "by Andy Weir\n2h 00m listened",
+                    "url": "https://abs.test/item/li-2",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-9/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-9/cover",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Fresh Arrival",
+                    "description": "by New Author\n1h 00m",
+                    "url": "https://abs.test/item/li-9",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=10",
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\",",
+            "        \"li-2\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 1800000000000",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "abs-announcements-off-and-server-down": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "override": true,
+              "networkError": "fetch failed"
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "override": true,
+              "networkError": "fetch failed"
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "abs-leaderboard": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab leaderboard",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Nobody has listened to anything this week yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab leaderboard",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1/listening-stats",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2/listening-stats",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Listening leaderboard, this week",
+                    "description": "🥇 **Alice** - 3.0 hours\n🥈 **Bob** - 0.5 hours"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab leaderboard month",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1/listening-stats",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2/listening-stats",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Listening leaderboard, this month",
+                    "description": "🥇 **Alice** - 5.0 hours\n🥈 **Bob** - 0.5 hours"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab leaderboard year",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1/listening-stats",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2/listening-stats",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Listening leaderboard, this year",
+                    "description": "🥇 **Alice** - 5.0 hours\n🥈 **Bob** - 0.5 hours"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab leaderboard decade",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "content": "Usage: !audiobookshelf leaderboard [week|month|year]"
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "abs-link-and-unlink": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Usage: !audiobookshelf link USERNAME"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link nobody",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "There's no Audiobookshelf user with that name."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link ALICIA",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: already linked to alice",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "That Audiobookshelf user is already linked to Alice."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab unlink wrong",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "content": "That username doesn't match the Audiobookshelf account you linked."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab unlink bobby",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "content": "Unlinked your Audiobookshelf account."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab unlink",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "content": "You don't have an Audiobookshelf account linked."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "abs-role-gate-help-and-not-configured": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "erin: !ab help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "You need the books role to use !audiobookshelf."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Audiobookshelf commands",
+                    "description": "`!audiobookshelf link USERNAME`\nlink your Audiobookshelf username so I can post when you finish a book\n\n`!audiobookshelf unlink`\nremove your Audiobookshelf link\n\n`!audiobookshelf nowplaying [@member]`\nwhat you, or the member you mention, are listening to\n\n`!audiobookshelf finished [@member]`\nrecently finished audiobooks\n\n`!audiobookshelf stats [@member]`\nbooks finished and hours listened\n\n`!audiobookshelf leaderboard [week|month|year]`\nrank members by hours listened\n\n`!audiobookshelf who BOOK`\nwho here has listened to a book\n\n`!audiobookshelf search BOOK`\nlook a book up in the library\n\n`!audiobookshelf new`\nthe newest books added to the library\n\n`!audiobookshelf compare @member [@member]`\naudiobooks two members have both finished",
+                    "footer": {
+                      "text": "!ab works as a shortcut for !audiobookshelf. Finished books and new arrivals are posted in #books."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !audiobookshelf help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Audiobookshelf commands",
+                    "description": "`!audiobookshelf link USERNAME`\nlink your Audiobookshelf username so I can post when you finish a book\n\n`!audiobookshelf unlink`\nremove your Audiobookshelf link\n\n`!audiobookshelf nowplaying [@member]`\nwhat you, or the member you mention, are listening to\n\n`!audiobookshelf finished [@member]`\nrecently finished audiobooks\n\n`!audiobookshelf stats [@member]`\nbooks finished and hours listened\n\n`!audiobookshelf leaderboard [week|month|year]`\nrank members by hours listened\n\n`!audiobookshelf who BOOK`\nwho here has listened to a book\n\n`!audiobookshelf search BOOK`\nlook a book up in the library\n\n`!audiobookshelf new`\nthe newest books added to the library\n\n`!audiobookshelf compare @member [@member]`\naudiobooks two members have both finished",
+                    "footer": {
+                      "text": "!ab works as a shortcut for !audiobookshelf. Finished books and new arrivals are posted in #books."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: no .env yet",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "Audiobookshelf isn't set up yet. An admin needs to fill in ABS_URL and ABS_TOKEN in plugins/audiobookshelf/.env."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "📚 Books",
+                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard or compare`\nthe same book commands across every linked book service; !books help lists them (books role)"
+                      },
+                      {
+                        "name": "📚 Books (continued)",
+                        "value": "`!audiobookshelf link USERNAME`\nlink your Audiobookshelf account so I post when you finish a book; !audiobookshelf help lists every command and !ab works too (books role)\n\n`!audiobookshelf unlink`\nremove your Audiobookshelf link\n\n`!audiobookshelf nowplaying`\nshow what you or @member are listening to\n\n`!audiobookshelf finished`\nrecently finished audiobooks for you or @member\n\n`!audiobookshelf stats`\nbooks finished and hours listened for you or @member\n\n`!audiobookshelf leaderboard`\nrank members by hours listened, week, month or year\n\n`!audiobookshelf who BOOK`\nshow who here has listened to a book\n\n`!audiobookshelf search BOOK`\nlook a book up in the library\n\n`!audiobookshelf new`\nthe newest books in the library\n\n`!audiobookshelf compare`\naudiobooks you and @member have both finished"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "abs-server-down-and-bad-token": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "override": true,
+              "networkError": "fetch failed"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "I couldn't reach Audiobookshelf right now."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 401
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "I couldn't reach Audiobookshelf right now."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab nowplaying",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Alice hasn't linked an Audiobookshelf account yet."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "abs-views": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab nowplaying",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-3",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-3/cover",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice is listening to",
+                    "description": "**Piranesi** by Susanna Clarke - 40%, 3h 00m left",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab nowplaying <@U2>",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "Bob isn't listening to anything right now."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab nowplaying <@U3>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "content": "Carol hasn't linked an Audiobookshelf account yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab finished",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished",
+                    "description": "**Dune** by Frank Herbert - 2026-03-03"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab finished <@U2>",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Bob finished",
+                    "description": "**Project Hail Mary** by Andy Weir - 2026-05-03\n**Dune** by Frank Herbert - 2025-06-03"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab stats",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1/listening-stats",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice's listening stats",
+                    "description": "Finished this year: 1\nFinished in total: 1\nListened in the last 7 days: 3.0 hours\nListened in the last 30 days: 5.0 hours\nListened in total: 5.0 hours"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab stats <@U2>",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2/listening-stats",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-9",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Bob's listening stats",
+                    "description": "Finished this year: 1\nFinished in total: 2\nListened in the last 7 days: 0.5 hours\nListened in the last 30 days: 0.5 hours\nListened in total: 0.5 hours"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab who dune",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=dune",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-10",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Who has listened to Dune",
+                    "description": "Alice - finished\nBob - finished"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab who piranesi",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=piranesi",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-11",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Who has listened to Piranesi",
+                    "description": "Alice - 40%"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab who nothing",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=nothing",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-12",
+              "payload": {
+                "content": "I couldn't find \"nothing\" in the library."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab who",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-13",
+              "payload": {
+                "content": "Usage: !audiobookshelf who BOOK"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab search hail",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=hail",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-14",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Library results",
+                    "description": "**Project Hail Mary** by Andy Weir - 2h 00m"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab search zzz",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=zzz",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-15",
+              "payload": {
+                "content": "Nothing in the library matches \"zzz\"."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab search",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-16",
+              "payload": {
+                "content": "Usage: !audiobookshelf search BOOK"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab new",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=5",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-17",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Newest in the library",
+                    "description": "**Piranesi** by Susanna Clarke\n**Project Hail Mary** by Andy Weir\n**Dune** by Frank Herbert"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab compare <@U2>",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-18",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Listening overlap",
+                    "description": "Alice and Bob have finished 1 audiobook in common.\n\n**Dune** by Frank Herbert"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab compare",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-19",
+              "payload": {
+                "content": "Usage: !audiobookshelf compare @member [@member]"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab compare <@U1>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-20",
+              "payload": {
+                "content": "Pick two different members to compare."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab compare <@U3>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-21",
+              "payload": {
+                "content": "Carol hasn't linked an Audiobookshelf account yet."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
     "ai-cooldown": {
       "steps": [
         {
@@ -2996,6 +4863,1097 @@
       "pendingTimers": 0,
       "files": {}
     },
+    "books-umbrella-absent-without-book-plugins": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !books"
+        },
+        {
+          "label": "alice: !help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "books-umbrella-audiobookshelf-only": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books currently",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-3",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice is reading",
+                    "description": "**Piranesi** by Susanna Clarke (Audiobookshelf)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books link",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Link with the book service's own command: !ab link."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-umbrella-both-sources": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Books commands",
+                    "description": "`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "footer": {
+                      "text": "Book services: Audiobookshelf, Goodreads"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "erin: !books help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "content": "You need the books role to use !books."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books currently",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-3",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice is reading",
+                    "description": "**Piranesi** by Susanna Clarke (Audiobookshelf)\n**Children of Time** by Adrian Tchaikovsky (Goodreads)",
+                    "thumbnail": {
+                      "url": "https://img.test/31-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books currently <@U2>",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "content": "Bob isn't reading anything right now."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books currently <@U3>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-9",
+              "payload": {
+                "content": "Carol hasn't linked a book service yet. Use !gr link or !ab link."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books who dune",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=dune",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=dune",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-10",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Who has read Dune",
+                    "description": "Alice - finished\nBob - finished"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books who nothing",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=nothing",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/search?limit=5&q=nothing",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-11",
+              "payload": {
+                "content": "Nobody here has read or started \"nothing\"."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books who",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-12",
+              "payload": {
+                "content": "Usage: !books who BOOK"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books leaderboard",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-13",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2026",
+                    "description": "🥇 **Alice** - 1 book\n🥈 **Bob** - 1 book"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books leaderboard 2025",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-14",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2025",
+                    "description": "🥇 **Alice** - 2 books\n🥈 **Bob** - 1 book"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books leaderboard abc",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-15",
+              "payload": {
+                "content": "Usage: !books leaderboard [YEAR], like !books leaderboard 2026"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books compare <@U2>",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-16",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading overlap",
+                    "description": "Alice and Bob have finished 2 books in common.\n\n**Dune**\n**Project Hail Mary** - Alice ★★★★☆, Bob not rated"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books compare",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-17",
+              "payload": {
+                "content": "Usage: !books compare @member [@member]"
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books compare <@U3>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-18",
+              "payload": {
+                "content": "Carol hasn't linked a book service yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books link",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-19",
+              "payload": {
+                "content": "Link with the book service's own command: !ab link or !gr link."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books unlink",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-20",
+              "payload": {
+                "content": "Link with the book service's own command: !ab unlink or !gr unlink."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-21",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "📚 Books",
+                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard or compare`\nthe same book commands across every linked book service; !books help lists them (books role)"
+                      },
+                      {
+                        "name": "📚 Books (continued)",
+                        "value": "`!audiobookshelf link USERNAME`\nlink your Audiobookshelf account so I post when you finish a book; !audiobookshelf help lists every command and !ab works too (books role)\n\n`!audiobookshelf unlink`\nremove your Audiobookshelf link\n\n`!audiobookshelf nowplaying`\nshow what you or @member are listening to\n\n`!audiobookshelf finished`\nrecently finished audiobooks for you or @member\n\n`!audiobookshelf stats`\nbooks finished and hours listened for you or @member\n\n`!audiobookshelf leaderboard`\nrank members by hours listened, week, month or year\n\n`!audiobookshelf who BOOK`\nshow who here has listened to a book\n\n`!audiobookshelf search BOOK`\nlook a book up in the library\n\n`!audiobookshelf new`\nthe newest books in the library\n\n`!audiobookshelf compare`\naudiobooks you and @member have both finished"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-umbrella-goodreads-only": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Books commands",
+                    "description": "`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "footer": {
+                      "text": "Book services: Goodreads"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books currently",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice is reading",
+                    "description": "**Children of Time** by Adrian Tchaikovsky (Goodreads)\n**Piranesi** by Susanna Clarke (Goodreads)",
+                    "thumbnail": {
+                      "url": "https://img.test/31-l.jpg"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books who dune",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Who has read Dune",
+                    "description": "Alice - ★★★★★\nBob - ★★★☆☆"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books leaderboard 2025",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2025",
+                    "description": "🥇 **Alice** - 2 books\n🥈 **Bob** - 1 book"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books compare <@U2>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading overlap",
+                    "description": "Alice and Bob have finished 1 book in common.\n\n**Dune** - Alice ★★★★★, Bob ★★★☆☆"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books link",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "content": "Link with the book service's own command: !gr link."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
     "check-channel-fetch-failure": {
       "steps": [
         {
@@ -4604,6 +7562,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -4627,6 +7589,7 @@
               "key": "cronExpressions",
               "value": [
                 "0 15 * * *",
+                "*/30 * * * *",
                 "* * * * *",
                 "*/30 * * * *"
               ]
@@ -4711,6 +7674,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -4811,6 +7778,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -5354,6 +8325,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -5579,6 +8554,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -6169,6 +9148,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -6292,6 +9275,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -8841,6 +11828,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -8961,6 +11952,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -9146,6 +12141,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -9275,6 +12274,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -9455,6 +12458,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -9594,6 +12601,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -12078,6 +15089,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -12295,6 +15310,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -12469,6 +15488,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -12614,6 +15637,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -12879,6 +15906,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -14512,6 +17543,10 @@
               "options": null
             },
             {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
               "cron": "* * * * *",
               "options": null
             },
@@ -14612,6 +17647,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
@@ -14996,7 +18035,11 @@
                       },
                       {
                         "name": "📚 Books",
-                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year"
+                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard or compare`\nthe same book commands across every linked book service; !books help lists them (books role)"
+                      },
+                      {
+                        "name": "📚 Books (continued)",
+                        "value": "`!audiobookshelf link USERNAME`\nlink your Audiobookshelf account so I post when you finish a book; !audiobookshelf help lists every command and !ab works too (books role)\n\n`!audiobookshelf unlink`\nremove your Audiobookshelf link\n\n`!audiobookshelf nowplaying`\nshow what you or @member are listening to\n\n`!audiobookshelf finished`\nrecently finished audiobooks for you or @member\n\n`!audiobookshelf stats`\nbooks finished and hours listened for you or @member\n\n`!audiobookshelf leaderboard`\nrank members by hours listened, week, month or year\n\n`!audiobookshelf who BOOK`\nshow who here has listened to a book\n\n`!audiobookshelf search BOOK`\nlook a book up in the library\n\n`!audiobookshelf new`\nthe newest books in the library\n\n`!audiobookshelf compare`\naudiobooks you and @member have both finished"
                       },
                       {
                         "name": "🧠 Memory",
@@ -27503,6 +30546,10 @@
           "registration": [
             {
               "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
               "options": null
             },
             {
