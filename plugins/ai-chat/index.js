@@ -28,7 +28,7 @@ const MAX_MEMORY_LENGTH = 300;
 
 let ctx = null;
 
-const SECRET_NAMES = "DISCORD_BOT_TOKEN|ITAD_API_KEY|STEAM_API_KEY|TAVILY_API_KEY|LINODE_API_KEY|ROOT_PASS|DOCKER_[A-Z_]+|OLLAMA_[A-Z_]+";
+const SECRET_NAMES = "DISCORD_BOT_TOKEN|ITAD_API_KEY|STEAM_API_KEY|TAVILY_API_KEY|LINODE_API_KEY|ROOT_PASS|DOCKER_[A-Z_]+|OLLAMA_[A-Z_]+|ABS_[A-Z_]+";
 const SECRET_PROBE = new RegExp(
   "\\.env\\b|(^|[^a-z0-9_])env($|[^a-z0-9_])|environment\\s+(variables?|vars?|file)|process\\.env|printenv|\\b(" + SECRET_NAMES + ")\\b|" +
   "\\b(show|print|dump|reveal|leak|tell|give|share|paste|display|read|cat|list|send)\\b.{0,40}\\b(secrets?|api[ _-]?keys?|tokens?|passwords?|credentials?|private keys?)\\b",

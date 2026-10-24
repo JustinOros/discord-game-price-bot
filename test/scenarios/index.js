@@ -10,6 +10,7 @@ module.exports = [].concat(
   require("./trivia"),
   require("./docker"),
   require("./books"),
+  require("./audiobookshelf"),
   require("./chat"),
   require("./extras")
 );

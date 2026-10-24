@@ -46,6 +46,7 @@ async function collectHelpEntries(plugins, message) {
         if (!checked.has(line.visible)) checked.set(line.visible, await line.visible(message));
         if (!checked.get(line.visible)) continue;
       }
+      if (entries.some((entry) => entry.order === line.order && entry.text === line.text)) continue;
       entries.push({ order: line.order, text: line.text });
     }
   }

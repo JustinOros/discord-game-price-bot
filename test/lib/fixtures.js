@@ -17,6 +17,10 @@ function makeResponse(status, body) {
     },
     text() {
       return Promise.resolve(text);
+    },
+    arrayBuffer() {
+      const buf = Buffer.from(text);
+      return Promise.resolve(buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength));
     }
   };
 }
@@ -47,6 +51,34 @@ function grItem(book) {
 function grXml(id, shelf, items) {
   return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\"><channel>\n" +
     "<title>Reader " + id + "'s bookshelf: " + shelf + "</title>\n" + items.map(grItem).join("") + "</channel></rss>\n";
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+const ABS_BOOKS = {
+  "li-1": { id: "li-1", addedAt: 1700000000000, media: { duration: 36000, metadata: { title: "Dune", authorName: "Frank Herbert" } } },
+  "li-2": { id: "li-2", addedAt: 1700000100000, media: { duration: 7200, metadata: { title: "Project Hail Mary", authorName: "Andy Weir" } } },
+  "li-3": { id: "li-3", addedAt: 1700000200000, media: { duration: 18000, metadata: { title: "Piranesi", authorName: "Susanna Clarke" } } }
+};
+
+function makeAbs() {
+  return {
+    users: [{ id: "u-1", username: "alicia" }, { id: "u-2", username: "bobby" }, { id: "u-3", username: "carla" }],
+    items: JSON.parse(JSON.stringify(ABS_BOOKS)),
+    progress: {
+      "u-1": [
+        { libraryItemId: "li-1", progress: 1, currentTime: 36000, duration: 36000, isFinished: true, finishedAt: Date.UTC(2026, 2, 3), lastUpdate: 1 },
+        { libraryItemId: "li-3", progress: 0.4, currentTime: 7200, duration: 18000, isFinished: false, finishedAt: 0, lastUpdate: 5 },
+        { libraryItemId: "ep-1", episodeId: "e1", progress: 0.5, isFinished: false, lastUpdate: 9 }
+      ],
+      "u-2": [
+        { libraryItemId: "li-1", progress: 1, currentTime: 36000, duration: 36000, isFinished: true, finishedAt: Date.UTC(2025, 5, 3), lastUpdate: 2 },
+        { libraryItemId: "li-2", progress: 1, currentTime: 7200, duration: 7200, isFinished: true, finishedAt: Date.UTC(2026, 4, 3), lastUpdate: 3 }
+      ],
+      "u-3": []
+    },
+    listeningDaysAgo: { "u-1": { 1: 7200, 3: 3600, 20: 7200 }, "u-2": { 2: 1800 }, "u-3": {} },
+    libraries: [{ id: "lib-1", name: "Audiobooks", mediaType: "book" }, { id: "lib-2", name: "Podcasts", mediaType: "podcast" }]
+  };
 }
 
 const GR_FEEDS = {
@@ -92,6 +124,7 @@ class Fixtures {
     this.extraSearch = {};
     this.shops = SHOPS;
     this.goodreads = { feeds: JSON.parse(JSON.stringify(GR_FEEDS)) };
+    this.abs = makeAbs();
   }
 
   on(matcher, responder, options) {
@@ -235,6 +268,7 @@ class Fixtures {
     if (p === "/api/chat") return this.routeOllama(req);
     if (host === "api.tavily.com") return this.routeTavily(req);
     if (host === "www.goodreads.com") return this.routeGoodreads(req);
+    if (host === "abs.test") return this.routeAbs(req);
     return { status: 404, body: "unmocked " + req.method + " " + req.url };
   }
 
@@ -449,6 +483,48 @@ class Fixtures {
       status: 200,
       body: { message: { role: "assistant", content: "Hey " + name + "! I see " + earlier + " earlier lines, " + facts + " shared facts, and context " + context + "." } }
     };
+  }
+
+  routeAbs(req) {
+    const auth = req.headers && (req.headers.Authorization || req.headers.authorization);
+    if (auth !== "Bearer tok-secret") return { status: 401, body: "unauthorized" };
+    const p = req.u.pathname;
+    const abs = this.abs;
+    if (p === "/api/users") return { status: 200, body: { users: abs.users } };
+    let m = p.match(/^\/api\/users\/([^/]+)\/listening-stats$/);
+    if (m) {
+      const spec = abs.listeningDaysAgo[m[1]];
+      if (!spec) return { status: 404, body: "no user" };
+      const days = {};
+      let total = 0;
+      Object.keys(spec).forEach((ago) => {
+        days[new Date(Date.now() - Number(ago) * DAY_MS).toISOString().slice(0, 10)] = spec[ago];
+        total += spec[ago];
+      });
+      return { status: 200, body: { days: days, totalTime: total } };
+    }
+    m = p.match(/^\/api\/users\/([^/]+)$/);
+    if (m) {
+      if (!abs.progress[m[1]]) return { status: 404, body: "no user" };
+      return { status: 200, body: { id: m[1], mediaProgress: abs.progress[m[1]] } };
+    }
+    m = p.match(/^\/api\/items\/([^/]+)\/cover$/);
+    if (m) return abs.items[m[1]] ? { status: 200, body: "JPEGDATA" } : { status: 404, body: "no cover" };
+    m = p.match(/^\/api\/items\/([^/]+)$/);
+    if (m) return abs.items[m[1]] ? { status: 200, body: abs.items[m[1]] } : { status: 404, body: "no item" };
+    if (p === "/api/libraries") return { status: 200, body: { libraries: abs.libraries } };
+    m = p.match(/^\/api\/libraries\/([^/]+)\/items$/);
+    if (m) {
+      const list = m[1] === "lib-1" ? Object.values(abs.items).sort((a, b) => b.addedAt - a.addedAt) : [];
+      return { status: 200, body: { results: list.slice(0, Number(req.query.get("limit")) || 10) } };
+    }
+    m = p.match(/^\/api\/libraries\/([^/]+)\/search$/);
+    if (m) {
+      const q = (req.query.get("q") || "").toLowerCase();
+      const hits = m[1] === "lib-1" ? Object.values(abs.items).filter((item) => item.media.metadata.title.toLowerCase().includes(q)) : [];
+      return { status: 200, body: { book: hits.map((item) => ({ libraryItem: item })) } };
+    }
+    return { status: 404, body: "unmocked abs path" };
   }
 
   routeGoodreads(req) {

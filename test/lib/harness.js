@@ -29,7 +29,7 @@ const BASE_ENV = {
   DOCKER_PROTECTED_CONTAINERS: "Plex-Media-Server",
   DOTENV_CONFIG_QUIET: "true"
 };
-const CLEARED_ENV = ["ITAD_COUNTRY", "OLLAMA_URL", "OLLAMA_MODEL", "DOTENV_CONFIG_PATH", "DOTENV_CONFIG_DEBUG"];
+const CLEARED_ENV = ["ITAD_COUNTRY", "OLLAMA_URL", "OLLAMA_MODEL", "DOTENV_CONFIG_PATH", "DOTENV_CONFIG_DEBUG", "DISABLED_PLUGINS"];
 
 function buildWorld(rec, clock) {
   const world = new World(rec, clock);

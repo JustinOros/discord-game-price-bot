@@ -5253,9 +5253,9 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
-                      "text": "Book services: Audiobookshelf, Goodreads"
+                      "text": "Link a service first, then these commands include your books."
                     }
                   }
                 ]
@@ -5813,9 +5813,9 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
-                      "text": "Book services: Goodreads"
+                      "text": "Link a service first, then these commands include your books."
                     }
                   }
                 ]

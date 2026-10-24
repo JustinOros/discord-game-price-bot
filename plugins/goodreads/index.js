@@ -430,6 +430,8 @@ async function checkFeeds() {
 const bookSource = {
   name: "Goodreads",
   config: loadConfig,
+  helpCommand: "!gr help",
+  about: "read books and shelves",
   isLinked(discordId) {
     return !!loadLinks()[discordId];
   },

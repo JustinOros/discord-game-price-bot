@@ -12,3 +12,5 @@ bot.error.log
 .DS_Store
 knowledge/
 goodreads.json
+audiobookshelf.json
+plugins/audiobookshelf/.env
