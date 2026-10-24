@@ -371,6 +371,7 @@ function findAnnounceChannel(guild, config) {
 }
 
 async function announceFinished(userId, item) {
+  if (!books.claimAnnouncement(userId, item.title)) return;
   const config = loadConfig();
   for (const guild of Array.from(ctx.client.guilds.cache.values())) {
     const member = guild.members.cache.get(userId);
