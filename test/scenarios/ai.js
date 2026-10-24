@@ -153,6 +153,61 @@ module.exports = [
     await ctx.say("alice", "!wiki where is the key card");
   }, { env: { TAVILY_API_KEY: null } }),
 
+  sc("game-chat-identifies-game-and-follows-up", async (ctx) => {
+    await ctx.say("alice", "bmo what is a good build for elden ring");
+    await ctx.advance(SIX);
+    await ctx.say("alice", "bmo what weapons should i use", { label: "alice: follow-up with no game name reuses the last game" });
+    await ctx.advance(SIX);
+    await ctx.say("bob", "bmo what weapons should i use", { label: "bob: no earlier game so no lookup" });
+    await ctx.advance(SIX);
+    await ctx.say("alice", "bmo i love games", { label: "alice: casual chat does not look anything up" });
+  }),
+
+  sc("game-chat-known-title-skips-model-lookup", async (ctx) => {
+    await ctx.say("alice", "bmo how do i beat the boss in the forest");
+    await ctx.advance(SIX);
+    await ctx.say("alice", "bmo where is the key in avowed");
+  }),
+
+  sc("game-chat-pack-cache-and-expiry", async (ctx) => {
+    await ctx.say("alice", "bmo best build for elden ring");
+    await ctx.advance(SIX);
+    await ctx.say("bob", "bmo best weapon in elden ring", { label: "bob: same game reuses the cached background" });
+    await ctx.advance(3 * 24 * 60 * 60 * 1000);
+    await ctx.say("alice", "bmo best build for elden ring again", { label: "alice: background older than three days is rebuilt" });
+  }),
+
+  sc("game-chat-lookup-failures", async (ctx) => {
+    const cases = [
+      "bmo best build [[game-throw]]",
+      "bmo best build [[game-500]]",
+      "bmo best build [[game-nonsense]]",
+      "bmo best build [[game-long]]",
+      "bmo best build for elden ring [[tavily-none]]",
+      "bmo best build for elden ring [[tavily-500]]"
+    ];
+    for (const text of cases) {
+      await ctx.say("alice", text);
+      await ctx.advance(SIX);
+    }
+  }),
+
+  sc("game-chat-model-down-falls-back-to-search-answer", async (ctx) => {
+    await ctx.say("alice", "bmo best build for elden ring [[tavily-answer]] [[ollama-500]]");
+    await ctx.advance(SIX);
+    await ctx.say("alice", "bmo best build for elden ring [[ollama-500]] [[tavily-none]]", { label: "alice: no search answer means no reply" });
+  }),
+
+  sc("game-wiki-identifies-game", async (ctx) => {
+    await ctx.say("alice", "!wiki best weapon in elden ring");
+    await ctx.advance(SIX);
+    await ctx.say("alice", "!wiki and the best armor", { label: "alice: !wiki follow-up reuses the last game" });
+  }),
+
+  sc("game-lookup-disabled-without-web-search-key", async (ctx) => {
+    await ctx.say("alice", "bmo best build for elden ring");
+  }, { env: { TAVILY_API_KEY: null } }),
+
   sc("wiki-maps-file-invalid", async (ctx) => {
     await ctx.say("alice", "!wiki where can i find the key in avowed [[tavily-answer]]");
   }, { files: { "maps.json": "{not json" } }),

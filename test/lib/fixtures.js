@@ -326,6 +326,20 @@ class Fixtures {
       return { status: 200, body: { message: { role: "assistant", content: answer } } };
     }
 
+    if (typeof first === "string" && first.startsWith("You identify which PC video game")) {
+      const asked = String(messages[messages.length - 1].content).toLowerCase();
+      if (asked.includes("[[game-throw]]")) throw new Error("connect ECONNREFUSED 127.0.0.1:11434");
+      if (asked.includes("[[game-500]]")) return { status: 500, body: "ollama exploded" };
+      const table = [
+        ["elden ring", "Elden Ring"],
+        ["dead by daylight", "Dead by Daylight"],
+        ["[[game-nonsense]]", "Zzzz Not A Real Game Qqqq"],
+        ["[[game-long]]", "x".repeat(80)]
+      ];
+      const hit = table.find((row) => asked.includes(row[0]));
+      return { status: 200, body: { message: { role: "assistant", content: hit ? hit[1] : "NONE" } } };
+    }
+
     const last = messages.length > 0 ? String(messages[messages.length - 1].content) : "";
     if (last.includes("[[ollama-500]]")) return { status: 500, body: "ollama exploded" };
     if (last.includes("[[ollama-throw]]")) throw new Error("connect ECONNREFUSED 127.0.0.1:11434");

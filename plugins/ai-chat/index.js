@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 const { EmbedBuilder } = require("discord.js");
+const { createGameKnowledge } = require("./gameknowledge");
 
 const AI_ENABLED = process.env.AI_ENABLED !== "false";
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
@@ -16,6 +17,11 @@ const MAPS_PATH = path.join(ROOT, "maps.json");
 const README_PATH = path.join(ROOT, "README.md");
 const PERSONALITY_PATH = path.join(ROOT, "personality.yaml");
 const MEMORY_PATH = path.join(ROOT, "memory.yaml");
+const KNOWLEDGE_DIR = path.join(ROOT, "knowledge");
+const GAME_ANSWER_MAX_SENTENCES = 5;
+const GAME_ANSWER_MAX_TOKENS = 400;
+const GAME_CONTEXT_WINDOW = 8192;
+const SHORT_COMPLETION_TIMEOUT_MS = 15000;
 const MAX_MEMORIES_PER_USER = 20;
 const MAX_MEMORY_LENGTH = 300;
 
@@ -58,6 +64,7 @@ function loadPersonality() {
 
 const PERSONALITY = loadPersonality();
 const TRIGGER_MENTION = new RegExp("\\b" + escapeRegex(PERSONALITY.trigger) + "\\b", "i");
+const TRIGGER_MENTION_GLOBAL = new RegExp("\\b" + escapeRegex(PERSONALITY.trigger) + "\\b", "ig");
 
 function stripHtml(text) {
   return (text || "").replace(/<\/?[^>]+(>|$)/g, "");
@@ -105,7 +112,8 @@ function appendMapSearch(url, term) {
   return url + separator + "search=" + encodeURIComponent(term);
 }
 
-async function searchWeb(query) {
+async function searchWeb(query, options) {
+  const includeAnswer = !(options && options.includeAnswer === false);
   if (!WEB_SEARCH_ENABLED || !query) return { answer: null, results: [] };
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), WEB_SEARCH_TIMEOUT_MS);
@@ -120,7 +128,7 @@ async function searchWeb(query) {
         query: query,
         max_results: WEB_SEARCH_RESULT_COUNT,
         search_depth: "advanced",
-        include_answer: true,
+        include_answer: includeAnswer,
         include_domains: ["mapgenie.io"],
         include_domains_mode: "boost"
       }),
@@ -258,7 +266,7 @@ function stripStageDirections(text) {
     .trim();
 }
 
-async function askAI(question, history, displayName, allFacts, searchResults) {
+async function askAI(question, history, displayName, allFacts, searchResults, gameContext) {
   let systemContent = AI_SYSTEM_PROMPT +
     "\n\nYou are talking with " + displayName + " right now. Address them as " + displayName + " or naturally - " +
     "never by any other name, and never describe them using a label like \"Discord member.\"";
@@ -271,10 +279,20 @@ async function askAI(question, history, displayName, allFacts, searchResults) {
       allFacts.map((f) => "- " + f).join("\n");
   }
 
+  if (gameContext && gameContext.material) {
+    systemContent += "\n\nThis question is about the video game " + gameContext.title + ". For anything specific to " +
+      "the game - names of perks, characters, killers, items, locations, numbers, and strategies - use ONLY the " +
+      "reference material below, and never invent or guess names or details. Never mix in things from other games, " +
+      "comics, or movies. If the material does not cover part of what was asked, say you are not sure about that " +
+      "part instead of making something up. Give a complete, useful answer in up to five short sentences, still in " +
+      "character, with no lists.\n\nReference material about " + gameContext.title + ":\n" + gameContext.material;
+  }
+
   const messages = [{ role: "system", content: systemContent }, ...history];
 
-  const hasAnswer = searchResults && searchResults.answer;
-  const hasResults = searchResults && searchResults.results && searchResults.results.length > 0;
+  const inGameMode = !!(gameContext && gameContext.material);
+  const hasAnswer = !inGameMode && searchResults && searchResults.answer;
+  const hasResults = !inGameMode && searchResults && searchResults.results && searchResults.results.length > 0;
 
   if (hasAnswer) {
     messages.push({
@@ -311,7 +329,9 @@ async function askAI(question, history, displayName, allFacts, searchResults) {
     body: JSON.stringify({
       model: OLLAMA_MODEL,
       stream: false,
-      options: { num_predict: 200 },
+      options: inGameMode
+        ? { num_predict: GAME_ANSWER_MAX_TOKENS, num_ctx: GAME_CONTEXT_WINDOW, temperature: 0.3 }
+        : { num_predict: 200 },
       messages: messages
     })
   });
@@ -321,8 +341,66 @@ async function askAI(question, history, displayName, allFacts, searchResults) {
   }
   const data = await res.json();
   const reply = data.message && data.message.content;
-  return reply ? capToSentences(trimIncompleteSentence(stripStageDirections(reply)), AI_MAX_SENTENCES) : null;
+  return reply
+    ? capToSentences(trimIncompleteSentence(stripStageDirections(reply)), inGameMode ? GAME_ANSWER_MAX_SENTENCES : AI_MAX_SENTENCES)
+    : null;
 }
+
+async function completeShort(system, user, maxTokens) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), SHORT_COMPLETION_TIMEOUT_MS);
+  try {
+    const res = await fetch(OLLAMA_URL + "/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        stream: false,
+        options: { num_predict: maxTokens, temperature: 0 },
+        messages: [{ role: "system", content: system }, { role: "user", content: user }]
+      }),
+      signal: controller.signal
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.message && data.message.content ? data.message.content.trim() : null;
+  } catch (err) {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function listKnownTitles() {
+  const titles = Object.keys(GAME_MAPS);
+  try {
+    Object.values(ctx.loadRoles()).forEach((entry) => {
+      if (entry && entry.title) titles.push(entry.title);
+    });
+  } catch (err) {
+    console.error("Could not read game roles for known titles:", err.message);
+  }
+  try {
+    Object.values(ctx.loadOwned()).forEach((list) => {
+      (list || []).forEach((game) => {
+        if (game && game.title) titles.push(game.title);
+      });
+    });
+  } catch (err) {
+    console.error("Could not read owned games for known titles:", err.message);
+  }
+  return titles;
+}
+
+const gameKnowledge = createGameKnowledge({
+  cacheDir: KNOWLEDGE_DIR,
+  normalizeTitle: (text) => ctx.normalizeTitle(text),
+  completeShort: completeShort,
+  searchWeb: searchWeb,
+  searchGame: (name) => ctx.searchGame(name),
+  pickSearchMatch: (query, results) => ctx.pickSearchMatch(query, results),
+  listKnownTitles: listKnownTitles
+});
 
 
 function loadMemory() {
@@ -441,10 +519,24 @@ async function handleWiki(message, query) {
       message.author.globalName || message.author.username;
     const memory = loadMemory();
     const allFacts = Object.values(memory).reduce((acc, list) => acc.concat(list || []), []);
-    const searchResults = await searchWeb(query);
-    const aiReply = searchResults && searchResults.answer
-      ? capToSentences(searchResults.answer.trim(), AI_MAX_SENTENCES)
-      : await askAI(query, history, displayName, allFacts, searchResults);
+    const gameContext = WEB_SEARCH_ENABLED
+      ? await gameKnowledge.buildContext(message.author.id, query, true, null)
+      : null;
+    const searchResults = gameContext ? null : await searchWeb(query);
+    let aiReply;
+    if (gameContext) {
+      try {
+        aiReply = await askAI(query, history, displayName, allFacts, null, gameContext);
+      } catch (err) {
+        if (!gameContext.answer) throw err;
+        console.error(PERSONALITY.name + " wiki AI failed, using the search answer:", err.message);
+        aiReply = capToSentences(gameContext.answer.trim(), GAME_ANSWER_MAX_SENTENCES);
+      }
+    } else {
+      aiReply = searchResults && searchResults.answer
+        ? capToSentences(searchResults.answer.trim(), AI_MAX_SENTENCES)
+        : await askAI(query, history, displayName, allFacts, searchResults);
+    }
     if (aiReply) {
       const knownMap = findKnownGameMap(query);
       const mapLink = knownMap ? appendMapSearch(knownMap.url, extractMapSearchTerm(query, knownMap.name)) : null;
@@ -470,7 +562,17 @@ async function onChat(message, content) {
         message.author.globalName || message.author.username;
       const memory = loadMemory();
       const allFacts = Object.values(memory).reduce((acc, list) => acc.concat(list || []), []);
-      const aiReply = await askAI(content, history, displayName, allFacts, null);
+      const gameContext = WEB_SEARCH_ENABLED
+        ? await gameKnowledge.buildContext(message.author.id, content, false, TRIGGER_MENTION_GLOBAL)
+        : null;
+      let aiReply;
+      try {
+        aiReply = await askAI(content, history, displayName, allFacts, null, gameContext);
+      } catch (err) {
+        if (!(gameContext && gameContext.answer)) throw err;
+        console.error(PERSONALITY.name + " AI reply failed, using the search answer:", err.message);
+        aiReply = capToSentences(gameContext.answer.trim(), GAME_ANSWER_MAX_SENTENCES);
+      }
       if (aiReply) {
         await message.reply(aiReply);
         rememberAiExchange(message.author.id, content, aiReply);

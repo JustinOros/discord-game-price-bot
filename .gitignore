@@ -10,3 +10,4 @@ roles.yaml
 bot.log
 bot.error.log
 .DS_Store
+knowledge/
