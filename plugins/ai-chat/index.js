@@ -258,6 +258,19 @@ function capToSentences(text, maxSentences) {
 
 const STAGE_DIRECTION_PHRASES = /\b(whirrs?(\s+and\s+beeps?)?|beeps?(\s+and\s+whirrs?)?|pauses?\s+for\s+a\s+moment|clears?\s+(its|his|her)\s+throat|chuckles?(\s+softly)?|sighs?(\s+(heavily|deeply))?|nods?(\s+slowly)?|tilts?\s+(its|his|her)\s+head|shrugs?)\b[.,]?\s*/gi;
 
+const SELF_NAME = escapeRegex(PERSONALITY.name);
+const SELF_TRAILING = new RegExp(",\\s*" + SELF_NAME + "(?=\\s*[.!?]|\\s*$)", "gi");
+const SELF_MIDDLE = new RegExp(",\\s*" + SELF_NAME + "\\s*,", "gi");
+const SELF_LEADING = new RegExp("(^|[.!?]\\s+)" + SELF_NAME + "\\s*,\\s*(\\w)", "gi");
+
+function stripSelfAddress(text) {
+  return text
+    .replace(SELF_MIDDLE, ",")
+    .replace(SELF_TRAILING, "")
+    .replace(SELF_LEADING, (match, lead, next) => lead + next.toUpperCase())
+    .trim();
+}
+
 function stripStageDirections(text) {
   return text
     .replace(/\*[^*]*\*/g, " ")
@@ -342,7 +355,7 @@ async function askAI(question, history, displayName, allFacts, searchResults, ga
   const data = await res.json();
   const reply = data.message && data.message.content;
   return reply
-    ? capToSentences(trimIncompleteSentence(stripStageDirections(reply)), inGameMode ? GAME_ANSWER_MAX_SENTENCES : AI_MAX_SENTENCES)
+    ? capToSentences(trimIncompleteSentence(stripSelfAddress(stripStageDirections(reply))), inGameMode ? GAME_ANSWER_MAX_SENTENCES : AI_MAX_SENTENCES)
     : null;
 }
 

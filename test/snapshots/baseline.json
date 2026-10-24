@@ -2691,6 +2691,104 @@
       "pendingTimers": 0,
       "files": {}
     },
+    "ai-strips-its-own-name-used-as-address": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: bmo [[selfname]]",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "http://localhost:11434/api/chat",
+              "hasSignal": false,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "model": "llama3.2",
+                "stream": false,
+                "options": {
+                  "num_predict": 200
+                },
+                "messages": [
+                  {
+                    "role": "system",
+                    "readmeIncluded": true,
+                    "headLength": 3354,
+                    "headSha1": "6ac3fe8aca2e22893f2b490e2d1f8a8e01ca7747",
+                    "tail": "\n\nYou are talking with Alice right now. Address them as Alice or naturally - never by any other name, and never describe them using a label like \"Discord member.\"\n\nPermanent facts Discord members have taught you with !remember - shared knowledge across everyone here, not private to whoever said them. Some are about the person who said them, some are about someone else they mentioned by name - use whichever ones are relevant, including when someone asks you what you know about a specific named person:\n- my name is Alice\n- I like roguelikes\n- Finn is the best friend"
+                  },
+                  {
+                    "role": "user",
+                    "content": "bmo [[selfname]]"
+                  }
+                ]
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Oh my glob, I can't help with that. Here is another line. Well, this is the last one."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
     "ai-system-prompt-full-text": {
       "steps": [
         {

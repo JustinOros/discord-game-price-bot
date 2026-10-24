@@ -44,6 +44,10 @@ module.exports = [
     await ctx.say("alice", "bmo after the ttl");
   }),
 
+  sc("ai-strips-its-own-name-used-as-address", async (ctx) => {
+    await ctx.say("alice", "bmo [[selfname]]");
+  }),
+
   sc("ai-reply-to-bot", async (ctx) => {
     await ctx.say("alice", "bmo hello there");
     const botMessage = ctx.lastSent();

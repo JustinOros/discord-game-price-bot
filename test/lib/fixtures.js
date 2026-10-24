@@ -351,6 +351,9 @@ class Fixtures {
         body: { message: { role: "assistant", content: "*whirrs* Sure thing, buddy. Beep boop. Here is a second line! Is this the third one? A fourth sentence should be cut." } }
       };
     }
+    if (last.includes("[[selfname]]")) {
+      return { status: 200, body: { message: { role: "assistant", content: "Oh my glob, I can't help with that, BMO. BMO, here is another line. Well, BMO, this is the last one. I am BMO and that stays." } } };
+    }
     if (last.includes("[[incomplete]]")) {
       return { status: 200, body: { message: { role: "assistant", content: "I love that game so much. It is really fun and the" } } };
     }
