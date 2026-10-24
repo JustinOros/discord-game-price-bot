@@ -344,15 +344,78 @@ async function findOwnerIds(gameId, appid) {
 const HELP_LINES = [
 ];
 
+const HELP_COLOR = 0x5fd4b0;
+const HELP_FIELD_MAX = 1000;
+const HELP_CATEGORIES = [
+  { name: "💰 Prices & Watching", ranges: [[10, 59], [200, 219]] },
+  { name: "📊 Game Info", ranges: [[60, 89], [240, 259]] },
+  { name: "🕹️ Ownership", ranges: [[90, 139]] },
+  { name: "🏷️ Game Roles", ranges: [[140, 160]] },
+  { name: "🖥️ Game Servers", ranges: [[161, 169]] },
+  { name: "🧠 Memory", ranges: [[170, 199]] },
+  { name: "🎲 Trivia", ranges: [[220, 239]] }
+];
+const HELP_OTHER_CATEGORY = "✨ More";
+
+function helpCategoryFor(order) {
+  const match = HELP_CATEGORIES.find((category) => category.ranges.some((range) => order >= range[0] && order <= range[1]));
+  return match ? match.name : HELP_OTHER_CATEGORY;
+}
+
+function formatHelpEntry(text) {
+  const split = text.indexOf(" - ");
+  if (split === -1) return "`" + text + "`";
+  return "`" + text.slice(0, split) + "`\n" + text.slice(split + 3);
+}
+
+function buildHelpFields(entries) {
+  const grouped = new Map();
+  entries.forEach((entry) => {
+    const name = helpCategoryFor(entry.order);
+    if (!grouped.has(name)) grouped.set(name, []);
+    grouped.get(name).push(formatHelpEntry(entry.text));
+  });
+
+  const names = HELP_CATEGORIES.map((category) => category.name).concat(HELP_OTHER_CATEGORY);
+  const fields = [];
+  names.filter((name) => grouped.has(name)).forEach((name) => {
+    let current = [];
+    let length = 0;
+    let part = 0;
+    const flush = () => {
+      if (current.length === 0) return;
+      fields.push({ name: part === 0 ? name : name + " (continued)", value: current.join("\n\n") });
+      part++;
+      current = [];
+      length = 0;
+    };
+    grouped.get(name).forEach((line) => {
+      if (length + line.length > HELP_FIELD_MAX) flush();
+      current.push(line);
+      length += line.length + 2;
+    });
+    flush();
+  });
+  return fields;
+}
+
 async function handleHelp(message, note) {
   const entries = HELP_LINES.concat(await collectHelpEntries(plugins, message));
   entries.sort((a, b) => a.order - b.order);
-  const description = "Commands:\n" + entries.map((entry) => entry.text).join("\n") + (note ? "\n\n" + note : "");
-  const embed = new EmbedBuilder().setDescription(description);
+
+  const botName = (client.user && client.user.username) || "Bot";
+  const embed = new EmbedBuilder()
+    .setColor(HELP_COLOR)
+    .setTitle(botName + " Commands")
+    .setDescription("Here is everything I can do. GAME means any game title.")
+    .addFields(buildHelpFields(entries).slice(0, 25));
+
+  if (client.user && typeof client.user.displayAvatarURL === "function") {
+    embed.setThumbnail(client.user.displayAvatarURL());
+  }
+  if (note) embed.setFooter({ text: note });
   await message.reply({ embeds: [embed] });
 }
-
-
 
 const dmGreetedUsers = new Set();
 

@@ -7793,7 +7793,42 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!docker ps - list containers on the game server (requires the Docker role)\n!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer\n\nHeads up: these commands only work in a text channel on your server, not here in DMs."
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ],
+                    "footer": {
+                      "text": "Heads up: these commands only work in a text channel on your server, not here in DMs."
+                    }
                   }
                 ]
               }
@@ -7821,7 +7856,42 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!docker ps - list containers on the game server (requires the Docker role)\n!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer\n\nHeads up: these commands only work in a text channel on your server, not here in DMs."
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ],
+                    "footer": {
+                      "text": "Heads up: these commands only work in a text channel on your server, not here in DMs."
+                    }
                   }
                 ]
               }
@@ -7849,7 +7919,38 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer\n\nHeads up: these commands only work in a text channel on your server, not here in DMs."
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ],
+                    "footer": {
+                      "text": "Heads up: these commands only work in a text channel on your server, not here in DMs."
+                    }
                   }
                 ]
               }
@@ -8206,7 +8307,35 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
                   }
                 ]
               }
@@ -11967,7 +12096,42 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!docker ps - list containers on the game server (requires the Docker role)\n!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer\n\nHeads up: these commands only work in a text channel on your server, not here in DMs."
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ],
+                    "footer": {
+                      "text": "Heads up: these commands only work in a text channel on your server, not here in DMs."
+                    }
                   }
                 ]
               }
@@ -12002,7 +12166,38 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer\n\nHeads up: these commands only work in a text channel on your server, not here in DMs."
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ],
+                    "footer": {
+                      "text": "Heads up: these commands only work in a text channel on your server, not here in DMs."
+                    }
                   }
                 ]
               }
@@ -12030,7 +12225,38 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer\n\nHeads up: these commands only work in a text channel on your server, not here in DMs."
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ],
+                    "footer": {
+                      "text": "Heads up: these commands only work in a text channel on your server, not here in DMs."
+                    }
                   }
                 ]
               }
@@ -12101,7 +12327,39 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!docker ps - list containers on the game server (requires the Docker role)\n!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
                   }
                 ]
               }
@@ -12117,7 +12375,35 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
                   }
                 ]
               }
@@ -12133,7 +12419,35 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
                   }
                 ]
               }
@@ -12204,7 +12518,39 @@
               "payload": {
                 "embeds": [
                   {
-                    "description": "Commands:\n!watch GAME - start watching a game for sales\n!remove GAME - stop watching a game (!unwatch also works)\n!list - show everything being watched\n!price GAME - check a game's current best price without watching it\n!prices GAME - list every store the game is on sale at, cheapest first\n!history GAME - show every recorded sale over the past 12 months, with date and price\n!predict GAME - guess when it might go on sale next, based on its full sale history\n!info GAME - show price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n!own GAME - mark a game as owned by you\n!unown GAME - remove a game from your owned list\n!my-steam-profile LINK - link your Steam profile so !info can count games you own automatically\n!who GAME - list who has confirmed they own a game\n!popular - list games owned by more than one member, most owned first\n!roles - list every game role and how many members have each\n!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n!unroll GAME - leave a game's role\n!docker ps - list containers on the game server (requires the Docker role)\n!docker restart CONTAINER NAME - restart a container by name (requires the Docker role, some containers may be protected)\n!remember SOMETHING - permanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n!forget SOMETHING - make me forget something you had me remember (must match exactly), or !forget all\n!memories - show everything I remember about you\n!check - run the sale check right now instead of waiting for the daily run\n!shops - list every store I check prices at\n!trivia - video game trivia, multiple choice, first correct answer in chat wins 100 points\n!score - show the top 10 members by trivia points\n!wiki QUESTION - ask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
                   }
                 ]
               }
