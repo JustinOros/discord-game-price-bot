@@ -1292,6 +1292,674 @@
         }
       }
     },
+    "abs-finished-card-shows-goodreads-rating": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-3",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-3/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Project Hail Mary",
+                    "description": "by Andy Weir\n2h 00m listened\n★★★★☆",
+                    "url": "https://abs.test/item/li-2",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Bob finished Piranesi",
+                    "description": "by Susanna Clarke\n5h 00m listened",
+                    "url": "https://abs.test/item/li-3",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "announced.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1|project hail mary\": 1791288000000,",
+            "  \"U2|piranesi\": 1791288000000",
+            "}",
+            ""
+          ]
+        },
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\",",
+            "        \"li-2\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\",",
+            "        \"li-3\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 1700000200000",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "abs-finished-card-with-expanded-item-shape": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-7",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-7/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/libraries/lib-1/items?sort=addedAt&desc=1&limit=100&page=0",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-7/cover",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-7/cover",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice finished Red Rising",
+                    "description": "by Pierce Brown\n3h 00m listened",
+                    "url": "https://abs.test/item/li-7",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "New in the library: Red Rising",
+                    "description": "by Pierce Brown\n3h 00m",
+                    "url": "https://abs.test/item/li-7",
+                    "thumbnail": {
+                      "url": "attachment://cover.jpg"
+                    }
+                  }
+                ],
+                "files": [
+                  {
+                    "attachment": {
+                      "type": "Buffer",
+                      "data": [
+                        74,
+                        80,
+                        69,
+                        71,
+                        68,
+                        65,
+                        84,
+                        65
+                      ]
+                    },
+                    "name": "cover.jpg"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "announced.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1|red rising\": 1791288000000",
+            "}",
+            ""
+          ]
+        },
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\",",
+            "        \"li-7\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 1700000300000",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
     "abs-leaderboard": {
       "steps": [
         {

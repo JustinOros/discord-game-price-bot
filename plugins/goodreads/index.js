@@ -457,6 +457,15 @@ const bookSource = {
       pages: item.pages
     }));
   },
+  async rating(discordId, title) {
+    const link = loadLinks()[discordId];
+    if (!link) return 0;
+    const result = await shelfFor(link, "read");
+    if (!result.ok) return 0;
+    const wanted = books.bookKey(title);
+    const hit = result.items.find((item) => item.rating > 0 && books.bookKey(item.title) === wanted);
+    return hit ? hit.rating : 0;
+  },
   async find(discordId, query) {
     const link = loadLinks()[discordId];
     if (!link) return [];
