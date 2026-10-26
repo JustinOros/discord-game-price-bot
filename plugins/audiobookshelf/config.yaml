@@ -1,0 +1,4 @@
+roleName: books
+announceChannel: books
+pollMinutes: 30
+announceNewBooks: true

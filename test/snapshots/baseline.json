@@ -111,6 +111,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -462,6 +466,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -616,6 +624,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -1075,6 +1087,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -1446,6 +1462,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -1781,6 +1801,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -2560,7 +2584,7 @@
                       },
                       {
                         "name": "📚 Books",
-                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard or compare`\nthe same book commands across every linked book service; !books help lists them (books role)"
+                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard, compare, goal, recommend or recap`\nbook commands across every linked book service; !books help lists them (books role)"
                       },
                       {
                         "name": "📚 Books (continued)",
@@ -6302,6 +6326,2664 @@
       "pendingTimers": 0,
       "files": {}
     },
+    "books-goal-for-old-year-is-ignored": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "content": "You haven't set a reading goal for 2026. Use !books goal 30 to set one."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books leaderboard 2026",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2026",
+                    "description": "🥇 **Alice** - 1 book\n🥈 **Bob** - 1 book"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-goal-set-view-and-clear": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "You haven't set a reading goal for 2026. Use !books goal 30 to set one."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: goal before linking",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "Goal set: 30 books in 2026. Link a book service with !gr link or !ab link so I can count your books."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (2 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal 30",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice's 2026 reading goal",
+                    "description": "**1 of 30 books** (3%)\n░░░░░░░░░░\n22 books behind pace, 29 to go"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice's 2026 reading goal",
+                    "description": "**1 of 30 books** (3%)\n░░░░░░░░░░\n22 books behind pace, 29 to go"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !books goal <@U1>",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-9",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Alice's 2026 reading goal",
+                    "description": "**1 of 30 books** (3%)\n░░░░░░░░░░\n22 books behind pace, 29 to go"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !books goal <@U3>",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-10",
+              "payload": {
+                "content": "Carol hasn't set a reading goal for 2026."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !books goal 1",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-11",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Bob's 2026 reading goal",
+                    "description": "**1 of 1 book** (100%)\n▓▓▓▓▓▓▓▓▓▓\nGoal reached!"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !books goal 2",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-12",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Bob's 2026 reading goal",
+                    "description": "**1 of 2 books** (50%)\n▓▓▓▓▓░░░░░\nRight on pace, 1 to go"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal abc",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-13",
+              "payload": {
+                "content": "Usage: !books goal NUMBER, like !books goal 30. Use !books goal to see your progress or !books goal clear to remove it."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal 0",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-14",
+              "payload": {
+                "content": "Usage: !books goal NUMBER, like !books goal 30. Use !books goal to see your progress or !books goal clear to remove it."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal 5000",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-15",
+              "payload": {
+                "content": "Usage: !books goal NUMBER, like !books goal 30. Use !books goal to see your progress or !books goal clear to remove it."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books leaderboard 2026",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-16",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2026",
+                    "description": "🥇 **Alice** - 1 book (goal 30)\n🥈 **Bob** - 1 book (goal 2)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books leaderboard 2025",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-17",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading leaderboard 2025",
+                    "description": "🥇 **Alice** - 2 books\n🥈 **Bob** - 1 book"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal clear",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-18",
+              "payload": {
+                "content": "Cleared your 2026 reading goal."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal clear",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-19",
+              "payload": {
+                "content": "You don't have a reading goal for 2026."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books goal",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-20",
+              "payload": {
+                "content": "You haven't set a reading goal for 2026. Use !books goal 30 to set one."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        },
+        "books.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"goals\": {",
+            "    \"U2\": {",
+            "      \"year\": 2026,",
+            "      \"target\": 2",
+            "    }",
+            "  },",
+            "  \"lastRecap\": \"\"",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-monthly-recap-can-be-turned-off": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron 0 * * * *"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"s2\",",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-monthly-recap-first-run-records-without-posting": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "first run only records the month"
+        },
+        {
+          "label": "second tick does nothing"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        },
+        "books.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"goals\": {},",
+            "  \"lastRecap\": \"2026-09\"",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"s2\",",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-monthly-recap-posts-once": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "first hourly tick posts the recap",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1/listening-stats",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2/listening-stats",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-books",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading recap: September 2026",
+                    "description": "📚 **4 books finished** by 2 readers\n🏆 **Most books:** Alice, Bob (2 each)\n⭐ **Top rated:** Septembook One (4 average from 2 ratings)\n🎧 **5.5 hours listened**, top listener Alice (5.0 hours)\n🔥 **Longest streak:** Alice listened 4 days in a row"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "second tick does nothing"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        },
+        "books.json": {
+          "status": "modified",
+          "lines": [
+            "{",
+            "  \"goals\": {},",
+            "  \"lastRecap\": \"2026-09\"",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"s2\",",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-monthly-recap-waits-for-the-hour": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron 0 * * * *"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"s2\",",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-recap-command": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books recap",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1/listening-stats",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2/listening-stats",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Reading recap: September 2026",
+                    "description": "📚 **4 books finished** by 2 readers\n🏆 **Most books:** Alice, Bob (2 each)\n⭐ **Top rated:** Septembook One (4 average from 2 ratings)\n🎧 **5.5 hours listened**, top listener Alice (5.0 hours)\n🔥 **Longest streak:** Alice listened 4 days in a row"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books recap this",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1/listening-stats",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2/listening-stats",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "content": "Nothing to recap for October 2026 yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "erin: !books recap",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "content": "You need the books role to use !books."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-8",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Books commands",
+                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "footer": {
+                      "text": "Link a service first, then these commands include your books."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        },
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"s1\",",
+            "      \"s2\",",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-recap-nothing-to-report": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1003",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1003?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books recap",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "Nothing to recap for September 2026 yet."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1003\",",
+            "    \"key\": null,",
+            "    \"seen\": []",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-recommend": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: not linked",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Link a book service first, like !gr link or !ab link, so I know what you've read."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !gr link 1001",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Alice to Goodreads user 1001. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !gr link 1002",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Bob to Goodreads user 1002. I'll post when you finish a book (4 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "carol: !gr link 1003",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1003?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-general",
+              "payload": {
+                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books recommend",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1001?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Recommended for Alice",
+                    "description": "**Hyperion** by Dan Simmons\nliked by Bob ★★★★★, Carol ★★★★☆\n\n**Solaris** by Stanislaw Lem\nliked by Carol ★★★★★\n\n**Neuromancer** by William Gibson\nliked by Bob ★★★★☆",
+                    "footer": {
+                      "text": "Books other members rated 4 or 5 stars that you haven't read, weighted toward members with similar taste."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !books recommend",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/1002?shelf=currently-reading&per_page=100&sort=date_read&order=d",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-6",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 12035466,
+                    "title": "Recommended for Bob",
+                    "description": "**Solaris** by Stanislaw Lem\nliked by Carol ★★★★★\n\n**Project Hail Mary** by Andy Weir\nliked by Alice ★★★★☆",
+                    "footer": {
+                      "text": "Books other members rated 4 or 5 stars that you haven't read, weighted toward members with similar taste."
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "erin: !books recommend",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-7",
+              "payload": {
+                "content": "You need the books role to use !books."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "goodreads.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": \"1001\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"11\",",
+            "      \"12\",",
+            "      \"13\"",
+            "    ]",
+            "  },",
+            "  \"U2\": {",
+            "    \"userId\": \"1002\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"r2\",",
+            "      \"r1\",",
+            "      \"11\",",
+            "      \"14\"",
+            "    ]",
+            "  },",
+            "  \"U3\": {",
+            "    \"userId\": \"1003\",",
+            "    \"key\": null,",
+            "    \"seen\": [",
+            "      \"r1\",",
+            "      \"r3\",",
+            "      \"11\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "books-recommend-without-ratings": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !ab link alicia",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Audiobookshelf user alicia. I'll post when you finish a book (1 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "bob: !ab link bobby",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "Linked Bob to Audiobookshelf user bobby. I'll post when you finish a book (2 already finished, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !books recommend",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-1",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-3",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/users/u-2",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://abs.test/api/items/li-2",
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "content": "I don't have enough 4 and 5 star ratings from other members to recommend anything new yet. Ratings come from Goodreads."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "audiobookshelf.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"links\": {",
+            "    \"U1\": {",
+            "      \"userId\": \"u-1\",",
+            "      \"username\": \"alicia\",",
+            "      \"seen\": [",
+            "        \"li-1\"",
+            "      ]",
+            "    },",
+            "    \"U2\": {",
+            "      \"userId\": \"u-2\",",
+            "      \"username\": \"bobby\",",
+            "      \"seen\": [",
+            "        \"li-2\",",
+            "        \"li-1\"",
+            "      ]",
+            "    }",
+            "  },",
+            "  \"newestAddedAt\": 0",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
     "books-same-book-finished-on-both-services-posts-once": {
       "steps": [
         {
@@ -6431,6 +9113,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -7008,7 +9694,7 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
                       "text": "Link a service first, then these commands include your books."
                     }
@@ -7391,7 +10077,7 @@
                       },
                       {
                         "name": "📚 Books",
-                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard or compare`\nthe same book commands across every linked book service; !books help lists them (books role)"
+                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard, compare, goal, recommend or recap`\nbook commands across every linked book service; !books help lists them (books role)"
                       },
                       {
                         "name": "📚 Books (continued)",
@@ -7568,7 +10254,7 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "**Book services here**\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
                       "text": "Link a service first, then these commands include your books."
                     }
@@ -9327,6 +12013,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -9346,7 +12036,8 @@
                 "0 15 * * *",
                 "*/30 * * * *",
                 "* * * * *",
-                "*/30 * * * *"
+                "*/30 * * * *",
+                "0 * * * *"
               ]
             }
           ]
@@ -9441,6 +12132,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -9545,6 +12240,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -10090,6 +12789,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -10321,6 +13024,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -10913,6 +13620,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -11042,6 +13753,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -13593,6 +16308,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -13719,6 +16438,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -13906,6 +16629,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -14041,6 +16768,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -14223,6 +16954,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -14368,6 +17103,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -16854,6 +19593,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -17085,6 +19828,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -17272,6 +20019,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -17432,6 +20183,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -17713,6 +20468,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -19760,6 +22519,10 @@
             {
               "cron": "*/30 * * * *",
               "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
             }
           ],
           "ops": [
@@ -19866,6 +22629,10 @@
             },
             {
               "cron": "*/10 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],
@@ -20642,7 +23409,7 @@
                       },
                       {
                         "name": "📚 Books",
-                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard or compare`\nthe same book commands across every linked book service; !books help lists them (books role)"
+                        "value": "`!goodreads link USERID`\nlink your Goodreads account (profile and shelves must be public) so I post when you finish a book; !goodreads help lists every Goodreads command and !gr works too (books role)\n\n`!goodreads unlink`\nremove your Goodreads link\n\n`!goodreads currently`\nshow what you or @member are reading right now\n\n`!goodreads shelf`\nshow your or @member's read, to-read or currently-reading shelf\n\n`!goodreads who BOOK`\nshow who here has read a book and how they rated it\n\n`!goodreads overlap`\nbooks that are on more than one member's to-read shelf\n\n`!goodreads compare`\ncompare reading taste with @member (or two members)\n\n`!goodreads leaderboard`\nrank members by books finished this year, or !goodreads leaderboard YEAR for another year\n\n`!books currently, who, leaderboard, compare, goal, recommend or recap`\nbook commands across every linked book service; !books help lists them (books role)"
                       },
                       {
                         "name": "📚 Books (continued)",
@@ -33165,6 +35932,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
               "options": null
             }
           ],

@@ -11,6 +11,7 @@ module.exports = [].concat(
   require("./docker"),
   require("./books"),
   require("./audiobookshelf"),
+  require("./bookfeatures"),
   require("./chat"),
   require("./extras")
 );

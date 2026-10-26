@@ -252,6 +252,13 @@ async function handleOverlap(message, links) {
   await message.reply({ embeds: [embed("On more than one to-read shelf", lines.join("\n"))] });
 }
 
+function readMonth(readAt) {
+  const match = String(readAt || "").match(/\b\d{1,2}\s+([A-Za-z]{3})/);
+  if (!match) return null;
+  const index = MONTHS.findIndex((name) => name.toLowerCase() === match[1].toLowerCase());
+  return index >= 0 ? index : null;
+}
+
 function readYear(readAt) {
   const match = String(readAt || "").match(/\b(\d{4})\b/);
   return match ? parseInt(match[1], 10) : null;
@@ -453,6 +460,7 @@ const bookSource = {
       title: item.title,
       author: item.author,
       year: readYear(item.readAt),
+      month: readMonth(item.readAt),
       rating: item.rating,
       pages: item.pages
     }));
