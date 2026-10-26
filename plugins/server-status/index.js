@@ -20,6 +20,7 @@ const LABELS = { online: "Online", running: "Running", offline: "Offline", missi
 let ctx = null;
 let checking = false;
 const queryPorts = new Map();
+const lastNotes = new Map();
 
 function sshSettings() {
   const host = process.env.DOCKER_SSH_HOST;
@@ -114,7 +115,15 @@ async function playerInfo(server, container) {
   }
   const answers = await Promise.all(candidates.map(async (port) => ({ port: port, info: await queryInfo(host, port) })));
   const hit = answers.find((answer) => answer.info);
-  if (!hit) return null;
+  if (!hit) {
+    const note = "no answer from " + host + " on UDP ports " + (candidates.join(", ") || "none") + " (container ports: " + (container.ports || "none") + ")";
+    if (lastNotes.get(container.name) !== note) {
+      lastNotes.set(container.name, note);
+      console.log("Server status: " + container.name + " " + note);
+    }
+    return null;
+  }
+  lastNotes.delete(container.name);
   queryPorts.set(container.name, hit.port);
   return hit.info;
 }

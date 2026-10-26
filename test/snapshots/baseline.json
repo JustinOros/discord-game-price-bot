@@ -42320,6 +42320,12 @@
               }
             }
           ],
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Server status: TheForest no answer from docker.test.local on UDP ports 8766, 27016 (container ports: 0.0.0.0:8766->8766/udp, :::8766->8766/udp, 0.0.0.0:27016->27016/udp)"
+            }
+          ],
           "outgoing": [
             {
               "via": "message.reply",
