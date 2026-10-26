@@ -11,6 +11,14 @@ module.exports = [
     await ctx.say("alice", "!help");
   }, { files: { "steamlinks.json": LINKS } }),
 
+  sc("leaderboard-refresh-and-cooldown", async (ctx) => {
+    await ctx.say("alice", "!leaderboard refresh");
+    await ctx.say("alice", "!leaderboard refresh hades");
+    await ctx.advance(121000, "advance past the refresh cooldown");
+    await ctx.say("alice", "!leaderboard refresh celeste");
+    await ctx.say("alice", "!leaderboard refresh nothing");
+  }, { files: { "steamlinks.json": LINKS } }),
+
   sc("leaderboard-private-profile-hidden", async (ctx) => {
     await ctx.say("alice", "!leaderboard celeste");
     await ctx.say("alice", "!leaderboard");

@@ -5,9 +5,11 @@ const CONCURRENCY = 4;
 const TOP_N = 10;
 const MEDALS = ["🥇", "🥈", "🥉"];
 const MIN_LOOSE_MATCH = 4;
+const REFRESH_COOLDOWN_MS = 2 * 60 * 1000;
 
 const libraryCache = new Map();
 const achievementCache = new Map();
+let lastRefresh = 0;
 
 function isFresh(entry) {
   return !!entry && Date.now() - entry.at < CACHE_MS;
@@ -245,16 +247,30 @@ async function handleLeaderboard(message, query, ctx) {
     return;
   }
 
+  let wanted = query;
+  const refreshMatch = /^refresh(?:\s+(.*))?$/i.exec(wanted);
+  if (refreshMatch) {
+    const wait = lastRefresh + REFRESH_COOLDOWN_MS - Date.now();
+    if (wait > 0) {
+      await message.reply("The leaderboard was refreshed a moment ago. Try again in " + Math.ceil(wait / 1000) + " seconds.");
+      return;
+    }
+    lastRefresh = Date.now();
+    libraryCache.clear();
+    achievementCache.clear();
+    wanted = (refreshMatch[1] || "").trim();
+  }
+
   let entries = ctx.sortedRoleEntries();
   if (entries.length === 0) {
     await message.reply("No game roles yet. Use !own GAME or !role GAME to create one.");
     return;
   }
 
-  if (query) {
-    const entry = pickEntry(entries, query);
+  if (wanted) {
+    const entry = pickEntry(entries, wanted);
     if (!entry) {
-      await message.reply("No game role matches \"" + query + "\". Use !roles to see them.");
+      await message.reply("No game role matches \"" + wanted + "\". Use !roles to see them.");
       return;
     }
     entries = [entry];
@@ -282,7 +298,7 @@ async function handleLeaderboard(message, query, ctx) {
   }
 
   if (built.linkedRoleMembers === 0) {
-    await message.reply("Nobody with " + (query ? "that role" : "a game role") + " has linked a Steam profile yet. Use !my-steam-profile LINK to link yours.");
+    await message.reply("Nobody with " + (wanted ? "that role" : "a game role") + " has linked a Steam profile yet. Use !my-steam-profile LINK to link yours.");
     return;
   }
 
@@ -296,7 +312,7 @@ async function handleLeaderboard(message, query, ctx) {
     return;
   }
 
-  const card = query ? gameCard(message.guild, withData[0]) : overviewCard(message.guild, withData, hidden);
+  const card = wanted ? gameCard(message.guild, withData[0]) : overviewCard(message.guild, withData, hidden);
   await message.reply({ embeds: [card], allowedMentions: { parse: [] } });
 }
 
@@ -304,6 +320,6 @@ module.exports = {
   name: "achievements",
   commands: [{ name: "leaderboard", run: (message, args, ctx) => handleLeaderboard(message, args, ctx) }],
   help: [
-    { order: 135, text: "!leaderboard [GAME] - rank members by Steam achievements unlocked, across every game role or for one game" }
+    { order: 135, text: "!leaderboard [GAME] - rank members by Steam achievements unlocked, across every game role or for one game; !leaderboard refresh fetches fresh Steam data" }
   ]
 };
