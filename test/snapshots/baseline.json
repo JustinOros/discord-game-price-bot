@@ -42675,6 +42675,246 @@
         }
       }
     },
+    "servers-remote-instance-states": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "bash",
+              "args": [
+                "-c",
+                "list-instances"
+              ],
+              "options": {
+                "cwd": "<TMP>",
+                "timeout": 30000,
+                "maxBuffer": 10485760
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🔴 **Remote Game** - Server is stopped"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "bash",
+              "args": [
+                "-c",
+                "list-instances"
+              ],
+              "options": {
+                "cwd": "<TMP>",
+                "timeout": 30000,
+                "maxBuffer": 10485760
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🟡 **Remote Game** - running, no player count"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "bash",
+              "args": [
+                "-c",
+                "list-instances"
+              ],
+              "options": {
+                "cwd": "<TMP>",
+                "timeout": 30000,
+                "maxBuffer": 10485760
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🟢 **Remote Game** - 1 / 10 players"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "bash",
+              "args": [
+                "-c",
+                "list-instances"
+              ],
+              "options": {
+                "cwd": "<TMP>",
+                "timeout": 30000,
+                "maxBuffer": 10485760
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🔴 **Remote Game** - No answer from remote.test.local"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
     "servers-remote-query-only-server": {
       "steps": [
         {

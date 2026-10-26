@@ -123,7 +123,7 @@ class Fixtures {
     this.env = env;
     this.readmeText = readmeText;
     this.overrides = [];
-    this.sshState = { fail: false, failRestart: false, output: null, serverOutput: null, failTimes: 0 };
+    this.sshState = { fail: false, failRestart: false, output: null, serverOutput: null, failTimes: 0, listOutput: null, listFail: false };
     this.recordFullSystem = false;
     this.extraSearch = {};
     this.shops = SHOPS;
@@ -585,6 +585,10 @@ class Fixtures {
   async runSsh(file, args, options) {
     const state = this.sshState;
     const remote = args[args.length - 1];
+    if (file === "bash") {
+      if (state.listFail || state.listOutput === null) throw new Error("bash failed");
+      return { stdout: state.listOutput, stderr: "" };
+    }
     if (state.fail) {
       if (state.failTimes > 0) {
         state.failTimes -= 1;

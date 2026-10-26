@@ -13,6 +13,7 @@ const CONFIG_PATH = path.join(__dirname, "config.yaml");
 const LOCAL_CONFIG_PATH = path.join(__dirname, "config.local.yaml");
 const DEFAULT_INTERVAL_MINUTES = 2;
 const SSH_TIMEOUT_MS = 15000;
+const LIST_TIMEOUT_MS = 30000;
 const REFRESH_MS = 10 * 60 * 1000;
 const COLORS = { online: 0x57f287, running: 0xfee75c, offline: 0xed4245, missing: 0x95a5a6, unknown: 0x95a5a6 };
 const ICONS = { online: "🟢", running: "🟡", offline: "🔴", missing: "⚪", unknown: "⚪" };
@@ -146,11 +147,29 @@ async function playerInfo(server, container) {
   return hit.info;
 }
 
+async function instanceState(server) {
+  try {
+    const { stdout } = await execFileAsync("bash", ["-c", server.listCommand], { cwd: ROOT, timeout: LIST_TIMEOUT_MS, maxBuffer: 10 * 1024 * 1024 });
+    const parsed = JSON.parse(stdout);
+    if (!Array.isArray(parsed.data)) return null;
+    const label = String(server.instanceLabel || "").toLowerCase();
+    const found = parsed.data.find((instance) => !label || String(instance.label).toLowerCase() === label);
+    return found ? String(found.status || "running").toLowerCase() : "none";
+  } catch (err) {
+    return null;
+  }
+}
+
 async function checkRemote(server) {
   const port = Number(server.queryPort) || 2457;
-  const info = await queryInfo(server.host, port);
-  if (!info) return { status: "offline", detail: "No answer from " + server.host };
-  return { status: "online", detail: server.host, players: info.players, max: info.max };
+  const [info, instance] = await Promise.all([
+    server.queryPort === false ? Promise.resolve(null) : queryInfo(server.host, port),
+    server.listCommand ? instanceState(server) : Promise.resolve(null)
+  ]);
+  if (info) return { status: "online", detail: server.host, players: info.players, max: info.max };
+  if (instance === "none") return { status: "offline", detail: "Server is stopped" };
+  if (instance) return { status: "running", detail: "Server is " + instance + ", no player count" };
+  return { status: "offline", detail: "No answer from " + server.host };
 }
 
 async function checkServer(server, containers) {

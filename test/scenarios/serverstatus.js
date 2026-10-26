@@ -53,6 +53,20 @@ module.exports = [
     await ctx.cron(TICK);
   }, { env: { DOCKER_SSH_HOST: null }, files: { "plugins/server-status/config.yaml": { servers: [] }, "plugins/server-status/config.local.yaml": { servers: [{ name: "Remote Game", host: "remote.test.local", queryPort: 2457, channel: "remote-game" }] } } }),
 
+  sc("servers-remote-instance-states", async (ctx) => {
+    ctx.world.g1.addChannel({ id: "CH-remote", name: "remote-game" });
+    await ctx.startReady();
+    ctx.fx.sshState.listOutput = JSON.stringify({ data: [] });
+    await ctx.say("alice", "!servers");
+    ctx.fx.sshState.listOutput = JSON.stringify({ data: [{ label: "remote", status: "running" }] });
+    await ctx.say("alice", "!servers");
+    ctx.world.a2s = { "remote.test.local:2457": { name: "Remote", players: 1, max: 10 } };
+    await ctx.say("alice", "!servers");
+    ctx.world.a2s = {};
+    ctx.fx.sshState.listFail = true;
+    await ctx.say("alice", "!servers");
+  }, { env: { DOCKER_SSH_HOST: null }, files: { "plugins/server-status/config.yaml": { servers: [] }, "plugins/server-status/config.local.yaml": { servers: [{ name: "Remote Game", host: "remote.test.local", queryPort: 2457, channel: "remote-game", instanceLabel: "remote", listCommand: "list-instances" }] } } }),
+
   sc("servers-not-set-up", async (ctx) => {
     await ctx.say("alice", "!servers");
     await ctx.startReady();
