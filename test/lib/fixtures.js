@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { GAMES, SEARCH_OVERRIDES, SHOPS, VANITY, STEAM_OWNED, DOCKER_PS_OUTPUT } = require("./gamedata");
+const { GAMES, SEARCH_OVERRIDES, SHOPS, VANITY, STEAM_OWNED, STEAM_ACHIEVEMENTS, DOCKER_PS_OUTPUT } = require("./gamedata");
 
 function sha1(text) {
   return crypto.createHash("sha1").update(text).digest("hex");
@@ -393,6 +393,15 @@ class Fixtures {
       if (owned === "error") return { status: 403, body: "forbidden" };
       if (owned === undefined || owned === null) return { status: 200, body: { response: {} } };
       return { status: 200, body: { response: { game_count: owned.length, games: owned } } };
+    }
+    if (p.startsWith("/ISteamUserStats/GetPlayerAchievements")) {
+      const spec = STEAM_ACHIEVEMENTS[req.query.get("steamid") + ":" + req.query.get("appid")];
+      if (spec === "private") return { status: 403, body: "forbidden" };
+      if (spec === "error") return { status: 500, body: "steam down" };
+      if (!spec) return { status: 400, body: "no stats" };
+      const list = [];
+      for (let i = 0; i < spec.total; i++) list.push({ apiname: "ACH_" + i, achieved: i < spec.unlocked ? 1 : 0 });
+      return { status: 200, body: { playerstats: { steamID: req.query.get("steamid"), success: true, achievements: list } } };
     }
     return { status: 404, body: "unmocked steam api" };
   }

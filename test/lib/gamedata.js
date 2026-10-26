@@ -336,7 +336,18 @@ const STEAM_OWNED = {
   "76561198000000006": null,
   "76561198000000007": "error",
   "76561198000000001": [],
-  "76561198000000002": [{ appid: 1245620, name: "Elden Ring", playtime_forever: 1 }]
+  "76561198000000002": [{ appid: 1245620, name: "Elden Ring", playtime_forever: 1 }],
+  "76561198000000011": [{ appid: 1145360, name: "Hades", playtime_forever: 500 }],
+  "76561198000000012": [{ appid: 1145360, name: "Hades", playtime_forever: 700 }],
+  "76561198000000013": [{ appid: 504230, name: "Celeste", playtime_forever: 90 }],
+  "76561198000000014": [{ appid: 504230, name: "Celeste", playtime_forever: 40 }]
+};
+
+const STEAM_ACHIEVEMENTS = {
+  "76561198000000011:1145360": { unlocked: 30, total: 49 },
+  "76561198000000012:1145360": { unlocked: 45, total: 49 },
+  "76561198000000013:504230": { unlocked: 8, total: 8 },
+  "76561198000000014:504230": "private"
 };
 
 const DOCKER_PS_OUTPUT = [
@@ -347,4 +358,4 @@ const DOCKER_PS_OUTPUT = [
   ""
 ].join("\n");
 
-module.exports = { GAMES, SEARCH_OVERRIDES, SHOPS, VANITY, STEAM_OWNED, DOCKER_PS_OUTPUT, slug, deal, hist, money, isoPlus, pad2 };
+module.exports = { GAMES, SEARCH_OVERRIDES, SHOPS, VANITY, STEAM_OWNED, STEAM_ACHIEVEMENTS, DOCKER_PS_OUTPUT, slug, deal, hist, money, isoPlus, pad2 };

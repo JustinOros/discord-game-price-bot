@@ -2600,7 +2600,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -9429,7 +9429,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -10121,7 +10121,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -15378,7 +15378,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -15441,7 +15441,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -15504,7 +15504,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -15896,7 +15896,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -23385,7 +23385,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -23550,7 +23550,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -24336,7 +24336,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -24406,7 +24406,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -24469,7 +24469,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -24575,7 +24575,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -24623,7 +24623,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -24671,7 +24671,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -24774,7 +24774,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -26800,6 +26800,802 @@
               "to": "M-3",
               "payload": {
                 "content": "Sale history for \"Hades\", past 12 months (4 events):\n- 2026-09-20: $15.99 (36% off, was $24.99) at GOG\n- 2026-06-25: $14.99 (40% off, was $24.99) at Steam\n- 2026-02-14: $17.99 (28% off, was $24.99) at Humble Store\n- 2025-11-27: $12.49 (50% off, was $24.99) at Steam"
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "leaderboard-needs-steam-key": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "The achievement leaderboard needs STEAM_API_KEY set in .env."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "leaderboard-no-roles": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "No game roles yet. Use !own GAME or !role GAME to create one."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "leaderboard-nobody-linked": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Nobody with a game role has linked a Steam profile yet. Use !my-steam-profile LINK to link yours."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard hades",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "content": "Nobody with that role has linked a Steam profile yet. Use !my-steam-profile LINK to link yours."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "leaderboard-only-private-profiles": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard celeste",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Every linked profile is private. Set Steam game details to public to show up."
+              }
+            }
+          ],
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000014&format=json&include_played_free_games=true&include_appinfo=true",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000014&appid=504230",
+              "status": 403
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "leaderboard-owned-games-failure": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard hades",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "No achievement data found. The game may not have Steam achievements, or no linked member owns it."
+              }
+            }
+          ],
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000007&format=json&include_played_free_games=true&include_appinfo=true",
+              "status": 403
+            }
+          ],
+          "console": [
+            {
+              "level": "error",
+              "text": "2026-10-06T12:00:00.000Z Achievements: owned games failed for 76561198000000007: owned games failed: 403"
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "leaderboard-private-profile-hidden": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard celeste",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Every linked profile is private. Set Steam game details to public to show up."
+              }
+            }
+          ],
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000014&format=json&include_played_free_games=true&include_appinfo=true",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000014&appid=504230",
+              "status": 403
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Achievement leaderboard",
+                    "description": "🥇 **Bob** - 45/49 (92%) across 1 game\n🥈 **Alice** - 30/49 (61%) across 1 game\n\nTop player per game:\n⚔️ **Hades**: Bob 45/49\n*1 private Steam profile skipped.*"
+                  }
+                ],
+                "allowedMentions": {
+                  "parse": []
+                }
+              }
+            }
+          ],
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000011&format=json&include_played_free_games=true&include_appinfo=true",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000012&format=json&include_played_free_games=true&include_appinfo=true",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000011&appid=1145360",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000012&appid=1145360",
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "leaderboard-single-game-and-overview": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard hades",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "⚔️ Hades achievements",
+                    "description": "🥇 **Bob** - 45/49 (92%)\n🥈 **Alice** - 30/49 (61%)"
+                  }
+                ],
+                "allowedMentions": {
+                  "parse": []
+                }
+              }
+            }
+          ],
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000011&format=json&include_played_free_games=true&include_appinfo=true",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000012&format=json&include_played_free_games=true&include_appinfo=true",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000011&appid=1145360",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000012&appid=1145360",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Achievement leaderboard",
+                    "description": "🥇 **Bob** - 45/49 (92%) across 1 game\n🥈 **Alice** - 30/49 (61%) across 1 game\n🥉 **Carol** - 8/8 (100%) across 1 game\n\nTop player per game:\n🍓 **Celeste**: Carol 8/8\n⚔️ **Hades**: Bob 45/49"
+                  }
+                ],
+                "allowedMentions": {
+                  "parse": []
+                }
+              }
+            }
+          ],
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000013&format=json&include_played_free_games=true&include_appinfo=true",
+              "status": 200
+            },
+            {
+              "method": "GET",
+              "url": "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?key=<STEAM_API_KEY>&steamid=76561198000000013&appid=504230",
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard celeste",
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.sendTyping",
+              "channel": "CH-general"
+            },
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "🍓 Celeste achievements",
+                    "description": "🥇 **Carol** - 8/8 (100%)"
+                  }
+                ],
+                "allowedMentions": {
+                  "parse": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !leaderboard nothing",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "content": "No game role matches \"nothing\". Use !roles to see them."
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-5",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
               }
             }
           ]
@@ -29834,7 +30630,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -30622,7 +31418,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -30789,7 +31585,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",
@@ -42220,7 +43016,7 @@
                       },
                       {
                         "name": "🕹️ Ownership",
-                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first\n\n`!leaderboard [GAME]`\nrank members by Steam achievements unlocked, across every game role or for one game"
                       },
                       {
                         "name": "🏷️ Game Roles",

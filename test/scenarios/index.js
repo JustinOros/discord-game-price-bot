@@ -13,6 +13,7 @@ module.exports = [].concat(
   require("./audiobookshelf"),
   require("./bookfeatures"),
   require("./serverstatus"),
+  require("./achievements"),
   require("./chat"),
   require("./extras")
 );
