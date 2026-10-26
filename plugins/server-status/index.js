@@ -278,7 +278,7 @@ async function alertIfChanged(server, state, store, config) {
   const key = serverId(server);
   const previous = store.up[key];
   store.up[key] = isUp;
-  if (config.alerts === false || previous === undefined || previous === isUp) return;
+  if (config.alerts === false || server.alerts === false || previous === undefined || previous === isUp) return;
   for (const guild of Array.from(ctx.client.guilds.cache.values())) {
     const channel = findChannel(guild, server);
     if (!channel) continue;
