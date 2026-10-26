@@ -1,0 +1,9 @@
+intervalMinutes: 2
+alerts: true
+servers:
+  - name: The Forest
+    container: TheForest
+    channel: the-forest
+  - name: Sons Of The Forest
+    container: SonsOfTheForest
+    channel: sons-of-the-forest

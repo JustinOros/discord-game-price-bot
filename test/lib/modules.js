@@ -141,4 +141,40 @@ function createChildProcessModule(world, runSsh) {
   };
 }
 
-module.exports = { createDiscordModule, createCronModule, createChildProcessModule };
+function infoResponse(spec) {
+  const text = (value) => Buffer.concat([Buffer.from(value, "utf8"), Buffer.from([0])]);
+  return Buffer.concat([
+    Buffer.from([0xff, 0xff, 0xff, 0xff, 0x49, 17]),
+    text(spec.name || "Server"), text("map"), text("folder"), text("game"),
+    Buffer.from([0, 0, spec.players, spec.max, 0])
+  ]);
+}
+
+function createDgramModule(world) {
+  function createSocket() {
+    const socket = new EventEmitter();
+    socket.close = () => {};
+    socket.send = (buffer, port, host, callback) => {
+      const key = host + ":" + port;
+      const spec = (world.a2s || {})[key];
+      world.a2sLog = world.a2sLog || [];
+      world.a2sLog.push(key + (buffer.length > 25 ? " challenge" : ""));
+      if (typeof callback === "function") callback(null);
+      setImmediate(() => {
+        if (!spec) {
+          socket.emit("error", new Error("ECONNREFUSED"));
+          return;
+        }
+        if (spec.challenge && buffer.length <= 25) {
+          socket.emit("message", Buffer.from([0xff, 0xff, 0xff, 0xff, 0x41, 1, 2, 3, 4]));
+          return;
+        }
+        socket.emit("message", infoResponse(spec));
+      });
+    };
+    return socket;
+  }
+  return { createSocket: createSocket };
+}
+
+module.exports = { createDiscordModule, createCronModule, createChildProcessModule, createDgramModule };

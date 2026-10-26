@@ -113,6 +113,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -468,6 +472,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -624,6 +632,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -1089,6 +1101,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -1464,6 +1480,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -1801,6 +1821,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -2589,6 +2613,10 @@
                       {
                         "name": "📚 Books (continued)",
                         "value": "`!audiobookshelf link USERNAME`\nlink your Audiobookshelf account so I post when you finish a book; !audiobookshelf help lists every command and !ab works too (books role)\n\n`!audiobookshelf unlink`\nremove your Audiobookshelf link\n\n`!audiobookshelf nowplaying`\nshow what you or @member are listening to\n\n`!audiobookshelf finished`\nrecently finished audiobooks for you or @member\n\n`!audiobookshelf stats`\nbooks finished and hours listened for you or @member\n\n`!audiobookshelf leaderboard`\nrank members by hours listened, week, month or year\n\n`!audiobookshelf who BOOK`\nshow who here has listened to a book\n\n`!audiobookshelf search BOOK`\nlook a book up in the library\n\n`!audiobookshelf new`\nthe newest books in the library\n\n`!audiobookshelf compare`\naudiobooks you and @member have both finished"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -7257,6 +7285,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -7507,6 +7539,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -7773,6 +7809,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -8086,6 +8126,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -9116,6 +9160,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -9386,6 +9434,10 @@
                       {
                         "name": "🏷️ Game Roles",
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -10082,6 +10134,10 @@
                       {
                         "name": "📚 Books (continued)",
                         "value": "`!audiobookshelf link USERNAME`\nlink your Audiobookshelf account so I post when you finish a book; !audiobookshelf help lists every command and !ab works too (books role)\n\n`!audiobookshelf unlink`\nremove your Audiobookshelf link\n\n`!audiobookshelf nowplaying`\nshow what you or @member are listening to\n\n`!audiobookshelf finished`\nrecently finished audiobooks for you or @member\n\n`!audiobookshelf stats`\nbooks finished and hours listened for you or @member\n\n`!audiobookshelf leaderboard`\nrank members by hours listened, week, month or year\n\n`!audiobookshelf who BOOK`\nshow who here has listened to a book\n\n`!audiobookshelf search BOOK`\nlook a book up in the library\n\n`!audiobookshelf new`\nthe newest books in the library\n\n`!audiobookshelf compare`\naudiobooks you and @member have both finished"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -12015,6 +12071,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -12037,6 +12097,7 @@
                 "*/30 * * * *",
                 "* * * * *",
                 "*/30 * * * *",
+                "*/2 * * * *",
                 "0 * * * *"
               ]
             }
@@ -12132,6 +12193,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -12240,6 +12305,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -12791,6 +12860,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -13024,6 +13097,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -13622,6 +13699,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -13753,6 +13834,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -15301,7 +15386,7 @@
                       },
                       {
                         "name": "🖥️ Game Servers",
-                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)\n\n`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -15364,7 +15449,7 @@
                       },
                       {
                         "name": "🖥️ Game Servers",
-                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)\n\n`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -15424,6 +15509,10 @@
                       {
                         "name": "🏷️ Game Roles",
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -15812,6 +15901,10 @@
                       {
                         "name": "🏷️ Game Roles",
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -16310,6 +16403,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -16438,6 +16535,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -16631,6 +16732,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -16768,6 +16873,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -16956,6 +17065,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -17103,6 +17216,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -19595,6 +19712,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -19830,6 +19951,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -20021,6 +20146,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -20183,6 +20312,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -20468,6 +20601,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -22521,6 +22658,10 @@
               "options": null
             },
             {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
               "cron": "0 * * * *",
               "options": null
             }
@@ -22629,6 +22770,10 @@
             },
             {
               "cron": "*/10 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -23247,6 +23392,10 @@
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
                       },
                       {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
+                      },
+                      {
                         "name": "🧠 Memory",
                         "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
                       },
@@ -23414,6 +23563,10 @@
                       {
                         "name": "📚 Books (continued)",
                         "value": "`!audiobookshelf link USERNAME`\nlink your Audiobookshelf account so I post when you finish a book; !audiobookshelf help lists every command and !ab works too (books role)\n\n`!audiobookshelf unlink`\nremove your Audiobookshelf link\n\n`!audiobookshelf nowplaying`\nshow what you or @member are listening to\n\n`!audiobookshelf finished`\nrecently finished audiobooks for you or @member\n\n`!audiobookshelf stats`\nbooks finished and hours listened for you or @member\n\n`!audiobookshelf leaderboard`\nrank members by hours listened, week, month or year\n\n`!audiobookshelf who BOOK`\nshow who here has listened to a book\n\n`!audiobookshelf search BOOK`\nlook a book up in the library\n\n`!audiobookshelf new`\nthe newest books in the library\n\n`!audiobookshelf compare`\naudiobooks you and @member have both finished"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -24191,7 +24344,7 @@
                       },
                       {
                         "name": "🖥️ Game Servers",
-                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)\n\n`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -24260,6 +24413,10 @@
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
                       },
                       {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
+                      },
+                      {
                         "name": "🧠 Memory",
                         "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
                       },
@@ -24317,6 +24474,10 @@
                       {
                         "name": "🏷️ Game Roles",
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -24422,7 +24583,7 @@
                       },
                       {
                         "name": "🖥️ Game Servers",
-                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)\n\n`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -24469,6 +24630,10 @@
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
                       },
                       {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
+                      },
+                      {
                         "name": "🧠 Memory",
                         "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
                       },
@@ -24511,6 +24676,10 @@
                       {
                         "name": "🏷️ Game Roles",
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -24613,7 +24782,7 @@
                       },
                       {
                         "name": "🖥️ Game Servers",
-                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)\n\n`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -29672,6 +29841,10 @@
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
                       },
                       {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
+                      },
+                      {
                         "name": "🧠 Memory",
                         "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
                       },
@@ -30457,7 +30630,7 @@
                       },
                       {
                         "name": "🖥️ Game Servers",
-                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)"
+                        "value": "`!docker ps`\nlist containers on the game server (requires the Docker role)\n\n`!docker restart CONTAINER NAME`\nrestart a container by name (requires the Docker role, some containers may be protected)\n\n`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -30621,6 +30794,10 @@
                       {
                         "name": "🏷️ Game Roles",
                         "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
                       },
                       {
                         "name": "🧠 Memory",
@@ -35932,6 +36109,10 @@
             },
             {
               "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
               "options": null
             },
             {
@@ -41541,6 +41722,2426 @@
       ],
       "pendingTimers": 0,
       "files": {}
+    },
+    "servers-command-container-missing": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "⚪ **The Forest** - No container named TheForest\n⚪ **Sons Of The Forest** - No container named SonsOfTheForest"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "⚪ **The Forest** - No container named TheForest\n⚪ **Sons Of The Forest** - No container named SonsOfTheForest"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "servers-command-docker-host-unreachable": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "console": [
+            {
+              "level": "error",
+              "text": "2026-10-06T12:00:00.000Z Server status check failed: ssh: connect to host docker.test.local port 22: Connection timed out"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "⚪ **The Forest** - Couldn't reach the Docker host\n⚪ **Sons Of The Forest** - Couldn't reach the Docker host"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "servers-command-explicit-query-port-and-host": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🟢 **The Forest** - 2 / 8 players"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "servers-command-online-and-offline": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🟢 **The Forest** - 3 / 8 players\n🔴 **Sons Of The Forest** - Exited (0) 5 minutes ago"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🟢 **The Forest** - 0 / 8 players\n🔴 **Sons Of The Forest** - Exited (0) 5 minutes ago"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-3",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🟢 **The Forest** - 1 / 4 players\n🔴 **Sons Of The Forest** - Exited (0) 5 minutes ago"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !help",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 6280368,
+                    "title": "GamePriceBot Commands",
+                    "description": "Here is everything I can do. GAME means any game title.",
+                    "fields": [
+                      {
+                        "name": "💰 Prices & Watching",
+                        "value": "`!watch GAME`\nstart watching a game for sales\n\n`!remove GAME`\nstop watching a game (!unwatch also works)\n\n`!list`\nshow everything being watched\n\n`!price GAME`\ncheck a game's current best price without watching it\n\n`!prices GAME`\nlist every store the game is on sale at, cheapest first\n\n`!check`\nrun the sale check right now instead of waiting for the daily run\n\n`!shops`\nlist every store I check prices at"
+                      },
+                      {
+                        "name": "📊 Game Info",
+                        "value": "`!history GAME`\nshow every recorded sale over the past 12 months, with date and price\n\n`!predict GAME`\nguess when it might go on sale next, based on its full sale history\n\n`!info GAME`\nshow price, platforms, multiplayer/co-op/cross-play info, a store link, and how many people here own it\n\n`!wiki QUESTION`\nask a specific game question (item locations, boss strategies, and so on) and get an accurate, searched answer"
+                      },
+                      {
+                        "name": "🕹️ Ownership",
+                        "value": "`!own GAME`\nmark a game as owned by you\n\n`!unown GAME`\nremove a game from your owned list\n\n`!my-steam-profile LINK`\nlink your Steam profile so !info can count games you own automatically\n\n`!who GAME`\nlist who has confirmed they own a game\n\n`!popular`\nlist games owned by more than one member, most owned first"
+                      },
+                      {
+                        "name": "🏷️ Game Roles",
+                        "value": "`!roles`\nlist every game role and how many members have each\n\n`!role GAME`\ncreate (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead\n\n`!unroll GAME`\nleave a game's role"
+                      },
+                      {
+                        "name": "🖥️ Game Servers",
+                        "value": "`!servers`\nshow whether the game servers are online and how many players are on them"
+                      },
+                      {
+                        "name": "🧠 Memory",
+                        "value": "`!remember SOMETHING`\npermanently teach me a fact (about you or someone else by name), shared with everyone and remembered across restarts\n\n`!forget SOMETHING`\nmake me forget something you had me remember (must match exactly), or !forget all\n\n`!memories`\nshow everything I remember about you"
+                      },
+                      {
+                        "name": "🎲 Trivia",
+                        "value": "`!trivia`\nvideo game trivia, multiple choice, first correct answer in chat wins 100 points\n\n`!score`\nshow the top 10 members by trivia points"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "servers-command-running-without-player-count": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🟡 **The Forest** - running, no player count\n🔴 **Sons Of The Forest** - Exited (0) 5 minutes ago"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "servers-config-missing": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "No game servers are listed in plugins/server-status/config.yaml yet."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "servers-no-servers-listed": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "No game servers are listed in plugins/server-status/config.yaml yet."
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "servers-not-set-up": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Server status isn't set up. Set DOCKER_SSH_HOST, DOCKER_SSH_USER and DOCKER_SSH_KEY_PATH in .env to enable it."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */2 * * * *"
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {}
+    },
+    "servers-status-alerts-off": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */2 * * * *",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-forest",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-1"
+            }
+          ]
+        },
+        {
+          "label": "forest down, edited, no alert",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "sent.edit",
+              "message": "S-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 15548997,
+                    "title": "The Forest",
+                    "description": "🔴 **Offline**\nExited (137) 1 minute ago\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "serverstatus.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"messages\": {",
+            "    \"G1|theforest\": {",
+            "      \"channelId\": \"CH-forest\",",
+            "      \"messageId\": \"S-1\",",
+            "      \"sig\": \"offline||\",",
+            "      \"at\": 1791288000000",
+            "    }",
+            "  },",
+            "  \"up\": {",
+            "    \"theforest\": false",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "servers-status-docker-host-down-keeps-quiet": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */2 * * * *",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-forest",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-1"
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-sotf",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 15548997,
+                    "title": "Sons Of The Forest",
+                    "description": "🔴 **Offline**\nExited (0) 5 minutes ago\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-2"
+            }
+          ]
+        },
+        {
+          "label": "host unreachable shows unknown, no alert",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "console": [
+            {
+              "level": "error",
+              "text": "2026-10-06T12:00:00.000Z Server status check failed: ssh: connect to host docker.test.local port 22: Connection timed out"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "sent.edit",
+              "message": "S-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 9807270,
+                    "title": "The Forest",
+                    "description": "⚪ **Unknown**\nCouldn't reach the Docker host\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.edit",
+              "message": "S-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 9807270,
+                    "title": "Sons Of The Forest",
+                    "description": "⚪ **Unknown**\nCouldn't reach the Docker host\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "host back, no alert because status never changed",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "sent.edit",
+              "message": "S-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.edit",
+              "message": "S-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 15548997,
+                    "title": "Sons Of The Forest",
+                    "description": "🔴 **Offline**\nExited (0) 5 minutes ago\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "serverstatus.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"messages\": {",
+            "    \"G1|theforest\": {",
+            "      \"channelId\": \"CH-forest\",",
+            "      \"messageId\": \"S-1\",",
+            "      \"sig\": \"online|3|8\",",
+            "      \"at\": 1791288000000",
+            "    },",
+            "    \"G1|sonsoftheforest\": {",
+            "      \"channelId\": \"CH-sotf\",",
+            "      \"messageId\": \"S-2\",",
+            "      \"sig\": \"offline||\",",
+            "      \"at\": 1791288000000",
+            "    }",
+            "  },",
+            "  \"up\": {",
+            "    \"theforest\": true,",
+            "    \"sonsoftheforest\": false",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "servers-status-interval-setting": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/10 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "interval of ten minutes",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "serverstatus.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"messages\": {},",
+            "  \"up\": {}",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "servers-status-message-deleted-is-reposted": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */2 * * * *",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-forest",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-1"
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-sotf",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 15548997,
+                    "title": "Sons Of The Forest",
+                    "description": "🔴 **Offline**\nExited (0) 5 minutes ago\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-2"
+            }
+          ]
+        },
+        {
+          "label": "message gone, posted again",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "console": [
+            {
+              "level": "error",
+              "text": "2026-10-06T12:00:00.000Z Could not edit the status message for The Forest, posting a new one: Unknown Message"
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-forest",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 4 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-3"
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "serverstatus.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"messages\": {",
+            "    \"G1|theforest\": {",
+            "      \"channelId\": \"CH-forest\",",
+            "      \"messageId\": \"S-3\",",
+            "      \"sig\": \"online|4|8\",",
+            "      \"at\": 1791288000000",
+            "    },",
+            "    \"G1|sonsoftheforest\": {",
+            "      \"channelId\": \"CH-sotf\",",
+            "      \"messageId\": \"S-2\",",
+            "      \"sig\": \"offline||\",",
+            "      \"at\": 1791288000000",
+            "    }",
+            "  },",
+            "  \"up\": {",
+            "    \"theforest\": true,",
+            "    \"sonsoftheforest\": false",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "servers-status-messages-post-edit-and-alert": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "first check posts and pins both messages",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-forest",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-1"
+            },
+            {
+              "via": "channel.send",
+              "channel": "CH-sotf",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 15548997,
+                    "title": "Sons Of The Forest",
+                    "description": "🔴 **Offline**\nExited (0) 5 minutes ago\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-2"
+            }
+          ]
+        },
+        {
+          "label": "nothing changed, nothing edited",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ]
+        },
+        {
+          "label": "player count changed, message edited",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "sent.edit",
+              "message": "S-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 5 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "forest went down, edited and alert",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-forest",
+              "payload": {
+                "content": "The Forest is now offline."
+              }
+            },
+            {
+              "via": "sent.edit",
+              "message": "S-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 15548997,
+                    "title": "The Forest",
+                    "description": "🔴 **Offline**\nExited (137) 1 minute ago\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "still down, nothing new",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ]
+        },
+        {
+          "label": "forest back up, edited and alert",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-forest",
+              "payload": {
+                "content": "The Forest is now online."
+              }
+            },
+            {
+              "via": "sent.edit",
+              "message": "S-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 0 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "advance 660000ms"
+        },
+        {
+          "label": "stale message refreshed after ten minutes",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "sent.edit",
+              "message": "S-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 0 / 8\nUp 3 hours\nUpdated <t:1791288660:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.edit",
+              "message": "S-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 15548997,
+                    "title": "Sons Of The Forest",
+                    "description": "🔴 **Offline**\nExited (0) 5 minutes ago\nUpdated <t:1791288660:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "serverstatus.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"messages\": {",
+            "    \"G1|theforest\": {",
+            "      \"channelId\": \"CH-forest\",",
+            "      \"messageId\": \"S-1\",",
+            "      \"sig\": \"online|0|8\",",
+            "      \"at\": 1791288660000",
+            "    },",
+            "    \"G1|sonsoftheforest\": {",
+            "      \"channelId\": \"CH-sotf\",",
+            "      \"messageId\": \"S-2\",",
+            "      \"sig\": \"offline||\",",
+            "      \"at\": 1791288660000",
+            "    }",
+            "  },",
+            "  \"up\": {",
+            "    \"theforest\": true,",
+            "    \"sonsoftheforest\": false",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "servers-status-pin-fails-and-missing-channel": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "forest posted, pin refused, sotf channel missing",
+          "ssh": [
+            {
+              "file": "ssh",
+              "args": [
+                "-i",
+                "/keys/test_ed25519",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "-o",
+                "ConnectTimeout=10",
+                "dockeruser@docker.test.local",
+                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
+              ],
+              "options": {
+                "timeout": 15000
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-forest",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "The Forest",
+                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-1"
+            }
+          ],
+          "console": [
+            {
+              "level": "error",
+              "text": "2026-10-06T12:00:00.000Z Could not pin the status message for The Forest: Missing Permissions"
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "serverstatus.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"messages\": {",
+            "    \"G1|theforest\": {",
+            "      \"channelId\": \"CH-forest\",",
+            "      \"messageId\": \"S-1\",",
+            "      \"sig\": \"online|3|8\",",
+            "      \"at\": 1791288000000",
+            "    }",
+            "  },",
+            "  \"up\": {",
+            "    \"theforest\": true,",
+            "    \"sonsoftheforest\": false",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
     },
     "shops-variants": {
       "steps": [

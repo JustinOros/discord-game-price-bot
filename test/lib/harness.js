@@ -8,7 +8,7 @@ const realDiscord = require("discord.js");
 const { createClock, createRandom, RealDate } = require("./clock");
 const { Recorder } = require("./recorder");
 const { World } = require("./world");
-const { createDiscordModule, createCronModule, createChildProcessModule } = require("./modules");
+const { createDiscordModule, createCronModule, createChildProcessModule, createDgramModule } = require("./modules");
 const { Fixtures } = require("./fixtures");
 const { createSandbox } = require("./sandbox");
 
@@ -90,6 +90,7 @@ async function runScenario(scn) {
   const fx = new Fixtures(env, readme);
   const discordModule = createDiscordModule(world, realDiscord);
   const cronModule = createCronModule(world);
+  const dgramModule = createDgramModule(world);
   const cpModule = createChildProcessModule(world, (file, args, options) => {
     rec.push("ssh", { file: file, args: args, options: options === undefined ? null : JSON.parse(JSON.stringify(options)) });
     return fx.runSsh(file, args, options);
@@ -203,6 +204,7 @@ async function runScenario(scn) {
         if (request === "discord.js") return discordModule;
         if (request === "node-cron") return cronModule;
         if (request === "child_process" || request === "node:child_process") return cpModule;
+        if (request === "dgram" || request === "node:dgram") return dgramModule;
       }
       return saved.load.apply(this, arguments);
     };

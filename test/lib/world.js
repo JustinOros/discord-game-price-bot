@@ -244,6 +244,12 @@ class FakeSentMessage {
     return Promise.resolve(this);
   }
 
+  pin() {
+    this.world.rec.push("outgoing", { via: "sent.pin", message: this.id });
+    if (this.world.shouldFail("pin")) return Promise.reject(new Error("Missing Permissions"));
+    return Promise.resolve();
+  }
+
   delete() {
     this.world.rec.push("outgoing", { via: "sent.delete", message: this.id });
     return Promise.resolve(this);

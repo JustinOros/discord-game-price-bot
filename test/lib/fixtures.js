@@ -53,6 +53,10 @@ function grXml(id, shelf, items) {
     "<title>Reader " + id + "'s bookshelf: " + shelf + "</title>\n" + items.map(grItem).join("") + "</channel></rss>\n";
 }
 
+const SERVER_PS_OUTPUT = "TheForest|Up 3 hours|0.0.0.0:8766->8766/udp, :::8766->8766/udp, 0.0.0.0:27016->27016/udp|running\n" +
+  "SonsOfTheForest|Exited (0) 5 minutes ago||exited\n" +
+  "plex|Up 2 days|0.0.0.0:32400->32400/tcp|running\n";
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 const ABS_BOOKS = {
   "li-1": { id: "li-1", addedAt: 1700000000000, media: { duration: 36000, metadata: { title: "Dune", authorName: "Frank Herbert" } } },
@@ -119,7 +123,7 @@ class Fixtures {
     this.env = env;
     this.readmeText = readmeText;
     this.overrides = [];
-    this.sshState = { fail: false, failRestart: false, output: null, failTimes: 0 };
+    this.sshState = { fail: false, failRestart: false, output: null, serverOutput: null, failTimes: 0 };
     this.recordFullSystem = false;
     this.extraSearch = {};
     this.shops = SHOPS;
@@ -590,6 +594,9 @@ class Fixtures {
     }
     if (state.failRestart && String(remote).startsWith("docker 'restart'")) {
       throw new Error("Command failed: ssh restart");
+    }
+    if (String(remote).includes("{{.Ports}}")) {
+      return { stdout: state.serverOutput === null ? SERVER_PS_OUTPUT : state.serverOutput, stderr: "" };
     }
     if (String(remote).startsWith("docker 'ps'")) {
       return { stdout: state.output === null ? DOCKER_PS_OUTPUT : state.output, stderr: "" };

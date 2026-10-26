@@ -16,3 +16,4 @@ audiobookshelf.json
 plugins/audiobookshelf/.env
 announced.json
 books.json
+serverstatus.json
