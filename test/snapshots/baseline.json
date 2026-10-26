@@ -27326,7 +27326,7 @@
                   {
                     "color": 5793266,
                     "title": "Achievement leaderboard",
-                    "description": "🥇 **Bob** - 45/49 (92%) across 1 game\n🥈 **Alice** - 30/49 (61%) across 1 game\n\nTop player per game:\n⚔️ **Hades**: Bob 45/49\n*1 private Steam profile skipped.*"
+                    "description": "🥇 **Bob** - 45/49 (92%) across 1 game\n🥈 **Alice** - 30/49 (61%) across 1 game\n\nTop 3 per game:\n⚔️ **Hades**\n🥇 Bob 45/49  🥈 Alice 30/49\n*1 private Steam profile skipped.*"
                   }
                 ],
                 "allowedMentions": {
@@ -27487,7 +27487,7 @@
                   {
                     "color": 5793266,
                     "title": "Achievement leaderboard",
-                    "description": "🥇 **Bob** - 45/49 (92%) across 1 game\n🥈 **Alice** - 30/49 (61%) across 1 game\n🥉 **Carol** - 8/8 (100%) across 1 game\n\nTop player per game:\n🍓 **Celeste**: Carol 8/8\n⚔️ **Hades**: Bob 45/49"
+                    "description": "🥇 **Bob** - 45/49 (92%) across 1 game\n🥈 **Alice** - 30/49 (61%) across 1 game\n🥉 **Carol** - 8/8 (100%) across 1 game\n\nTop 3 per game:\n🍓 **Celeste**\n🥇 Carol 8/8\n⚔️ **Hades**\n🥇 Bob 45/49  🥈 Alice 30/49"
                   }
                 ],
                 "allowedMentions": {

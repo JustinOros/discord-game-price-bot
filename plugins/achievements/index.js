@@ -213,13 +213,14 @@ function overviewCard(guild, boards, hidden) {
     lines.push("...and " + extra + " more member" + (extra === 1 ? "" : "s") + ".");
   }
 
-  const leaders = boards
-    .filter((board) => board.rows.length > 0)
-    .map((board) => (board.emoji ? board.emoji + " " : "") + "**" + board.title + "**: " + nameOf(guild, board.rows[0].id) + " " + board.rows[0].unlocked + "/" + board.rows[0].total);
+  const leaders = boards.filter((board) => board.rows.length > 0);
   if (leaders.length > 0) {
     lines.push("");
-    lines.push("Top player per game:");
-    leaders.forEach((line) => lines.push(line));
+    lines.push("Top 3 per game:");
+    leaders.forEach((board) => {
+      lines.push((board.emoji ? board.emoji + " " : "") + "**" + board.title + "**");
+      lines.push(board.rows.slice(0, MEDALS.length).map((row, index) => MEDALS[index] + " " + nameOf(guild, row.id) + " " + row.unlocked + "/" + row.total).join("  "));
+    });
   }
 
   if (hidden > 0) lines.push("*" + hidden + " private Steam profile" + (hidden === 1 ? "" : "s") + " skipped.*");
