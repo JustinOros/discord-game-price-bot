@@ -163,11 +163,12 @@ async function instanceState(server) {
 async function checkRemote(server) {
   const port = Number(server.queryPort) || 2457;
   const [info, instance] = await Promise.all([
-    server.queryPort === false ? Promise.resolve(null) : queryInfo(server.host, port),
+    server.playerCount === false ? Promise.resolve(null) : queryInfo(server.host, port),
     server.listCommand ? instanceState(server) : Promise.resolve(null)
   ]);
   if (info) return { status: "online", detail: server.host, players: info.players, max: info.max };
   if (instance === "none") return { status: "offline", detail: "Server is stopped" };
+  if (instance && server.playerCount === false) return instance === "running" ? { status: "online", detail: "Server is running" } : { status: "running", detail: "Server is " + instance };
   if (instance) return { status: "running", detail: "Server is " + instance };
   return { status: "offline", detail: "No answer from " + server.host };
 }
@@ -205,7 +206,7 @@ async function checkAll(config) {
 
 function describe(state) {
   const lines = [ICONS[state.status] + " **" + LABELS[state.status] + "**"];
-  if (state.status === "online") lines.push("Players: " + state.players + " / " + state.max);
+  if (state.status === "online" && state.players !== undefined) lines.push("Players: " + state.players + " / " + state.max);
   if (state.status === "running") lines.push("No player count available");
   if (state.detail) lines.push(state.detail);
   return lines;
@@ -318,7 +319,7 @@ async function handleServers(message) {
   const results = await checkAll(config);
   const lines = results.map((result) => {
     const state = result.state;
-    const detail = state.status === "online" ? state.players + " / " + state.max + " players" : (state.status === "running" ? "running, no player count" : (state.detail || LABELS[state.status]));
+    const detail = state.status === "online" ? (state.players === undefined ? "running" : state.players + " / " + state.max + " players") : (state.status === "running" ? "running, no player count" : (state.detail || LABELS[state.status]));
     return ICONS[state.status] + " **" + result.server.name + "** - " + detail;
   });
   const card = new EmbedBuilder().setColor(0x5865f2).setTitle("Game servers").setDescription(lines.join("\n"));
