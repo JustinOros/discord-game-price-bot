@@ -43116,7 +43116,39 @@
                   {
                     "color": 5793266,
                     "title": "Game servers",
-                    "description": "🟡 **Remote Game** - running, no player count"
+                    "description": "🟡 **Remote Game** - stopping"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "cron */2 * * * *",
+          "ssh": [
+            {
+              "file": "bash",
+              "args": [
+                "-c",
+                "list-instances"
+              ],
+              "options": {
+                "cwd": "<TMP>",
+                "timeout": 30000,
+                "maxBuffer": 10485760
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "sent.edit",
+              "message": "S-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 16705372,
+                    "title": "Remote Game",
+                    "description": "🟡 **Stopping**\nServer is shutting down\nUpdated <t:1791288000:R>"
                   }
                 ]
               }
@@ -43148,6 +43180,70 @@
                   {
                     "color": 5793266,
                     "title": "Game servers",
+                    "description": "🟡 **Remote Game** - starting"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "cron */2 * * * *",
+          "ssh": [
+            {
+              "file": "bash",
+              "args": [
+                "-c",
+                "list-instances"
+              ],
+              "options": {
+                "cwd": "<TMP>",
+                "timeout": 30000,
+                "maxBuffer": 10485760
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "sent.edit",
+              "message": "S-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 16705372,
+                    "title": "Remote Game",
+                    "description": "🟡 **Starting**\nServer is provisioning\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "ssh": [
+            {
+              "file": "bash",
+              "args": [
+                "-c",
+                "list-instances"
+              ],
+              "options": {
+                "cwd": "<TMP>",
+                "timeout": 30000,
+                "maxBuffer": 10485760
+              }
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-4",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
                     "description": "🔴 **Remote Game** - Server is stopped"
                   }
                 ]
@@ -43166,7 +43262,7 @@
             "    \"G1|remote game\": {",
             "      \"channelId\": \"CH-remote\",",
             "      \"messageId\": \"S-2\",",
-            "      \"sig\": \"online||\",",
+            "      \"sig\": \"running|Starting||\",",
             "      \"at\": 1791288000000",
             "    }",
             "  },",
@@ -43363,7 +43459,7 @@
             "    \"G1|remote game\": {",
             "      \"channelId\": \"CH-remote\",",
             "      \"messageId\": \"S-2\",",
-            "      \"sig\": \"offline||\",",
+            "      \"sig\": \"offline|||\",",
             "      \"at\": 1791288000000",
             "    }",
             "  },",
@@ -43571,7 +43667,7 @@
             "    \"G1|theforest\": {",
             "      \"channelId\": \"CH-forest\",",
             "      \"messageId\": \"S-1\",",
-            "      \"sig\": \"offline||\",",
+            "      \"sig\": \"offline|||\",",
             "      \"at\": 1791288000000",
             "    }",
             "  },",
@@ -43821,7 +43917,7 @@
             "    \"G1|sonsoftheforest\": {",
             "      \"channelId\": \"CH-sotf\",",
             "      \"messageId\": \"S-1\",",
-            "      \"sig\": \"offline||\",",
+            "      \"sig\": \"offline|||\",",
             "      \"at\": 1791288000000",
             "    }",
             "  },",
@@ -44141,7 +44237,7 @@
             "    \"G1|sonsoftheforest\": {",
             "      \"channelId\": \"CH-sotf\",",
             "      \"messageId\": \"S-1\",",
-            "      \"sig\": \"offline||\",",
+            "      \"sig\": \"offline|||\",",
             "      \"at\": 1791288000000",
             "    }",
             "  },",
@@ -44458,7 +44554,7 @@
             "    \"G1|sonsoftheforest\": {",
             "      \"channelId\": \"CH-sotf\",",
             "      \"messageId\": \"S-1\",",
-            "      \"sig\": \"offline||\",",
+            "      \"sig\": \"offline|||\",",
             "      \"at\": 1791288660000",
             "    }",
             "  },",

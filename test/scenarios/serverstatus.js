@@ -73,8 +73,12 @@ module.exports = [
     ctx.fx.sshState.listOutput = JSON.stringify({ data: [{ label: "remote", status: "running" }] });
     await ctx.say("alice", "!servers");
     await ctx.cron(TICK);
+    ctx.fx.sshState.listOutput = JSON.stringify({ data: [{ label: "remote", status: "shutting_down" }] });
+    await ctx.say("alice", "!servers");
+    await ctx.cron(TICK);
     ctx.fx.sshState.listOutput = JSON.stringify({ data: [{ label: "remote", status: "provisioning" }] });
     await ctx.say("alice", "!servers");
+    await ctx.cron(TICK);
     ctx.fx.sshState.listOutput = JSON.stringify({ data: [] });
     await ctx.say("alice", "!servers");
   }, { env: { DOCKER_SSH_HOST: null }, files: { "plugins/server-status/config.yaml": { servers: [] }, "plugins/server-status/config.local.yaml": { servers: [{ name: "Remote Game", host: "remote.test.local", playerCount: false, channel: "remote-game", instanceLabel: "remote", listCommand: "list-instances" }] } } }),

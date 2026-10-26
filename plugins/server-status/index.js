@@ -160,6 +160,12 @@ async function instanceState(server) {
   }
 }
 
+function transitionState(instance) {
+  const words = instance.replace(/_/g, " ");
+  const stopping = /shutting|stopp|delet|offline/.test(instance);
+  return { status: "running", label: stopping ? "Stopping" : "Starting", quiet: true, detail: "Server is " + words };
+}
+
 async function checkRemote(server) {
   const port = Number(server.queryPort) || 2457;
   const [info, instance] = await Promise.all([
@@ -168,7 +174,7 @@ async function checkRemote(server) {
   ]);
   if (info) return { status: "online", detail: server.host, players: info.players, max: info.max };
   if (instance === "none") return { status: "offline", detail: "Server is stopped" };
-  if (instance && server.playerCount === false) return instance === "running" ? { status: "online", detail: "Server is running" } : { status: "running", detail: "Server is " + instance };
+  if (instance && server.playerCount === false) return instance === "running" ? { status: "online", detail: "Server is running" } : transitionState(instance);
   if (instance) return { status: "running", detail: "Server is " + instance };
   return { status: "offline", detail: "No answer from " + server.host };
 }
@@ -205,15 +211,15 @@ async function checkAll(config) {
 }
 
 function describe(state) {
-  const lines = [ICONS[state.status] + " **" + LABELS[state.status] + "**"];
+  const lines = [ICONS[state.status] + " **" + (state.label || LABELS[state.status]) + "**"];
   if (state.status === "online" && state.players !== undefined) lines.push("Players: " + state.players + " / " + state.max);
-  if (state.status === "running") lines.push("No player count available");
+  if (state.status === "running" && !state.quiet) lines.push("No player count available");
   if (state.detail) lines.push(state.detail);
   return lines;
 }
 
 function signature(state) {
-  return [state.status, state.players === undefined ? "" : state.players, state.max === undefined ? "" : state.max].join("|");
+  return [state.status, state.label || "", state.players === undefined ? "" : state.players, state.max === undefined ? "" : state.max].join("|");
 }
 
 function buildCard(server, state) {
@@ -319,7 +325,7 @@ async function handleServers(message) {
   const results = await checkAll(config);
   const lines = results.map((result) => {
     const state = result.state;
-    const detail = state.status === "online" ? (state.players === undefined ? "running" : state.players + " / " + state.max + " players") : (state.status === "running" ? "running, no player count" : (state.detail || LABELS[state.status]));
+    const detail = state.status === "online" ? (state.players === undefined ? "running" : state.players + " / " + state.max + " players") : (state.status === "running" ? (state.quiet ? (state.label || "running").toLowerCase() : "running, no player count") : (state.detail || LABELS[state.status]));
     return ICONS[state.status] + " **" + result.server.name + "** - " + detail;
   });
   const card = new EmbedBuilder().setColor(0x5865f2).setTitle("Game servers").setDescription(lines.join("\n"));
