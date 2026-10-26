@@ -168,7 +168,7 @@ async function checkRemote(server) {
   ]);
   if (info) return { status: "online", detail: server.host, players: info.players, max: info.max };
   if (instance === "none") return { status: "offline", detail: "Server is stopped" };
-  if (instance) return { status: "running", detail: "Server is " + instance + ", no player count" };
+  if (instance) return { status: "running", detail: "Server is " + instance };
   return { status: "offline", detail: "No answer from " + server.host };
 }
 
