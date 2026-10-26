@@ -3,7 +3,7 @@ alerts: true
 servers:
   - name: The Forest
     container: TheForest
-    channel: the-forest
+    channel: "1543087643666153512"
   - name: Sons Of The Forest
     container: SonsOfTheForest
     channel: sons-of-the-forest

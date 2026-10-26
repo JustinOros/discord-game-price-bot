@@ -174,6 +174,10 @@ function buildCard(server, state) {
 function findChannel(guild, server) {
   const name = String(server.channel || "").toLowerCase();
   if (!name) return null;
+  if (/^\d+$/.test(name)) {
+    const byId = guild.channels.cache.get(name);
+    return byId && byId.isTextBased && byId.isTextBased() ? byId : null;
+  }
   return guild.channels.cache.find((channel) => String(channel.name).toLowerCase() === name && channel.isTextBased && channel.isTextBased()) || null;
 }
 
