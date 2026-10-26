@@ -43,6 +43,16 @@ module.exports = [
     await ctx.say("alice", "!servers");
   }, { files: { "plugins/server-status/config.yaml": { servers: [{ name: "The Forest", container: "theforest", channel: "the-forest", host: "game.test.local", queryPort: 9999 }] } } }),
 
+  sc("servers-remote-query-only-server", async (ctx) => {
+    ctx.world.g1.addChannel({ id: "CH-remote", name: "remote-game" });
+    ctx.world.a2s = { "remote.test.local:2457": { name: "Remote Game", players: 2, max: 10 } };
+    await ctx.say("alice", "!servers");
+    await ctx.startReady();
+    await ctx.cron(TICK);
+    ctx.world.a2s = {};
+    await ctx.cron(TICK);
+  }, { env: { DOCKER_SSH_HOST: null }, files: { "plugins/server-status/config.yaml": { servers: [] }, "plugins/server-status/config.local.yaml": { servers: [{ name: "Remote Game", host: "remote.test.local", queryPort: 2457, channel: "remote-game" }] } } }),
+
   sc("servers-not-set-up", async (ctx) => {
     await ctx.say("alice", "!servers");
     await ctx.startReady();

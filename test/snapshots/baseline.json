@@ -42662,7 +42662,215 @@
         }
       ],
       "pendingTimers": 0,
-      "files": {}
+      "files": {
+        "serverstatus.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"messages\": {},",
+            "  \"up\": {}",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
+    "servers-remote-query-only-server": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !servers",
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5793266,
+                    "title": "Game servers",
+                    "description": "🟢 **Remote Game** - 2 / 10 players"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */2 * * * *",
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-remote",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 5763719,
+                    "title": "Remote Game",
+                    "description": "🟢 **Online**\nPlayers: 2 / 10\nremote.test.local\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            },
+            {
+              "via": "sent.pin",
+              "message": "S-2"
+            }
+          ]
+        },
+        {
+          "label": "cron */2 * * * *",
+          "outgoing": [
+            {
+              "via": "channel.send",
+              "channel": "CH-remote",
+              "payload": {
+                "content": "Remote Game is now offline."
+              }
+            },
+            {
+              "via": "sent.edit",
+              "message": "S-2",
+              "payload": {
+                "embeds": [
+                  {
+                    "color": 15548997,
+                    "title": "Remote Game",
+                    "description": "🔴 **Offline**\nNo answer from remote.test.local\nUpdated <t:1791288000:R>"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "serverstatus.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"messages\": {",
+            "    \"G1|remote game\": {",
+            "      \"channelId\": \"CH-remote\",",
+            "      \"messageId\": \"S-2\",",
+            "      \"sig\": \"offline||\",",
+            "      \"at\": 1791288000000",
+            "    }",
+            "  },",
+            "  \"up\": {",
+            "    \"remote game\": false",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
     },
     "servers-status-alerts-off": {
       "steps": [
@@ -43003,23 +43211,6 @@
           "outgoing": [
             {
               "via": "channel.send",
-              "channel": "CH-forest",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            },
-            {
-              "via": "sent.pin",
-              "message": "S-1"
-            },
-            {
-              "via": "channel.send",
               "channel": "CH-sotf",
               "payload": {
                 "embeds": [
@@ -43033,7 +43224,7 @@
             },
             {
               "via": "sent.pin",
-              "message": "S-2"
+              "message": "S-1"
             }
           ]
         },
@@ -43067,19 +43258,6 @@
             {
               "via": "sent.edit",
               "message": "S-1",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 9807270,
-                    "title": "The Forest",
-                    "description": "⚪ **Unknown**\nCouldn't reach the Docker host\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            },
-            {
-              "via": "sent.edit",
-              "message": "S-2",
               "payload": {
                 "embeds": [
                   {
@@ -43119,19 +43297,6 @@
               "payload": {
                 "embeds": [
                   {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            },
-            {
-              "via": "sent.edit",
-              "message": "S-2",
-              "payload": {
-                "embeds": [
-                  {
                     "color": 15548997,
                     "title": "Sons Of The Forest",
                     "description": "🔴 **Offline**\nExited (0) 5 minutes ago\nUpdated <t:1791288000:R>"
@@ -43149,15 +43314,9 @@
           "lines": [
             "{",
             "  \"messages\": {",
-            "    \"G1|theforest\": {",
-            "      \"channelId\": \"CH-forest\",",
-            "      \"messageId\": \"S-1\",",
-            "      \"sig\": \"online|3|8\",",
-            "      \"at\": 1791288000000",
-            "    },",
             "    \"G1|sonsoftheforest\": {",
             "      \"channelId\": \"CH-sotf\",",
-            "      \"messageId\": \"S-2\",",
+            "      \"messageId\": \"S-1\",",
             "      \"sig\": \"offline||\",",
             "      \"at\": 1791288000000",
             "    }",
@@ -43281,25 +43440,7 @@
           ]
         },
         {
-          "label": "interval of ten minutes",
-          "ssh": [
-            {
-              "file": "ssh",
-              "args": [
-                "-i",
-                "/keys/test_ed25519",
-                "-o",
-                "StrictHostKeyChecking=no",
-                "-o",
-                "ConnectTimeout=10",
-                "dockeruser@docker.test.local",
-                "'docker' 'ps' '-a' '--format' '{{.Names}}|{{.Status}}|{{.Ports}}|{{.State}}'"
-              ],
-              "options": {
-                "timeout": 15000
-              }
-            }
-          ]
+          "label": "interval of ten minutes"
         }
       ],
       "pendingTimers": 0,
@@ -43447,23 +43588,6 @@
           "outgoing": [
             {
               "via": "channel.send",
-              "channel": "CH-forest",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            },
-            {
-              "via": "sent.pin",
-              "message": "S-1"
-            },
-            {
-              "via": "channel.send",
               "channel": "CH-sotf",
               "payload": {
                 "embeds": [
@@ -43477,7 +43601,7 @@
             },
             {
               "via": "sent.pin",
-              "message": "S-2"
+              "message": "S-1"
             }
           ]
         },
@@ -43500,31 +43624,6 @@
                 "timeout": 15000
               }
             }
-          ],
-          "console": [
-            {
-              "level": "error",
-              "text": "2026-10-06T12:00:00.000Z Could not edit the status message for The Forest, posting a new one: Unknown Message"
-            }
-          ],
-          "outgoing": [
-            {
-              "via": "channel.send",
-              "channel": "CH-forest",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 4 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            },
-            {
-              "via": "sent.pin",
-              "message": "S-3"
-            }
           ]
         }
       ],
@@ -43535,15 +43634,9 @@
           "lines": [
             "{",
             "  \"messages\": {",
-            "    \"G1|theforest\": {",
-            "      \"channelId\": \"CH-forest\",",
-            "      \"messageId\": \"S-3\",",
-            "      \"sig\": \"online|4|8\",",
-            "      \"at\": 1791288000000",
-            "    },",
             "    \"G1|sonsoftheforest\": {",
             "      \"channelId\": \"CH-sotf\",",
-            "      \"messageId\": \"S-2\",",
+            "      \"messageId\": \"S-1\",",
             "      \"sig\": \"offline||\",",
             "      \"at\": 1791288000000",
             "    }",
@@ -43689,23 +43782,6 @@
           "outgoing": [
             {
               "via": "channel.send",
-              "channel": "CH-forest",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            },
-            {
-              "via": "sent.pin",
-              "message": "S-1"
-            },
-            {
-              "via": "channel.send",
               "channel": "CH-sotf",
               "payload": {
                 "embeds": [
@@ -43719,7 +43795,7 @@
             },
             {
               "via": "sent.pin",
-              "message": "S-2"
+              "message": "S-1"
             }
           ]
         },
@@ -43763,21 +43839,6 @@
                 "timeout": 15000
               }
             }
-          ],
-          "outgoing": [
-            {
-              "via": "sent.edit",
-              "message": "S-1",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 5 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            }
           ]
         },
         {
@@ -43797,28 +43858,6 @@
               ],
               "options": {
                 "timeout": 15000
-              }
-            }
-          ],
-          "outgoing": [
-            {
-              "via": "channel.send",
-              "channel": "CH-forest",
-              "payload": {
-                "content": "The Forest is now offline."
-              }
-            },
-            {
-              "via": "sent.edit",
-              "message": "S-1",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 15548997,
-                    "title": "The Forest",
-                    "description": "🔴 **Offline**\nExited (137) 1 minute ago\nUpdated <t:1791288000:R>"
-                  }
-                ]
               }
             }
           ]
@@ -43863,28 +43902,6 @@
                 "timeout": 15000
               }
             }
-          ],
-          "outgoing": [
-            {
-              "via": "channel.send",
-              "channel": "CH-forest",
-              "payload": {
-                "content": "The Forest is now online."
-              }
-            },
-            {
-              "via": "sent.edit",
-              "message": "S-1",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 0 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            }
           ]
         },
         {
@@ -43917,19 +43934,6 @@
               "payload": {
                 "embeds": [
                   {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 0 / 8\nUp 3 hours\nUpdated <t:1791288660:R>"
-                  }
-                ]
-              }
-            },
-            {
-              "via": "sent.edit",
-              "message": "S-2",
-              "payload": {
-                "embeds": [
-                  {
                     "color": 15548997,
                     "title": "Sons Of The Forest",
                     "description": "🔴 **Offline**\nExited (0) 5 minutes ago\nUpdated <t:1791288660:R>"
@@ -43947,15 +43951,9 @@
           "lines": [
             "{",
             "  \"messages\": {",
-            "    \"G1|theforest\": {",
-            "      \"channelId\": \"CH-forest\",",
-            "      \"messageId\": \"S-1\",",
-            "      \"sig\": \"online|0|8\",",
-            "      \"at\": 1791288660000",
-            "    },",
             "    \"G1|sonsoftheforest\": {",
             "      \"channelId\": \"CH-sotf\",",
-            "      \"messageId\": \"S-2\",",
+            "      \"messageId\": \"S-1\",",
             "      \"sig\": \"offline||\",",
             "      \"at\": 1791288660000",
             "    }",
@@ -44097,31 +44095,6 @@
                 "timeout": 15000
               }
             }
-          ],
-          "outgoing": [
-            {
-              "via": "channel.send",
-              "channel": "CH-forest",
-              "payload": {
-                "embeds": [
-                  {
-                    "color": 5763719,
-                    "title": "The Forest",
-                    "description": "🟢 **Online**\nPlayers: 3 / 8\nUp 3 hours\nUpdated <t:1791288000:R>"
-                  }
-                ]
-              }
-            },
-            {
-              "via": "sent.pin",
-              "message": "S-1"
-            }
-          ],
-          "console": [
-            {
-              "level": "error",
-              "text": "2026-10-06T12:00:00.000Z Could not pin the status message for The Forest: Missing Permissions"
-            }
           ]
         }
       ],
@@ -44131,14 +44104,7 @@
           "status": "created",
           "lines": [
             "{",
-            "  \"messages\": {",
-            "    \"G1|theforest\": {",
-            "      \"channelId\": \"CH-forest\",",
-            "      \"messageId\": \"S-1\",",
-            "      \"sig\": \"online|3|8\",",
-            "      \"at\": 1791288000000",
-            "    }",
-            "  },",
+            "  \"messages\": {},",
             "  \"up\": {",
             "    \"theforest\": true,",
             "    \"sonsoftheforest\": false",

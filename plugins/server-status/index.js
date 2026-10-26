@@ -10,6 +10,7 @@ const execFileAsync = util.promisify(require("child_process").execFile);
 const ROOT = path.join(__dirname, "..", "..");
 const STORE_PATH = path.join(ROOT, "serverstatus.json");
 const CONFIG_PATH = path.join(__dirname, "config.yaml");
+const LOCAL_CONFIG_PATH = path.join(__dirname, "config.local.yaml");
 const DEFAULT_INTERVAL_MINUTES = 2;
 const SSH_TIMEOUT_MS = 15000;
 const REFRESH_MS = 10 * 60 * 1000;
@@ -29,17 +30,34 @@ function sshSettings() {
   return { host: host, user: user, key: key, ready: !!(host && user && key) };
 }
 
-function loadConfig() {
+function readYaml(file) {
   try {
-    const data = yaml.load(fs.readFileSync(CONFIG_PATH, "utf8"));
+    const data = yaml.load(fs.readFileSync(file, "utf8"));
     return (data && typeof data === "object") ? data : {};
   } catch (err) {
     return {};
   }
 }
 
+function loadConfig() {
+  const config = readYaml(CONFIG_PATH);
+  const local = readYaml(LOCAL_CONFIG_PATH);
+  const extra = Array.isArray(local.servers) ? local.servers : [];
+  if (extra.length === 0) return config;
+  const base = Array.isArray(config.servers) ? config.servers : [];
+  return Object.assign({}, config, { servers: base.concat(extra) });
+}
+
 function servers(config) {
-  return (Array.isArray(config.servers) ? config.servers : []).filter((server) => server && server.container && server.name);
+  return (Array.isArray(config.servers) ? config.servers : []).filter((server) => server && server.name && (server.container || server.host));
+}
+
+function serverId(server) {
+  return String(server.container || server.name).toLowerCase();
+}
+
+function isRemote(server) {
+  return !server.container;
 }
 
 function intervalMinutes(config) {
@@ -128,7 +146,15 @@ async function playerInfo(server, container) {
   return hit.info;
 }
 
+async function checkRemote(server) {
+  const port = Number(server.queryPort) || 2457;
+  const info = await queryInfo(server.host, port);
+  if (!info) return { status: "offline", detail: "No answer from " + server.host };
+  return { status: "online", detail: server.host, players: info.players, max: info.max };
+}
+
 async function checkServer(server, containers) {
+  if (isRemote(server)) return checkRemote(server);
   const container = containers.find((entry) => entry.name.toLowerCase() === String(server.container).toLowerCase());
   if (!container) return { status: "missing", detail: "No container named " + server.container };
   if (container.state !== "running") return { status: "offline", detail: container.status };
@@ -139,16 +165,21 @@ async function checkServer(server, containers) {
 
 async function checkAll(config) {
   const list = servers(config);
-  let containers;
-  try {
-    containers = await listContainers();
-  } catch (err) {
-    console.error("Server status check failed:", err.message);
-    return list.map((server) => ({ server: server, state: { status: "unknown", detail: "Couldn't reach the Docker host" } }));
+  let containers = null;
+  if (list.some((server) => !isRemote(server)) && sshSettings().ready) {
+    try {
+      containers = await listContainers();
+    } catch (err) {
+      console.error("Server status check failed:", err.message);
+    }
   }
   const results = [];
   for (const server of list) {
-    results.push({ server: server, state: await checkServer(server, containers) });
+    if (!isRemote(server) && !containers) {
+      results.push({ server: server, state: { status: "unknown", detail: "Couldn't reach the Docker host" } });
+      continue;
+    }
+    results.push({ server: server, state: await checkServer(server, containers || []) });
   }
   return results;
 }
@@ -184,7 +215,7 @@ function findChannel(guild, server) {
 async function refreshMessage(guild, server, state, store) {
   const channel = findChannel(guild, server);
   if (!channel) return;
-  const key = guild.id + "|" + String(server.container).toLowerCase();
+  const key = guild.id + "|" + serverId(server);
   const entry = store.messages[key];
   const sig = signature(state);
   const now = Date.now();
@@ -218,7 +249,7 @@ async function alertIfChanged(server, state, store, config) {
   const isUp = state.status === "online" || state.status === "running";
   const isDown = state.status === "offline";
   if (!isUp && !isDown) return;
-  const key = String(server.container).toLowerCase();
+  const key = serverId(server);
   const previous = store.up[key];
   store.up[key] = isUp;
   if (config.alerts === false || previous === undefined || previous === isUp) return;
@@ -234,7 +265,7 @@ async function alertIfChanged(server, state, store, config) {
 }
 
 async function tick() {
-  if (checking || !ctx || !sshSettings().ready) return;
+  if (checking || !ctx) return;
   checking = true;
   try {
     const config = loadConfig();
@@ -255,12 +286,13 @@ async function tick() {
 }
 
 async function handleServers(message) {
-  if (!sshSettings().ready) {
+  const config = loadConfig();
+  const list = servers(config);
+  if (!sshSettings().ready && list.every((server) => !isRemote(server))) {
     await message.reply("Server status isn't set up. Set DOCKER_SSH_HOST, DOCKER_SSH_USER and DOCKER_SSH_KEY_PATH in .env to enable it.");
     return;
   }
-  const config = loadConfig();
-  if (servers(config).length === 0) {
+  if (list.length === 0) {
     await message.reply("No game servers are listed in plugins/server-status/config.yaml yet.");
     return;
   }
