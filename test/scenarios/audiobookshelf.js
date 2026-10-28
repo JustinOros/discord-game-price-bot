@@ -196,6 +196,21 @@ module.exports = [
     await ctx.cron("*/30 * * * *");
   }, WITH_ENV),
 
+  sc("abs-finished-card-gets-rating-added-later", async (ctx) => {
+    SETUP(ctx);
+    await ctx.say("alice", "!ab link alicia");
+    await ctx.say("alice", "!gr link 1001");
+    await ctx.startReady();
+    await ctx.cron("*/30 * * * *");
+    ctx.fx.abs.progress["u-1"].push({ libraryItemId: "li-3", progress: 1, isFinished: true, finishedAt: Date.UTC(2026, 9, 5), lastUpdate: 9 });
+    ctx.fx.abs.progress["u-1"] = ctx.fx.abs.progress["u-1"].filter((entry) => entry.libraryItemId !== "li-3" || entry.isFinished);
+    await ctx.cron("*/30 * * * *");
+    await ctx.cron("*/30 * * * *");
+    ctx.fx.goodreads.feeds["1001"].read.unshift({ id: "96", title: "Piranesi", author: "Susanna Clarke", rating: 4, readAt: "Mon, 05 Oct 2026 00:00:00 -0700", pages: 272 });
+    await ctx.cron("*/30 * * * *");
+    await ctx.cron("*/30 * * * *");
+  }, WITH_ENV),
+
   sc("abs-finished-card-with-expanded-item-shape", async (ctx) => {
     SETUP(ctx);
     await ctx.say("alice", "!ab link alicia");

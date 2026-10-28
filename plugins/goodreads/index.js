@@ -468,7 +468,7 @@ const bookSource = {
   async rating(discordId, title) {
     const link = loadLinks()[discordId];
     if (!link) return 0;
-    const result = await shelfFor(link, "read");
+    const result = await shelfFor(link, "read", true, true);
     if (!result.ok) return 0;
     const wanted = books.bookKey(title);
     const hit = result.items.find((item) => item.rating > 0 && books.bookKey(item.title) === wanted);

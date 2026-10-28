@@ -12,6 +12,7 @@ const CONFIG_PATH = path.join(__dirname, "config.yaml");
 const DEFAULT_POLL_MINUTES = 30;
 const MAX_ANNOUNCE_PER_USER = 3;
 const MAX_SEEN_PER_USER = 1000;
+const RATING_FOLLOWUP_MS = 24 * 60 * 60 * 1000;
 const NEW_BOOK_LIMIT = 5;
 const NEW_BOOK_PAGE_SIZE = 100;
 const NEW_BOOK_MAX_PAGES = 5;
@@ -34,6 +35,7 @@ const ABS_HELP = [
 
 let ctx = null;
 let checking = false;
+const pendingRatings = [];
 
 function loadConfig() {
   try {
@@ -412,9 +414,11 @@ async function announce(guild, config, card, cover) {
     payload.files = [cover];
   }
   try {
-    await channel.send(payload);
+    const sent = await channel.send(payload);
+    return sent ? { id: sent.id, channelId: channel.id } : null;
   } catch (err) {
     console.error("Audiobookshelf announcement failed:", err.message);
+    return null;
   }
 }
 
@@ -431,22 +435,66 @@ async function findRating(userId, title) {
   return 0;
 }
 
+function finishedCard(guild, userId, item, rating, coverName) {
+  const lines = [];
+  if (item.author) lines.push("by " + item.author);
+  if (item.duration) lines.push(abs.formatDuration(item.duration) + " listened");
+  if (rating) lines.push(books.stars(rating));
+  const card = new EmbedBuilder()
+    .setColor(EMBED_COLOR)
+    .setTitle(memberName(guild, userId) + " finished " + item.title)
+    .setDescription(lines.join("\n") || "Finished an audiobook");
+  const url = abs.itemUrl(item.id);
+  if (url) card.setURL(url);
+  if (coverName) card.setThumbnail("attachment://" + coverName);
+  return card;
+}
+
+function hasRatingSource() {
+  return books.getSources(ctx).some((source) => typeof source.rating === "function");
+}
+
 async function announceFinished(userId, item, config) {
   if (!books.claimAnnouncement(userId, item.title)) return;
   const rating = await findRating(userId, item.title);
   for (const guild of Array.from(ctx.client.guilds.cache.values())) {
     if (!guild.members.cache.has(userId)) continue;
-    const lines = [];
-    if (item.author) lines.push("by " + item.author);
-    if (item.duration) lines.push(abs.formatDuration(item.duration) + " listened");
-    if (rating) lines.push(books.stars(rating));
-    const card = new EmbedBuilder()
-      .setColor(EMBED_COLOR)
-      .setTitle(memberName(guild, userId) + " finished " + item.title)
-      .setDescription(lines.join("\n") || "Finished an audiobook");
-    const url = abs.itemUrl(item.id);
-    if (url) card.setURL(url);
-    await announce(guild, config, card, await abs.coverFile(item.id));
+    const card = finishedCard(guild, userId, item, rating, null);
+    const cover = await abs.coverFile(item.id);
+    const sent = await announce(guild, config, card, cover);
+    if (sent && !rating && hasRatingSource()) {
+      pendingRatings.push({
+        guildId: guild.id,
+        channelId: sent.channelId,
+        messageId: sent.id,
+        userId: userId,
+        item: item,
+        coverName: cover ? cover.name : null,
+        expires: Date.now() + RATING_FOLLOWUP_MS
+      });
+    }
+  }
+}
+
+async function updatePendingRatings() {
+  const now = Date.now();
+  for (let i = pendingRatings.length - 1; i >= 0; i--) {
+    if (pendingRatings[i].expires <= now) pendingRatings.splice(i, 1);
+  }
+  for (const pending of pendingRatings.slice()) {
+    const rating = await findRating(pending.userId, pending.item.title);
+    if (!rating) continue;
+    const index = pendingRatings.indexOf(pending);
+    if (index !== -1) pendingRatings.splice(index, 1);
+    const guild = ctx.client.guilds.cache.get(pending.guildId);
+    const channel = guild && guild.channels.cache.get(pending.channelId);
+    if (!channel) continue;
+    try {
+      const message = await channel.messages.fetch(pending.messageId);
+      await message.edit({ embeds: [finishedCard(guild, pending.userId, pending.item, rating, pending.coverName)] });
+    } catch (err) {
+      console.error("Could not add the rating to the announcement:", err.message);
+    }
   }
 }
 
@@ -528,6 +576,7 @@ async function checkProgress() {
       changed = true;
     }
     if (await announceNewBooks(data, config)) changed = true;
+    await updatePendingRatings();
     if (changed) saveData(data);
   } catch (err) {
     console.error("Audiobookshelf check failed:", err.message);
