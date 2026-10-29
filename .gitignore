@@ -18,3 +18,5 @@ announced.json
 books.json
 serverstatus.json
 plugins/server-status/config.local.yaml
+hardcover.json
+plugins/hardcover/.env

@@ -14,6 +14,7 @@ module.exports = [].concat(
   require("./bookfeatures"),
   require("./serverstatus"),
   require("./achievements"),
+  require("./hardcover"),
   require("./chat"),
   require("./extras")
 );

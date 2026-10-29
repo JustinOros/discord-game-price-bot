@@ -20,6 +20,14 @@ async function linkAll(ctx) {
 }
 
 module.exports = [
+  sc("books-goal-counts-different-editions-with-same-base-title", async (ctx) => {
+    SETUP(ctx);
+    ctx.fx.goodreads.feeds["1001"].read.unshift({ id: "e1", title: "1984", author: "George Orwell", rating: 5, readAt: "Tue, 15 Sep 2026 00:00:00 -0700", pages: 300 });
+    ctx.fx.goodreads.feeds["1001"].read.unshift({ id: "e2", title: "1984: An Audible Original adaptation", author: "George Orwell", rating: 4, readAt: "Wed, 16 Sep 2026 00:00:00 -0700", pages: 0 });
+    await ctx.say("alice", "!gr link 1001");
+    await ctx.say("alice", "!books goal 10");
+  }),
+
   sc("books-goal-set-view-and-clear", async (ctx) => {
     SETUP(ctx);
     await ctx.say("alice", "!books goal");

@@ -128,6 +128,7 @@ class Fixtures {
     this.extraSearch = {};
     this.shops = SHOPS;
     this.goodreads = { feeds: JSON.parse(JSON.stringify(GR_FEEDS)) };
+    this.hardcover = { users: {}, books: {}, errorFor: {} };
     this.abs = makeAbs();
   }
 
@@ -273,6 +274,7 @@ class Fixtures {
     if (host === "api.tavily.com") return this.routeTavily(req);
     if (host === "www.goodreads.com") return this.routeGoodreads(req);
     if (host === "abs.test") return this.routeAbs(req);
+    if (host === "api.hardcover.app") return this.routeHardcover(req);
     return { status: 404, body: "unmocked " + req.method + " " + req.url };
   }
 
@@ -540,6 +542,23 @@ class Fixtures {
       return { status: 200, body: { book: hits.map((item) => ({ libraryItem: item })) } };
     }
     return { status: 404, body: "unmocked abs path" };
+  }
+
+  routeHardcover(req) {
+    const auth = req.headers && req.headers.Authorization;
+    if (!auth || auth === "Bearer wrong") return { status: 401, body: "unauthorized" };
+    const query = req.body && req.body.query ? req.body.query : "";
+    const variables = (req.body && req.body.variables) || {};
+    if (query.includes("users(")) {
+      const user = this.hardcover.users[variables.username];
+      return { status: 200, body: { data: { users: user ? [{ id: user.id, username: variables.username }] : [] } } };
+    }
+    if (query.includes("user_books(")) {
+      if (this.hardcover.errorFor[variables.userId]) return { status: 200, body: { errors: [{ message: "permission denied" }] } };
+      const shelf = (this.hardcover.books[variables.userId] || {})[variables.status] || [];
+      return { status: 200, body: { data: { user_books: shelf.slice(variables.offset, variables.offset + variables.limit) } } };
+    }
+    return { status: 400, body: "bad query" };
   }
 
   routeGoodreads(req) {
