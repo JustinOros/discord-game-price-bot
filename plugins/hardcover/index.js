@@ -244,11 +244,15 @@ async function announceFinished(userId, item) {
     const channel = findAnnounceChannel(guild, config);
     if (!channel) continue;
 
-    const lines = [stars(item.rating) + (item.pages ? " - " + item.pages + " pages" : "")];
+    const lines = [];
+    const detail = [];
+    if (item.rating > 0) detail.push(stars(item.rating));
+    if (item.pages) detail.push(item.pages + " pages");
+    if (detail.length > 0) lines.push(detail.join(" - "));
     const card = new EmbedBuilder()
       .setColor(EMBED_COLOR)
       .setTitle(memberName(guild, userId) + " finished " + item.title)
-      .setDescription(((item.author ? "by " + item.author + "\n" : "") + lines.join("\n")).slice(0, 4000));
+      .setDescription(((item.author ? "by " + item.author + "\n" : "") + lines.join("\n")).trim().slice(0, 4000) || "Finished a book");
     if (item.link) card.setURL(item.link);
     if (item.image) card.setThumbnail(item.image);
     try {
