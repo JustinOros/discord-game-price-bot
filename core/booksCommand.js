@@ -46,16 +46,17 @@ async function gatherCurrently(id, active, perSource) {
       const key = bookKey(item.title);
       const found = merged.get(key);
       if (!found) {
-        merged.set(key, { item: item, source: source.name, percent: item.percent || 0, image: item.image || null });
+        merged.set(key, { item: item, source: source.name, percent: item.percent || 0, image: item.image || null, started: String(item.startedAt || "") });
         return;
       }
       if (!found.percent && item.percent) found.percent = item.percent;
+      if (!found.started && item.startedAt) found.started = String(item.startedAt);
       if (!found.image && item.image) found.image = item.image;
     });
   }
   return Array.from(merged.values())
     .map((entry, index) => ({ entry: entry, index: index }))
-    .sort((a, b) => (b.entry.percent - a.entry.percent) || (a.index - b.index))
+    .sort((a, b) => (b.entry.percent - a.entry.percent) || (a.entry.started === b.entry.started ? 0 : a.entry.started < b.entry.started ? 1 : -1) || (a.index - b.index))
     .map((row) => row.entry);
 }
 

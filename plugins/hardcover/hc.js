@@ -17,7 +17,7 @@ const BOOKS_QUERY = "query ($userId: Int!, $status: Int!, $limit: Int!, $offset:
   "id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } " +
   "user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }";
 
-const READING_QUERY = BOOKS_QUERY.replace("user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at }", "user_book_reads(order_by: {started_at: desc_nulls_last}, limit: 1) { finished_at progress_pages }");
+const READING_QUERY = BOOKS_QUERY.replace("user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at }", "user_book_reads(order_by: {started_at: desc_nulls_last}, limit: 1) { finished_at started_at progress_pages }");
 
 function loadSettings() {
   let token = String(process.env.HARDCOVER_TOKEN || "").trim();
@@ -107,6 +107,7 @@ function toItem(row) {
     image: image,
     link: book.slug ? "https://hardcover.app/books/" + book.slug : "",
     pages: parseInt(book.pages, 10) || 0,
+    startedAt: String((reads.length > 0 && reads[0].started_at) || row.date_added || ""),
     progressPages: reads.length > 0 ? parseInt(reads[0].progress_pages, 10) || 0 : 0,
     review: ""
   };

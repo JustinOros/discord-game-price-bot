@@ -311,6 +311,7 @@ const bookSource = {
       author: item.author,
       image: item.image,
       verb: "reading",
+      startedAt: item.startedAt,
       percent: item.pages > 0 && item.progressPages > 0 ? Math.min(100, Math.round((item.progressPages / item.pages) * 100)) : 0
     }));
   },
