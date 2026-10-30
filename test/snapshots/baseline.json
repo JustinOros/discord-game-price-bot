@@ -8816,7 +8816,7 @@
               "via": "channel.send",
               "channel": "CH-general",
               "payload": {
-                "content": "Linked Alice to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+                "content": "Linked Alice to Goodreads user 1003. I'll post when you finish a book."
               }
             }
           ]
@@ -20959,7 +20959,7 @@
               "via": "channel.send",
               "channel": "CH-general",
               "payload": {
-                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book."
               }
             }
           ]
@@ -21615,7 +21615,7 @@
               "via": "channel.send",
               "channel": "CH-general",
               "payload": {
-                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book."
               }
             }
           ]
@@ -22110,7 +22110,7 @@
               "via": "channel.send",
               "channel": "CH-general",
               "payload": {
-                "content": "Linked Alice to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+                "content": "Linked Alice to Goodreads user 1003. I'll post when you finish a book."
               }
             }
           ]
@@ -23487,7 +23487,7 @@
               "via": "channel.send",
               "channel": "CH-general",
               "payload": {
-                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book (0 already on your read shelf, so I won't announce those)."
+                "content": "Linked Carol to Goodreads user 1003. I'll post when you finish a book."
               }
             }
           ]

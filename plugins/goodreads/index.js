@@ -115,8 +115,8 @@ async function handleLink(message, args, links) {
   };
   saveLinks(links);
   await message.channel.send(
-    "Linked " + memberName(message.guild, message.author.id) + " to Goodreads user " + parsed.userId + ". I'll post when you finish a book " +
-    "(" + result.items.length + " already on your read shelf, so I won't announce those)."
+    "Linked " + memberName(message.guild, message.author.id) + " to Goodreads user " + parsed.userId + ". I'll post when you finish a book" +
+    (result.items.length > 0 ? " (" + result.items.length + " already on your read shelf, so I won't announce those)." : ".")
   );
 }
 

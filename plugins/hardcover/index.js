@@ -128,8 +128,8 @@ async function handleLink(message, args, links) {
   };
   saveLinks(links);
   await message.reply(
-    "Linked " + memberName(message.guild, message.author.id) + " to Hardcover user " + found.user.username + ". I'll post when you finish a book " +
-    "(" + result.items.length + " already on your read shelf, so I won't announce those)."
+    "Linked " + memberName(message.guild, message.author.id) + " to Hardcover user " + found.user.username + ". I'll post when you finish a book" +
+    (result.items.length > 0 ? " (" + result.items.length + " already on your read shelf, so I won't announce those)." : ".")
   );
 }
 
