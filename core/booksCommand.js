@@ -44,7 +44,7 @@ async function handleCurrentlyAll(message, sources) {
         const key = bookKey(item.title);
         if (seen.has(key)) return;
         seen.add(key);
-        lines.push("- " + item.title + (item.author ? " by " + item.author : "") + (item.percent ? ", " + item.percent + "%" : ""));
+        lines.push("- " + item.title + (item.author ? " by " + item.author : "") + (item.percent ? " (" + item.percent + "%)" : ""));
       });
     }
     if (lines.length > 0) sections.push("**" + memberName(message.guild, id) + "**\n" + lines.join("\n"));
@@ -86,7 +86,7 @@ async function handleCurrently(message, args, sources) {
       const key = bookKey(item.title);
       if (seen.has(key)) return;
       seen.add(key);
-      lines.push("**" + item.title + "**" + (item.author ? " by " + item.author : "") + (item.percent ? ", " + item.percent + "%" : "") + " (" + source.name + ")");
+      lines.push("**" + item.title + "**" + (item.author ? " by " + item.author : "") + (item.percent ? " (" + item.percent + "%)" : "") + " (" + source.name + ")");
       if (!image && item.image) image = item.image;
     });
   }
