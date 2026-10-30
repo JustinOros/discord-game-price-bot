@@ -31,23 +31,37 @@ function guildIds(message) {
   return message.guild.members.cache.map((member) => member.id).slice(0, 1000);
 }
 
+async function gatherCurrently(id, active, perSource) {
+  const merged = new Map();
+  for (const source of active) {
+    const items = await safe(source.currently(id));
+    items.slice(0, perSource).forEach((item) => {
+      const key = bookKey(item.title);
+      const found = merged.get(key);
+      if (!found) {
+        merged.set(key, { item: item, source: source.name, percent: item.percent || 0, image: item.image || null });
+        return;
+      }
+      if (!found.percent && item.percent) found.percent = item.percent;
+      if (!found.image && item.image) found.image = item.image;
+    });
+  }
+  return Array.from(merged.values());
+}
+
+function percentText(entry) {
+  return entry.percent ? " (" + entry.percent + "%)" : "";
+}
+
 async function handleCurrentlyAll(message, sources) {
   const sections = [];
   for (const id of guildIds(message)) {
     const active = linkedSources(sources, id);
     if (active.length === 0) continue;
-    const lines = [];
-    const seen = new Set();
-    for (const source of active) {
-      const items = await safe(source.currently(id));
-      items.slice(0, 3).forEach((item) => {
-        const key = bookKey(item.title);
-        if (seen.has(key)) return;
-        seen.add(key);
-        lines.push("- " + item.title + (item.author ? " by " + item.author : "") + (item.percent ? " (" + item.percent + "%)" : ""));
-      });
-    }
-    if (lines.length > 0) sections.push("**" + memberName(message.guild, id) + "**\n" + lines.join("\n"));
+    const entries = await gatherCurrently(id, active, 3);
+    if (entries.length === 0) continue;
+    const lines = entries.map((entry) => "- " + entry.item.title + (entry.item.author ? " by " + entry.item.author : "") + percentText(entry) + " (" + entry.source + ")");
+    sections.push("**" + memberName(message.guild, id) + "**\n" + lines.join("\n"));
   }
   if (sections.length === 0) {
     await message.reply("Nobody is reading anything right now.");
@@ -77,23 +91,13 @@ async function handleCurrently(message, args, sources) {
     await message.reply(name + " hasn't linked a book service yet. Use !gr link or !ab link.");
     return;
   }
-  const lines = [];
-  const seen = new Set();
-  let image = null;
-  for (const source of active) {
-    const items = await safe(source.currently(id));
-    items.slice(0, 5).forEach((item) => {
-      const key = bookKey(item.title);
-      if (seen.has(key)) return;
-      seen.add(key);
-      lines.push("**" + item.title + "**" + (item.author ? " by " + item.author : "") + (item.percent ? " (" + item.percent + "%)" : "") + " (" + source.name + ")");
-      if (!image && item.image) image = item.image;
-    });
-  }
-  if (lines.length === 0) {
+  const entries = await gatherCurrently(id, active, 5);
+  if (entries.length === 0) {
     await message.reply(name + " isn't reading anything right now.");
     return;
   }
+  const lines = entries.map((entry) => "**" + entry.item.title + "**" + (entry.item.author ? " by " + entry.item.author : "") + percentText(entry) + " (" + entry.source + ")");
+  const image = entries.map((entry) => entry.image).find(Boolean);
   const card = embed(name + " is reading", lines.join("\n"));
   if (image) card.setThumbnail(image);
   await message.reply({ embeds: [card] });

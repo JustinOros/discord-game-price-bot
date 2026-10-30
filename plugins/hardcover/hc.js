@@ -17,6 +17,8 @@ const BOOKS_QUERY = "query ($userId: Int!, $status: Int!, $limit: Int!, $offset:
   "id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } " +
   "user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }";
 
+const READING_QUERY = BOOKS_QUERY.replace("user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at }", "user_book_reads(order_by: {started_at: desc_nulls_last}, limit: 1) { finished_at progress_pages }");
+
 function loadSettings() {
   let token = String(process.env.HARDCOVER_TOKEN || "").trim();
   try {
@@ -105,6 +107,7 @@ function toItem(row) {
     image: image,
     link: book.slug ? "https://hardcover.app/books/" + book.slug : "",
     pages: parseInt(book.pages, 10) || 0,
+    progressPages: reads.length > 0 ? parseInt(reads[0].progress_pages, 10) || 0 : 0,
     review: ""
   };
 }
@@ -113,7 +116,10 @@ async function fetchShelf(userId, status, options) {
   const maxPages = options && options.firstPageOnly ? 1 : MAX_PAGES;
   let items = [];
   for (let page = 0; page < maxPages; page++) {
-    const result = await graphql(BOOKS_QUERY, { userId: userId, status: status, limit: PAGE_SIZE, offset: page * PAGE_SIZE });
+    const variables = { userId: userId, status: status, limit: PAGE_SIZE, offset: page * PAGE_SIZE };
+    let result = null;
+    if (status === STATUS.reading) result = await graphql(READING_QUERY, variables);
+    if (!result || !result.ok) result = await graphql(BOOKS_QUERY, variables);
     if (!result.ok) {
       if (page === 0) return { ok: false, status: result.status, error: result.error };
       break;

@@ -9956,7 +9956,7 @@
                     "title": "Alice is reading",
                     "description": "**Piranesi** by Susanna Clarke (40%) (Audiobookshelf)\n**Children of Time** by Adrian Tchaikovsky (Goodreads)",
                     "thumbnail": {
-                      "url": "https://img.test/31-l.jpg"
+                      "url": "https://img.test/32-l.jpg"
                     }
                   }
                 ]
@@ -23954,7 +23954,7 @@
               "method": "POST",
               "url": "https://api.hardcover.app/v1/graphql",
               "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
+                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {started_at: desc_nulls_last}, limit: 1) { finished_at progress_pages } } }",
                 "variables": {
                   "userId": 501,
                   "status": 2,
@@ -24480,7 +24480,7 @@
               "method": "POST",
               "url": "https://api.hardcover.app/v1/graphql",
               "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
+                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {started_at: desc_nulls_last}, limit: 1) { finished_at progress_pages } } }",
                 "variables": {
                   "userId": 501,
                   "status": 2,

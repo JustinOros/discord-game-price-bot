@@ -306,7 +306,13 @@ const bookSource = {
     if (!link) return [];
     const result = await shelfFor(link, hc.STATUS.reading);
     if (!result.ok) return [];
-    return result.items.map((item) => ({ title: item.title, author: item.author, image: item.image, verb: "reading" }));
+    return result.items.map((item) => ({
+      title: item.title,
+      author: item.author,
+      image: item.image,
+      verb: "reading",
+      percent: item.pages > 0 && item.progressPages > 0 ? Math.min(100, Math.round((item.progressPages / item.pages) * 100)) : 0
+    }));
   },
   async finished(discordId, options) {
     const link = loadLinks()[discordId];
