@@ -53,7 +53,10 @@ async function gatherCurrently(id, active, perSource) {
       if (!found.image && item.image) found.image = item.image;
     });
   }
-  return Array.from(merged.values());
+  return Array.from(merged.values())
+    .map((entry, index) => ({ entry: entry, index: index }))
+    .sort((a, b) => (b.entry.percent - a.entry.percent) || (a.index - b.index))
+    .map((row) => row.entry);
 }
 
 function percentText(entry) {
