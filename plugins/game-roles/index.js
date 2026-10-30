@@ -74,7 +74,7 @@ async function handleRole(message, input, ctx) {
 
 async function handleUnroll(message, query, ctx) {
   if (!query) {
-    await message.reply("Usage: !unroll GAME NAME");
+    await message.reply("Usage: !unrole GAME NAME");
     return;
   }
   if (!message.guild) {
@@ -166,11 +166,12 @@ module.exports = {
   commands: [
     { name: "roles", exact: true, run: (message, args, ctx) => handleRoles(message, ctx) },
     { name: "role", needsArgs: true, run: (message, args, ctx) => handleRole(message, args, ctx) },
+    { name: "unrole", needsArgs: true, run: (message, args, ctx) => handleUnroll(message, args, ctx) },
     { name: "unroll", needsArgs: true, run: (message, args, ctx) => handleUnroll(message, args, ctx) }
   ],
   help: [
     { order: 140, text: "!roles - list every game role and how many members have each" },
     { order: 150, text: "!role GAME - create (if it doesn't exist) and join that game's role, with an emoji picked for you; !role EMOJI GAME to pick your own emoji instead" },
-    { order: 160, text: "!unroll GAME - leave a game's role" }
+    { order: 160, text: "!unrole GAME - leave a game's role" }
   ]
 };
