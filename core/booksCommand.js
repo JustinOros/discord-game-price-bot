@@ -31,9 +31,16 @@ function guildIds(message) {
   return message.guild.members.cache.map((member) => member.id).slice(0, 1000);
 }
 
+const SOURCE_WEIGHTS = { audiobookshelf: 3, hardcover: 2, goodreads: 1 };
+
+function weightOf(source) {
+  return SOURCE_WEIGHTS[String(source.name || "").toLowerCase()] || 0;
+}
+
 async function gatherCurrently(id, active, perSource) {
   const merged = new Map();
-  for (const source of active) {
+  const ranked = active.slice().sort((a, b) => weightOf(b) - weightOf(a));
+  for (const source of ranked) {
     const items = await safe(source.currently(id));
     items.slice(0, perSource).forEach((item) => {
       const key = bookKey(item.title);
