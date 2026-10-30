@@ -168,20 +168,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -227,20 +213,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -313,20 +285,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -372,20 +330,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -458,20 +402,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         }
@@ -637,20 +567,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -679,20 +595,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -728,20 +630,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -925,20 +813,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -999,20 +873,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -1197,20 +1057,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -1471,20 +1317,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -1545,20 +1377,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -1703,20 +1521,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         }
@@ -1916,20 +1720,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -1989,20 +1779,6 @@
             {
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
               "status": 200
             }
           ],
@@ -2086,20 +1862,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -2144,20 +1906,6 @@
             {
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
               "status": 200
             }
           ],
@@ -2217,20 +1965,6 @@
             {
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
               "status": 200
             }
           ]
@@ -2460,20 +2194,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -2543,20 +2263,6 @@
             {
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
               "status": 200
             }
           ],
@@ -2805,20 +2511,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -2864,20 +2556,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -9059,7 +8737,7 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member|all]`\nwhat you, the member you mention, or everyone with all, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
                       "text": "Link a service first, then these commands include your books."
                     }
@@ -9690,20 +9368,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -9758,20 +9422,6 @@
             {
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
               "status": 200
             }
           ],
@@ -9850,20 +9500,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         }
@@ -9933,7 +9569,7 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "**Book services here**\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member|all]`\nwhat you, the member you mention, or everyone with all, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
                       "text": "Link a service first, then these commands include your books."
                     }
@@ -10268,7 +9904,7 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member|all]`\nwhat you, the member you mention, or everyone with all, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
                       "text": "Link a service first, then these commands include your books."
                     }
@@ -10780,7 +10416,7 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "**Book services here**\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member|all]`\nwhat you, the member you mention, or everyone with all, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
                       "text": "Link a service first, then these commands include your books."
                     }
@@ -20302,20 +19938,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1002?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -20517,20 +20139,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ],
           "outgoing": [
@@ -20722,20 +20330,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         }
@@ -20901,20 +20495,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -20944,20 +20524,6 @@
             {
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
               "status": 200
             }
           ],
@@ -21008,20 +20574,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         },
@@ -21051,20 +20603,6 @@
             {
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
               "status": 200
             }
           ],
@@ -21148,20 +20686,6 @@
             {
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/1001?shelf=read&per_page=100&sort=date_read&order=d",
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
               "status": 200
             }
           ]
@@ -21325,20 +20849,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         }
@@ -22940,20 +22450,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             }
           ]
         }
@@ -24517,7 +24013,7 @@
                   {
                     "color": 12035466,
                     "title": "Books commands",
-                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member]`\nwhat you, or the member you mention, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
+                    "description": "**Book services here**\n**Audiobookshelf** - type `!ab help` for its commands (audiobooks)\n**Goodreads** - type `!gr help` for its commands (read books and shelves)\n**Hardcover** - type `!hc help` for its commands (read books and shelves)\n\n**Commands that work across all of them**\n\n`!books currently [@member|all]`\nwhat you, the member you mention, or everyone with all, are reading or listening to right now, from every linked book service\n\n`!books who BOOK`\nwho here has read or is reading a book, from every linked book service\n\n`!books leaderboard [YEAR]`\nrank members by books finished this year, or in the year you give, across every linked book service\n\n`!books compare @member [@member]`\nbooks two members have both finished\n\n`!books goal [NUMBER|clear|@member]`\nset a yearly reading goal, or see your progress or a member's\n\n`!books recommend`\nbooks other members rated 4 or 5 stars that you haven't read yet\n\n`!books recap [this]`\nlast month's reading recap, or the current month so far with this\n\n`!books link`\nhow to link a book service, like !gr link or !ab link",
                     "footer": {
                       "text": "Link a service first, then these commands include your books."
                     }
@@ -24617,20 +24113,6 @@
               "body": {
                 "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
                 "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
                   "userId": 501,
                   "status": 3,
                   "limit": 100,
@@ -24663,20 +24145,6 @@
               "method": "GET",
               "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
               "status": 404
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
             },
             {
               "method": "POST",
@@ -24742,20 +24210,6 @@
               "body": {
                 "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
                 "variables": {
-                  "userId": 89039,
-                  "status": 3,
-                  "limit": 100,
-                  "offset": 0
-                }
-              },
-              "status": 200
-            },
-            {
-              "method": "POST",
-              "url": "https://api.hardcover.app/v1/graphql",
-              "body": {
-                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
-                "variables": {
                   "userId": 501,
                   "status": 3,
                   "limit": 100,
@@ -24768,7 +24222,26 @@
         }
       ],
       "pendingTimers": 0,
-      "files": {}
+      "files": {
+        "hardcover.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": 501,",
+            "    \"username\": \"alicehc\",",
+            "    \"seen\": [",
+            "      \"101\",",
+            "      \"102\",",
+            "      \"103\",",
+            "      \"107\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
     },
     "hardcover-link-views-and-unlink": {
       "steps": [
@@ -25166,7 +24639,25 @@
         }
       ],
       "pendingTimers": 0,
-      "files": {}
+      "files": {
+        "hardcover.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": 501,",
+            "    \"username\": \"alicehc\",",
+            "    \"seen\": [",
+            "      \"101\",",
+            "      \"102\",",
+            "      \"103\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
     },
     "hardcover-role-gate-help-and-not-configured": {
       "steps": [

@@ -9,7 +9,7 @@ const { loadState } = require("./booksState");
 const MEDALS = ["🥇", "🥈", "🥉"];
 const MIN_YEAR = 1900;
 const BOOKS_HELP = [
-  ["!books currently [@member]", "what you, or the member you mention, are reading or listening to right now, from every linked book service"],
+  ["!books currently [@member|all]", "what you, the member you mention, or everyone with all, are reading or listening to right now, from every linked book service"],
   ["!books who BOOK", "who here has read or is reading a book, from every linked book service"],
   ["!books leaderboard [YEAR]", "rank members by books finished this year, or in the year you give, across every linked book service"],
   ["!books compare @member [@member]", "books two members have both finished"],
@@ -31,7 +31,44 @@ function guildIds(message) {
   return message.guild.members.cache.map((member) => member.id).slice(0, 1000);
 }
 
+async function handleCurrentlyAll(message, sources) {
+  const sections = [];
+  for (const id of guildIds(message)) {
+    const active = linkedSources(sources, id);
+    if (active.length === 0) continue;
+    const lines = [];
+    const seen = new Set();
+    for (const source of active) {
+      const items = await safe(source.currently(id));
+      items.slice(0, 3).forEach((item) => {
+        const key = bookKey(item.title);
+        if (seen.has(key)) return;
+        seen.add(key);
+        lines.push("- " + item.title + (item.author ? " by " + item.author : "") + (item.percent ? ", " + item.percent + "%" : ""));
+      });
+    }
+    if (lines.length > 0) sections.push("**" + memberName(message.guild, id) + "**\n" + lines.join("\n"));
+  }
+  if (sections.length === 0) {
+    await message.reply("Nobody is reading anything right now.");
+    return;
+  }
+  let text = "";
+  let shown = 0;
+  for (const section of sections) {
+    if ((text + "\n\n" + section).length > 3800) break;
+    text = text ? text + "\n\n" + section : section;
+    shown += 1;
+  }
+  if (shown < sections.length) text += "\n\n...and " + (sections.length - shown) + " more.";
+  await message.reply({ embeds: [embed("Currently reading", text)], allowedMentions: { parse: [] } });
+}
+
 async function handleCurrently(message, args, sources) {
+  if (normalize(args) === "all") {
+    await handleCurrentlyAll(message, sources);
+    return;
+  }
   const ids = mentionedIds(args);
   const id = ids.length > 0 ? ids[0] : message.author.id;
   const name = memberName(message.guild, id);
