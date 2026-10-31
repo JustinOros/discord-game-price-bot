@@ -62,6 +62,7 @@ function normalizeItem(raw) {
     narrator: meta.narratorName || names(meta.narrators, "name"),
     series: meta.seriesName || names(meta.series, "name"),
     duration: Number(media.duration) || fileSeconds,
+    kind: (Number(media.duration) || fileSeconds) > 0 ? "audiobook" : (media.ebookFormat || media.ebookFile ? "e-book" : "book"),
     addedAt: Number(item.addedAt) || 0
   };
 }

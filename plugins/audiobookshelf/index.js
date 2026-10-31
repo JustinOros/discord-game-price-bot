@@ -531,7 +531,7 @@ async function announceNewBooks(data, config) {
     for (const guild of Array.from(ctx.client.guilds.cache.values())) {
       const card = new EmbedBuilder()
         .setColor(EMBED_COLOR)
-        .setTitle("New in the library: " + item.title)
+        .setTitle("New " + (item.kind || "book") + " added to Audiobookshelf: " + item.title)
         .setDescription(((item.author ? "by " + item.author + "\n" : "") + (item.duration ? abs.formatDuration(item.duration) : "")).trim() || "A new book was added");
       const url = abs.itemUrl(item.id);
       if (url) card.setURL(url);
