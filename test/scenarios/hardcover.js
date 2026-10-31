@@ -78,6 +78,17 @@ module.exports = [
     await ctx.cron("*/30 * * * *");
   }, WITH_ENV),
 
+  sc("hardcover-old-finish-dates-are-not-announced", async (ctx) => {
+    SETUP(ctx);
+    seed(ctx);
+    await ctx.say("alice", "!hc link alicehc");
+    await ctx.startReady();
+    await ctx.cron("*/30 * * * *");
+    ctx.fx.hardcover.books[501][3].unshift(row(8, "Synced Old Book", { last_read_date: "2020-03-04", user_book_reads: [{ finished_at: "2020-03-04" }] }));
+    await ctx.cron("*/30 * * * *");
+    await ctx.cron("*/30 * * * *");
+  }, WITH_ENV),
+
   sc("hardcover-bad-token-and-network-down", async (ctx) => {
     SETUP(ctx);
     seed(ctx);

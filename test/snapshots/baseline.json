@@ -24659,6 +24659,297 @@
         }
       }
     },
+    "hardcover-old-finish-dates-are-not-announced": {
+      "steps": [
+        {
+          "label": "load",
+          "registration": [
+            {
+              "process": "unhandledRejection"
+            },
+            {
+              "method": "once",
+              "event": "clientReady"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberAdd"
+            },
+            {
+              "method": "on",
+              "event": "guildMemberRemove"
+            },
+            {
+              "method": "on",
+              "event": "interactionCreate"
+            },
+            {
+              "method": "on",
+              "event": "messageCreate"
+            },
+            {
+              "clientOptions": {
+                "intents": [
+                  1,
+                  512,
+                  4096,
+                  32768,
+                  2,
+                  65536
+                ],
+                "partials": [
+                  1
+                ]
+              }
+            }
+          ],
+          "ops": [
+            {
+              "op": "client.login",
+              "token": "test-discord-token"
+            }
+          ]
+        },
+        {
+          "label": "alice: !hc link alicehc",
+          "fetches": [
+            {
+              "method": "POST",
+              "url": "https://api.hardcover.app/v1/graphql",
+              "body": {
+                "query": "query ($username: citext!) { users(where: {username: {_eq: $username}}, limit: 1) { id username } }",
+                "variables": {
+                  "username": "alicehc"
+                }
+              },
+              "status": 200
+            },
+            {
+              "method": "POST",
+              "url": "https://api.hardcover.app/v1/graphql",
+              "body": {
+                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
+                "variables": {
+                  "userId": 501,
+                  "status": 3,
+                  "limit": 100,
+                  "offset": 0
+                }
+              },
+              "status": 200
+            }
+          ],
+          "outgoing": [
+            {
+              "via": "message.reply",
+              "to": "M-1",
+              "payload": {
+                "content": "Linked Alice to Hardcover user alicehc. I'll post when you finish a book (3 already on your read shelf, so I won't announce those)."
+              }
+            }
+          ]
+        },
+        {
+          "label": "clientReady",
+          "console": [
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Logged in as GamePriceBot#0001"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Web search: enabled (TAVILY_API_KEY is set)"
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 5 members for Test Guild."
+            },
+            {
+              "level": "log",
+              "text": "2026-10-06T12:00:00.000Z Cached 2 members for Second Guild."
+            }
+          ],
+          "registration": [
+            {
+              "cron": "0 15 * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "* * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/30 * * * *",
+              "options": null
+            },
+            {
+              "cron": "*/2 * * * *",
+              "options": null
+            },
+            {
+              "cron": "0 * * * *",
+              "options": null
+            }
+          ],
+          "ops": [
+            {
+              "op": "guild.members.fetch",
+              "guild": "G1"
+            },
+            {
+              "op": "guild.members.fetch",
+              "guild": "G2"
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/users/76fe7924-fc78-4cbb-af41-c6df0412a2da",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/users/23e567cd-1eb2-401a-93c2-a8cef7825a97",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/libraries",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            },
+            {
+              "method": "POST",
+              "url": "https://api.hardcover.app/v1/graphql",
+              "body": {
+                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
+                "variables": {
+                  "userId": 501,
+                  "status": 3,
+                  "limit": 100,
+                  "offset": 0
+                }
+              },
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/users/76fe7924-fc78-4cbb-af41-c6df0412a2da",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/users/23e567cd-1eb2-401a-93c2-a8cef7825a97",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/libraries",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            },
+            {
+              "method": "POST",
+              "url": "https://api.hardcover.app/v1/graphql",
+              "body": {
+                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
+                "variables": {
+                  "userId": 501,
+                  "status": 3,
+                  "limit": 100,
+                  "offset": 0
+                }
+              },
+              "status": 200
+            }
+          ]
+        },
+        {
+          "label": "cron */30 * * * *",
+          "fetches": [
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/users/76fe7924-fc78-4cbb-af41-c6df0412a2da",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/users/23e567cd-1eb2-401a-93c2-a8cef7825a97",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://books.justinoros.com/api/libraries",
+              "status": 404
+            },
+            {
+              "method": "GET",
+              "url": "https://www.goodreads.com/review/list_rss/142147401?shelf=read&per_page=100&sort=date_read&order=d",
+              "status": 404
+            },
+            {
+              "method": "POST",
+              "url": "https://api.hardcover.app/v1/graphql",
+              "body": {
+                "query": "query ($userId: Int!, $status: Int!, $limit: Int!, $offset: Int!) { user_books(where: {user_id: {_eq: $userId}, status_id: {_eq: $status}}, order_by: {last_read_date: desc_nulls_last}, limit: $limit, offset: $offset) { id rating last_read_date date_added book { id title slug pages cached_image cached_contributors } user_book_reads(order_by: {finished_at: desc_nulls_last}, limit: 1) { finished_at } } }",
+                "variables": {
+                  "userId": 501,
+                  "status": 3,
+                  "limit": 100,
+                  "offset": 0
+                }
+              },
+              "status": 200
+            }
+          ]
+        }
+      ],
+      "pendingTimers": 0,
+      "files": {
+        "hardcover.json": {
+          "status": "created",
+          "lines": [
+            "{",
+            "  \"U1\": {",
+            "    \"userId\": 501,",
+            "    \"username\": \"alicehc\",",
+            "    \"seen\": [",
+            "      \"101\",",
+            "      \"102\",",
+            "      \"103\",",
+            "      \"108\"",
+            "    ]",
+            "  }",
+            "}",
+            ""
+          ]
+        }
+      }
+    },
     "hardcover-role-gate-help-and-not-configured": {
       "steps": [
         {

@@ -103,6 +103,7 @@ function toItem(row) {
     author: authorOf(book),
     rating: rating >= 1 && rating <= 5 ? rating : 0,
     readAt: formatDate(finished),
+    finishedRaw: String(finished || ""),
     addedAt: formatDate(row.date_added),
     image: image,
     link: book.slug ? "https://hardcover.app/books/" + book.slug : "",

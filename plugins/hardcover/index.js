@@ -13,6 +13,13 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 const DEFAULT_POLL_MINUTES = 30;
 const MAX_ANNOUNCE_PER_USER = 3;
 const MAX_SEEN_PER_USER = 500;
+const ANNOUNCE_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+function isRecent(item) {
+  const when = Date.parse(item.finishedRaw);
+  if (!Number.isFinite(when)) return true;
+  return Date.now() - when <= ANNOUNCE_WINDOW_MS;
+}
 const SHELVES = { read: hc.STATUS.read, reading: hc.STATUS.reading, "currently-reading": hc.STATUS.reading, "want-to-read": hc.STATUS.wantToRead, "to-read": hc.STATUS.wantToRead };
 const SHELF_NAMES = { 1: "want to read", 2: "currently reading", 3: "read" };
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -278,7 +285,7 @@ async function checkLibraries() {
       const fresh = result.items.filter((item) => item.bookId && !seen.has(item.bookId));
       if (fresh.length === 0) continue;
 
-      for (const item of fresh.slice(0, MAX_ANNOUNCE_PER_USER).reverse()) {
+      for (const item of fresh.filter(isRecent).slice(0, MAX_ANNOUNCE_PER_USER).reverse()) {
         await announceFinished(userId, item);
       }
       fresh.forEach((item) => seen.add(item.bookId));
