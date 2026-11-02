@@ -32,27 +32,6 @@ function matches(matcher, req) {
   return false;
 }
 
-function grItem(book) {
-  return "<item>\n<guid>https://www.goodreads.com/review/show/" + book.id + "</guid>\n" +
-    "<title><![CDATA[" + book.title + "]]></title>\n" +
-    "<link><![CDATA[https://www.goodreads.com/review/show/" + book.id + "?utm_medium=api]]></link>\n" +
-    "<book_id>" + book.id + "</book_id>\n" +
-    "<book_image_url><![CDATA[https://img.test/" + book.id + "-s.jpg]]></book_image_url>\n" +
-    "<book_large_image_url><![CDATA[https://img.test/" + book.id + "-l.jpg]]></book_large_image_url>\n" +
-    "<author_name>" + (book.author || "Someone") + "</author_name>\n" +
-    "<user_rating>" + (book.rating === undefined ? 0 : book.rating) + "</user_rating>\n" +
-    "<user_read_at><![CDATA[" + (book.readAt || "") + "]]></user_read_at>\n" +
-    "<user_date_added><![CDATA[Mon, 01 Jan 2024 00:00:00 -0800]]></user_date_added>\n" +
-    "<user_review><![CDATA[" + (book.review || "") + "]]></user_review>\n" +
-    "<book><num_pages>" + (book.pages === undefined ? "" : book.pages) + "</num_pages></book>\n" +
-    "</item>\n";
-}
-
-function grXml(id, shelf, items) {
-  return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\"><channel>\n" +
-    "<title>Reader " + id + "'s bookshelf: " + shelf + "</title>\n" + items.map(grItem).join("") + "</channel></rss>\n";
-}
-
 const SERVER_PS_OUTPUT = "TheForest|Up 3 hours|0.0.0.0:8766->8766/udp, :::8766->8766/udp, 0.0.0.0:27016->27016/udp|running\n" +
   "SonsOfTheForest|Exited (0) 5 minutes ago||exited\n" +
   "plex|Up 2 days|0.0.0.0:32400->32400/tcp|running\n";
@@ -85,7 +64,7 @@ function makeAbs() {
   };
 }
 
-const GR_FEEDS = {
+const SHELF_FEEDS = {
   "1001": {
     read: [
       { id: "11", title: "Dune", author: "Frank Herbert", rating: 5, readAt: "Sat, 13 Sep 2025 00:00:00 -0700", pages: 612 },
@@ -127,7 +106,7 @@ class Fixtures {
     this.recordFullSystem = false;
     this.extraSearch = {};
     this.shops = SHOPS;
-    this.goodreads = { feeds: JSON.parse(JSON.stringify(GR_FEEDS)) };
+    this.shelves = { feeds: JSON.parse(JSON.stringify(SHELF_FEEDS)) };
     this.hardcover = { users: {}, books: {}, errorFor: {} };
     this.abs = makeAbs();
   }
@@ -272,7 +251,6 @@ class Fixtures {
     if (host === "api.steampowered.com") return this.routeSteamApi(req, p);
     if (p === "/api/chat") return this.routeOllama(req);
     if (host === "api.tavily.com") return this.routeTavily(req);
-    if (host === "www.goodreads.com") return this.routeGoodreads(req);
     if (host === "abs.test") return this.routeAbs(req);
     if (host === "api.hardcover.app") return this.routeHardcover(req);
     return { status: 404, body: "unmocked " + req.method + " " + req.url };
@@ -544,41 +522,71 @@ class Fixtures {
     return { status: 404, body: "unmocked abs path" };
   }
 
+  shelfRows(userId, status) {
+    const feed = this.shelves.feeds[String(userId)];
+    if (!feed) return [];
+    const names = { 1: "to-read", 2: "currently-reading", 3: "read" };
+    const toDate = (text) => {
+      const when = text ? new Date(text) : null;
+      return when && !isNaN(when.getTime()) ? when.toISOString().slice(0, 10) : null;
+    };
+    return (feed[names[status]] || []).map((book, index) => ({
+      id: 9000 + index,
+      rating: book.rating || null,
+      last_read_date: toDate(book.readAt),
+      date_added: "2024-01-01",
+      book: {
+        id: parseInt(book.id, 10) || 0,
+        title: book.title,
+        slug: "book-" + book.id,
+        pages: book.pages === undefined ? null : book.pages,
+        cached_image: { url: "https://img.test/" + book.id + "-l.jpg" },
+        cached_contributors: [{ author: { name: book.author || "Someone" }, contribution: null }]
+      },
+      user_book_reads: [{ finished_at: toDate(book.readAt), started_at: "2026-10-01", progress_pages: 0 }]
+    }));
+  }
+
   routeHardcover(req) {
     const auth = req.headers && req.headers.Authorization;
     if (!auth || auth === "Bearer wrong") return { status: 401, body: "unauthorized" };
     const query = req.body && req.body.query ? req.body.query : "";
     const variables = (req.body && req.body.variables) || {};
     if (query.includes("users(")) {
-      const user = this.hardcover.users[variables.username];
+      let user = this.hardcover.users[variables.username];
+      const alias = String(variables.username).match(/^u(\d+)$/);
+      if (!user && alias && this.shelves.feeds[alias[1]]) user = { id: Number(alias[1]) };
       return { status: 200, body: { data: { users: user ? [{ id: user.id, username: variables.username }] : [] } } };
     }
     if (query.includes("user_books(")) {
       if (this.hardcover.errorFor[variables.userId]) return { status: 200, body: { errors: [{ message: "permission denied" }] } };
-      const shelf = (this.hardcover.books[variables.userId] || {})[variables.status] || [];
+      let shelf = (this.hardcover.books[variables.userId] || {})[variables.status];
+      if (!shelf) shelf = this.shelfRows(variables.userId, variables.status);
       return { status: 200, body: { data: { user_books: shelf.slice(variables.offset, variables.offset + variables.limit) } } };
     }
     return { status: 400, body: "bad query" };
   }
 
-  routeGoodreads(req) {
-    const match = req.u.pathname.match(/^\/review\/list_rss\/(\d+)$/);
-    if (!match) return { status: 404, body: "unmocked goodreads path" };
-    const id = match[1];
-    if (id === "9600") throw new Error("getaddrinfo ENOTFOUND www.goodreads.com");
-    if (id === "9500") return { status: 200, body: "<html><body>Please sign in</body></html>" };
-    const feed = this.goodreads.feeds[id];
-    if (!feed) return { status: 404, body: "not found" };
-    if (feed.needsKey && req.query.get("key") !== feed.needsKey) return { status: 403, body: "forbidden" };
-    const shelf = req.query.get("shelf") || "read";
-    const all = feed[shelf] || [];
-    const page = Number(req.query.get("page")) || 1;
-    const lengths = feed.pageLengths || [];
-    let start = 0;
-    for (let n = 1; n < page; n++) start += lengths[n - 1] || 100;
-    const items = all.slice(start, start + (lengths[page - 1] || 100));
-    return { status: 200, body: grXml(id, shelf, items) };
+  routeHardcover(req) {
+    const auth = req.headers && req.headers.Authorization;
+    if (!auth || auth === "Bearer wrong") return { status: 401, body: "unauthorized" };
+    const query = req.body && req.body.query ? req.body.query : "";
+    const variables = (req.body && req.body.variables) || {};
+    if (query.includes("users(")) {
+      let user = this.hardcover.users[variables.username];
+      const alias = String(variables.username).match(/^u(\d+)$/);
+      if (!user && alias && this.shelves.feeds[alias[1]]) user = { id: Number(alias[1]) };
+      return { status: 200, body: { data: { users: user ? [{ id: user.id, username: variables.username }] : [] } } };
+    }
+    if (query.includes("user_books(")) {
+      if (this.hardcover.errorFor[variables.userId]) return { status: 200, body: { errors: [{ message: "permission denied" }] } };
+      let shelf = (this.hardcover.books[variables.userId] || {})[variables.status];
+      if (!shelf) shelf = this.shelfRows(variables.userId, variables.status);
+      return { status: 200, body: { data: { user_books: shelf.slice(variables.offset, variables.offset + variables.limit) } } };
+    }
+    return { status: 400, body: "bad query" };
   }
+
 
   routeTavily(req) {
     const query = (req.body && req.body.query) || "";

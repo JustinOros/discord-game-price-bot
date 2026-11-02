@@ -22,6 +22,7 @@ const BASE_ENV = {
   STEAM_API_KEY: "test-steam-key",
   TAVILY_API_KEY: "test-tavily-key",
   AI_ENABLED: "true",
+  HARDCOVER_TOKEN: "hc-test-token",
   DOCKER_SSH_HOST: "docker.test.local",
   DOCKER_SSH_USER: "dockeruser",
   DOCKER_SSH_KEY_PATH: "/keys/test_ed25519",

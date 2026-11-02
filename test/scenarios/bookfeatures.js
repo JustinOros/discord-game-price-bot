@@ -4,9 +4,9 @@ const SETUP = (ctx) => ctx.setupBooks(["alice", "bob", "carol"]);
 const ENV = { "plugins/audiobookshelf/.env": "ABS_URL=https://abs.test/\nABS_TOKEN=tok-secret\n" };
 
 function septemberData(ctx) {
-  ctx.fx.goodreads.feeds["1001"].read.unshift({ id: "s1", title: "Septembook One", author: "Ann Author", rating: 5, readAt: "Tue, 15 Sep 2026 00:00:00 -0700", pages: 300 });
-  ctx.fx.goodreads.feeds["1002"].read.unshift({ id: "s2", title: "Septembook Two", author: "Bo Writer", rating: 4, readAt: "Wed, 16 Sep 2026 00:00:00 -0700", pages: 200 });
-  ctx.fx.goodreads.feeds["1002"].read.unshift({ id: "s1", title: "Septembook One", author: "Ann Author", rating: 3, readAt: "Thu, 17 Sep 2026 00:00:00 -0700", pages: 300 });
+  ctx.fx.shelves.feeds["1001"].read.unshift({ id: "s1", title: "Septembook One", author: "Ann Author", rating: 5, readAt: "Tue, 15 Sep 2026 00:00:00 -0700", pages: 300 });
+  ctx.fx.shelves.feeds["1002"].read.unshift({ id: "s2", title: "Septembook Two", author: "Bo Writer", rating: 4, readAt: "Wed, 16 Sep 2026 00:00:00 -0700", pages: 200 });
+  ctx.fx.shelves.feeds["1002"].read.unshift({ id: "s1", title: "Septembook One", author: "Ann Author", rating: 3, readAt: "Thu, 17 Sep 2026 00:00:00 -0700", pages: 300 });
   ctx.fx.abs.progress["u-1"].push({ libraryItemId: "li-2", progress: 1, isFinished: true, finishedAt: Date.UTC(2026, 8, 15, 12), lastUpdate: 9 });
   ctx.fx.abs.listeningDaysAgo["u-1"] = { 20: 3600, 21: 3600, 22: 7200, 23: 3600, 40: 3600 };
   ctx.fx.abs.listeningDaysAgo["u-2"] = { 25: 1800 };
@@ -14,17 +14,17 @@ function septemberData(ctx) {
 
 async function linkAll(ctx) {
   await ctx.say("alice", "!ab link alicia");
-  await ctx.say("alice", "!gr link 1001");
+  await ctx.say("alice", "!hc link u1001");
   await ctx.say("bob", "!ab link bobby");
-  await ctx.say("bob", "!gr link 1002");
+  await ctx.say("bob", "!hc link u1002");
 }
 
 module.exports = [
   sc("books-goal-counts-different-editions-with-same-base-title", async (ctx) => {
     SETUP(ctx);
-    ctx.fx.goodreads.feeds["1001"].read.unshift({ id: "e1", title: "1984", author: "George Orwell", rating: 5, readAt: "Tue, 15 Sep 2026 00:00:00 -0700", pages: 300 });
-    ctx.fx.goodreads.feeds["1001"].read.unshift({ id: "e2", title: "1984: An Audible Original adaptation", author: "George Orwell", rating: 4, readAt: "Wed, 16 Sep 2026 00:00:00 -0700", pages: 0 });
-    await ctx.say("alice", "!gr link 1001");
+    ctx.fx.shelves.feeds["1001"].read.unshift({ id: "e1", title: "1984", author: "George Orwell", rating: 5, readAt: "Tue, 15 Sep 2026 00:00:00 -0700", pages: 300 });
+    ctx.fx.shelves.feeds["1001"].read.unshift({ id: "e2", title: "1984: An Audible Original adaptation", author: "George Orwell", rating: 4, readAt: "Wed, 16 Sep 2026 00:00:00 -0700", pages: 0 });
+    await ctx.say("alice", "!hc link u1001");
     await ctx.say("alice", "!books goal 10");
   }),
 
@@ -59,16 +59,16 @@ module.exports = [
   sc("books-recommend", async (ctx) => {
     SETUP(ctx);
     await ctx.say("alice", "!books recommend", { label: "alice: not linked" });
-    ctx.fx.goodreads.feeds["1002"].read.unshift({ id: "r1", title: "Hyperion", author: "Dan Simmons", rating: 5, readAt: "Mon, 02 Jun 2025 00:00:00 -0700", pages: 500 });
-    ctx.fx.goodreads.feeds["1002"].read.unshift({ id: "r2", title: "Meh Book", author: "M", rating: 2, readAt: "Mon, 02 Jun 2025 00:00:00 -0700", pages: 100 });
-    ctx.fx.goodreads.feeds["1003"] = { read: [
+    ctx.fx.shelves.feeds["1002"].read.unshift({ id: "r1", title: "Hyperion", author: "Dan Simmons", rating: 5, readAt: "Mon, 02 Jun 2025 00:00:00 -0700", pages: 500 });
+    ctx.fx.shelves.feeds["1002"].read.unshift({ id: "r2", title: "Meh Book", author: "M", rating: 2, readAt: "Mon, 02 Jun 2025 00:00:00 -0700", pages: 100 });
+    ctx.fx.shelves.feeds["1003"] = { read: [
       { id: "r1", title: "Hyperion", author: "Dan Simmons", rating: 4, readAt: "Mon, 02 Jun 2025 00:00:00 -0700", pages: 500 },
       { id: "r3", title: "Solaris", author: "Stanislaw Lem", rating: 5, readAt: "Mon, 02 Jun 2025 00:00:00 -0700", pages: 200 },
       { id: "11", title: "Dune", author: "Frank Herbert", rating: 5, readAt: "Mon, 02 Jun 2025 00:00:00 -0700", pages: 612 }
     ], "to-read": [], "currently-reading": [] };
-    await ctx.say("alice", "!gr link 1001");
-    await ctx.say("bob", "!gr link 1002");
-    await ctx.say("carol", "!gr link 1003");
+    await ctx.say("alice", "!hc link u1001");
+    await ctx.say("bob", "!hc link u1002");
+    await ctx.say("carol", "!hc link u1003");
     await ctx.say("alice", "!books recommend");
     await ctx.say("bob", "!books recommend");
     await ctx.say("erin", "!books recommend");
@@ -93,7 +93,7 @@ module.exports = [
 
   sc("books-recap-nothing-to-report", async (ctx) => {
     SETUP(ctx);
-    await ctx.say("alice", "!gr link 1003");
+    await ctx.say("alice", "!hc link u1003");
     await ctx.say("alice", "!books recap");
   }),
 

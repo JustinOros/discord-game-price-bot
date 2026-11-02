@@ -16,7 +16,7 @@ const BOOKS_HELP = [
   ["!books goal [NUMBER|clear|@member]", "set a yearly reading goal, or see your progress or a member's"],
   ["!books recommend", "books other members rated 4 or 5 stars that you haven't read yet"],
   ["!books recap [this]", "last month's reading recap, or the current month so far with this"],
-  ["!books link", "how to link a book service, like !gr link or !ab link"]
+  ["!books link", "how to link a book service, like !hc link or !ab link"]
 ];
 
 function helpEmbed(sources) {
@@ -31,7 +31,7 @@ function guildIds(message) {
   return message.guild.members.cache.map((member) => member.id).slice(0, 1000);
 }
 
-const SOURCE_WEIGHTS = { audiobookshelf: 3, hardcover: 2, goodreads: 1 };
+const SOURCE_WEIGHTS = { audiobookshelf: 3, hardcover: 2 };
 
 function weightOf(source) {
   return SOURCE_WEIGHTS[String(source.name || "").toLowerCase()] || 0;
@@ -99,7 +99,7 @@ async function handleCurrently(message, args, sources) {
   const name = memberName(message.guild, id);
   const active = linkedSources(sources, id);
   if (active.length === 0) {
-    await message.reply(name + " hasn't linked a book service yet. Use !gr link or !ab link.");
+    await message.reply(name + " hasn't linked a book service yet. Use !hc link or !ab link.");
     return;
   }
   const entries = await gatherCurrently(id, active, 5);
@@ -260,7 +260,7 @@ function createBooksPlugin() {
       else if (sub === "recommend") await handleRecommend(message, sources);
       else if (sub === "recap") await handleRecap(message, rest, sources);
       else if (sub === "link" || sub === "unlink") {
-        await message.reply("Link with the book service's own command: " + sources.map((source) => source.name === "Goodreads" ? "!gr " + sub : source.name === "Audiobookshelf" ? "!ab " + sub : null).filter(Boolean).join(" or ") + ".");
+        await message.reply("Link with the book service's own command: " + sources.map((source) => source.name === "Hardcover" ? "!hc " + sub : source.name === "Audiobookshelf" ? "!ab " + sub : null).filter(Boolean).join(" or ") + ".");
       } else await message.reply({ embeds: [helpEmbed(sources)] });
     }
     }],

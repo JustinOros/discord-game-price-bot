@@ -99,9 +99,9 @@ module.exports = [
   sc("books-umbrella-both-sources", async (ctx) => {
     SETUP(ctx);
     await ctx.say("alice", "!ab link alicia");
-    await ctx.say("alice", "!gr link 1001");
+    await ctx.say("alice", "!hc link u1001");
     await ctx.say("bob", "!ab link bobby");
-    await ctx.say("bob", "!gr link 1002");
+    await ctx.say("bob", "!hc link u1002");
     await ctx.say("alice", "!books");
     await ctx.say("erin", "!books help");
     await ctx.say("alice", "!books currently");
@@ -121,10 +121,10 @@ module.exports = [
     await ctx.say("alice", "!help");
   }, WITH_ENV),
 
-  sc("books-umbrella-goodreads-only", async (ctx) => {
+  sc("books-umbrella-hardcover-only", async (ctx) => {
     SETUP(ctx);
-    await ctx.say("alice", "!gr link 1001");
-    await ctx.say("bob", "!gr link 1002");
+    await ctx.say("alice", "!hc link u1001");
+    await ctx.say("bob", "!hc link u1002");
     await ctx.say("alice", "!books");
     await ctx.say("alice", "!books currently");
     await ctx.say("alice", "!books who dune");
@@ -137,22 +137,22 @@ module.exports = [
     SETUP(ctx);
     await ctx.say("alice", "!books");
     await ctx.say("alice", "!help");
-  }, { env: { DISABLED_PLUGINS: "goodreads,audiobookshelf" } }),
+  }, { env: { DISABLED_PLUGINS: "hardcover,audiobookshelf" } }),
 
   sc("books-umbrella-audiobookshelf-only", async (ctx) => {
     SETUP(ctx);
     await ctx.say("alice", "!ab link alicia");
     await ctx.say("alice", "!books currently");
     await ctx.say("alice", "!books link");
-  }, { env: { DISABLED_PLUGINS: "goodreads" }, files: ENV }),
+  }, { env: { DISABLED_PLUGINS: "hardcover" }, files: ENV }),
 
   sc("books-same-book-finished-on-both-services-posts-once", async (ctx) => {
     SETUP(ctx);
     await ctx.say("alice", "!ab link alicia");
-    await ctx.say("alice", "!gr link 1001");
+    await ctx.say("alice", "!hc link u1001");
     await ctx.startReady();
     await ctx.cron("*/30 * * * *");
-    ctx.fx.goodreads.feeds["1001"].read.unshift({ id: "95", title: "Piranesi", author: "Susanna Clarke", rating: 5, readAt: "Sun, 04 Oct 2026 00:00:00 -0700", pages: 272 });
+    ctx.fx.shelves.feeds["1001"].read.unshift({ id: "95", title: "Piranesi", author: "Susanna Clarke", rating: 5, readAt: "Sun, 04 Oct 2026 00:00:00 -0700", pages: 272 });
     ctx.fx.abs.progress["u-1"].push({ libraryItemId: "li-3", progress: 1, currentTime: 18000, duration: 18000, isFinished: true, finishedAt: Date.UTC(2026, 9, 4), lastUpdate: 9 });
     ctx.fx.abs.progress["u-1"] = ctx.fx.abs.progress["u-1"].filter((entry, index, list) => entry.libraryItemId !== "li-3" || entry.isFinished);
     await ctx.cron("*/30 * * * *");
@@ -184,10 +184,10 @@ module.exports = [
     await ctx.cron("*/30 * * * *");
   }, WITH_ENV),
 
-  sc("abs-finished-card-shows-goodreads-rating", async (ctx) => {
+  sc("abs-finished-card-shows-hardcover-rating", async (ctx) => {
     SETUP(ctx);
     await ctx.say("alice", "!ab link alicia");
-    await ctx.say("alice", "!gr link 1001");
+    await ctx.say("alice", "!hc link u1001");
     await ctx.say("bob", "!ab link bobby");
     await ctx.startReady();
     await ctx.cron("*/30 * * * *");
@@ -199,14 +199,14 @@ module.exports = [
   sc("abs-finished-card-gets-rating-added-later", async (ctx) => {
     SETUP(ctx);
     await ctx.say("alice", "!ab link alicia");
-    await ctx.say("alice", "!gr link 1001");
+    await ctx.say("alice", "!hc link u1001");
     await ctx.startReady();
     await ctx.cron("*/30 * * * *");
     ctx.fx.abs.progress["u-1"].push({ libraryItemId: "li-3", progress: 1, isFinished: true, finishedAt: Date.UTC(2026, 9, 5), lastUpdate: 9 });
     ctx.fx.abs.progress["u-1"] = ctx.fx.abs.progress["u-1"].filter((entry) => entry.libraryItemId !== "li-3" || entry.isFinished);
     await ctx.cron("*/30 * * * *");
     await ctx.cron("*/30 * * * *");
-    ctx.fx.goodreads.feeds["1001"].read.unshift({ id: "96", title: "Piranesi", author: "Susanna Clarke", rating: 4, readAt: "Mon, 05 Oct 2026 00:00:00 -0700", pages: 272 });
+    ctx.fx.shelves.feeds["1001"].read.unshift({ id: "96", title: "Piranesi", author: "Susanna Clarke", rating: 4, readAt: "Mon, 05 Oct 2026 00:00:00 -0700", pages: 272 });
     await ctx.cron("*/30 * * * *");
     await ctx.cron("*/30 * * * *");
   }, WITH_ENV),

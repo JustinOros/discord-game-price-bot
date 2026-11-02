@@ -85,7 +85,7 @@ async function handleGoal(message, args, sources) {
   state.goals[message.author.id] = { year: year, target: target };
   saveState(state);
   if (linkedSources(sources, message.author.id).length === 0) {
-    await message.reply("Goal set: " + target + " books in " + year + ". Link a book service with !gr link or !ab link so I can count your books.");
+    await message.reply("Goal set: " + target + " books in " + year + ". Link a book service with !hc link or !ab link so I can count your books.");
     return;
   }
   await showGoal(message, message.author.id, sources, state);

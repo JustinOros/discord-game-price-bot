@@ -29,7 +29,7 @@ async function handleRecommend(message, sources) {
   const me = message.author.id;
   const mySources = linkedSources(sources, me);
   if (mySources.length === 0) {
-    await message.reply("Link a book service first, like !gr link or !ab link, so I know what you've read.");
+    await message.reply("Link a book service first, like !hc link or !ab link, so I know what you've read.");
     return;
   }
 
@@ -60,7 +60,7 @@ async function handleRecommend(message, sources) {
     .sort((a, b) => (b.score - a.score) || (b.fans.length - a.fans.length) || a.title.localeCompare(b.title))
     .slice(0, Math.min(MAX_RECOMMENDATIONS, LIST_LIMIT));
   if (ranked.length === 0) {
-    await message.reply("I don't have enough 4 and 5 star ratings from other members to recommend anything new yet. Ratings come from Goodreads.");
+    await message.reply("I don't have enough 4 and 5 star ratings from other members to recommend anything new yet. Ratings come from Hardcover.");
     return;
   }
 
