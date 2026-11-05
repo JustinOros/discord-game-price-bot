@@ -255,7 +255,12 @@ async function refreshMessage(guild, server, state, store) {
       store.messages[key] = { channelId: channel.id, messageId: entry.messageId, sig: sig, at: now };
       return;
     } catch (err) {
-      console.error("Could not edit the status message for " + server.name + ", posting a new one:", err.message);
+      const gone = err && (err.code === 10008 || err.status === 404);
+      if (!gone) {
+        console.error("Could not edit the status message for " + server.name + ", will retry:", err.message);
+        return;
+      }
+      console.error("The status message for " + server.name + " is gone, posting a new one:", err.message);
     }
   }
   try {

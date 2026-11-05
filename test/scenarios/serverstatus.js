@@ -132,9 +132,24 @@ module.exports = [
     forestUp(ctx, 3);
     await ctx.startReady();
     await ctx.cron(TICK);
-    ctx.world.channelRegistry.get("CH-forest").store.clear();
-    forestUp(ctx, 4);
+    ctx.world.channelRegistry.get("CH-sotf").store.clear();
+    await ctx.advance(11 * 60 * 1000);
     await ctx.cron(TICK, "message gone, posted again");
+  }),
+
+  sc("servers-status-edit-hiccup-does-not-repost", async (ctx) => {
+    channels(ctx);
+    forestUp(ctx, 3);
+    await ctx.startReady();
+    await ctx.cron(TICK);
+    const channel = ctx.world.channelRegistry.get("CH-sotf");
+    const realFetch = channel.messages.fetch;
+    channel.messages.fetch = () => Promise.reject(new Error("other side closed"));
+    await ctx.advance(11 * 60 * 1000);
+    await ctx.cron(TICK, "network hiccup, nothing new posted");
+    channel.messages.fetch = realFetch;
+    await ctx.advance(11 * 60 * 1000);
+    await ctx.cron(TICK, "back to normal, edits again");
   }),
 
   sc("servers-status-pin-fails-and-missing-channel", async (ctx) => {

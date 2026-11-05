@@ -187,7 +187,7 @@ class FakeChannel {
     this.messages = {
       fetch(id) {
         const found = channel.store.get(id);
-        if (!found) return Promise.reject(new Error("Unknown Message"));
+        if (!found) return Promise.reject(Object.assign(new Error("Unknown Message"), { code: 10008 }));
         return Promise.resolve(found);
       }
     };
